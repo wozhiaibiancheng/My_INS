@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">My_Ins</string>
+
+
+    <!--Firebase Authenticationmessage-->
+    <string name="fail_to_auth">Failed to Authenticate your identity</string>
+    <string name="succ_to_auth">Authenticate your identity successfullly</string>
 </resources>

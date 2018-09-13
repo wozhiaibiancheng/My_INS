@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "176468812989",
+    "firebase_url": "https://myins-8b509.firebaseio.com",
+    "project_id": "myins-8b509",
+    "storage_bucket": "myins-8b509.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:176468812989:android:974ca7f8972a155d",
+        "android_client_info": {
+          "package_name": "au.edu.unimelb.student.group55.my_ins"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "176468812989-shahfmmm5m6fmtcs1gq6mtmt163mi8kd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "au.edu.unimelb.student.group55.my_ins",
+            "certificate_hash": "c5720f020e693af8d1c42341282a6efd38b4793d"
+          }
+        },
+        {
+          "client_id": "176468812989-fb225bkkq36t0jet2h7ub9no05fqas00.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAY_GHj2zT3AmtKOtn3icJOVr1WzHkzPQ8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "176468812989-fb225bkkq36t0jet2h7ub9no05fqas00.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
