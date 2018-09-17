@@ -1,7 +1,6 @@
 package au.edu.unimelb.student.group55.my_ins.LoginNRegister;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,16 +10,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseAuthentication;
-import au.edu.unimelb.student.group55.my_ins.MainActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
+import au.edu.unimelb.student.group55.my_ins.MainActivity;
 
 public class RegisterActivity extends AppCompatActivity {
 

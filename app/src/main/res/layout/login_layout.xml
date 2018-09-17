@@ -7,15 +7,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="55dp"
+        android:paddingTop="70dp"
         android:paddingLeft="25dp"
         android:paddingRight="25dp"
         >
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="75dp"
-            android:src="@drawable/instagram_logo"
+            android:layout_height="60dp"
+            android:src="@drawable/ins"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="25dp"/>
 
@@ -53,20 +53,24 @@
             android:id="@+id/login_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="25dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+
             android:background="@drawable/white_rounded_button"
             android:padding="12dp"
-            android:text="Login" />
+            android:text="Log In"
+            android:textColor="@color/white"
+            android:textStyle="bold"/>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="25dp"
-            android:text="No account yet? Create one"
+            android:text="Don't have an account?  Sign up"
             android:gravity="center"
             android:textSize="16dp"
             android:id="@+id/link_signup"
-            android:textColor="@color/link_blue"/>
+            android:textColor="@color/link_blue" />
 
     </LinearLayout>
 

@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,6 +22,11 @@
 
         <activity android:name=".LoginNRegister.LoginActivity"></activity>
         <activity android:name=".LoginNRegister.RegisterActivity"></activity>
+        <activity android:name=".Discovery.DiscoverActivity"></activity>
+        <activity android:name=".Feed.FeedActivity"></activity>
+        <activity android:name=".Profile.ProfileActivity"></activity>
+        <activity android:name=".Upload.UploadActivity"></activity>
+        <activity android:name=".Home.HomeActivity" android:exported="true"></activity>
     </application>
 
 </manifest>

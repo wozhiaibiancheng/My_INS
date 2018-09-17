@@ -1,14 +1,27 @@
+
+
+
 package au.edu.unimelb.student.group55.my_ins;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
+import android.view.Menu;
+import android.view.MenuItem;
 
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+
+import au.edu.unimelb.student.group55.my_ins.Home.CameraFragment;
+import au.edu.unimelb.student.group55.my_ins.Home.HomeFragment;
+import au.edu.unimelb.student.group55.my_ins.Home.PlaceHolder;
+import au.edu.unimelb.student.group55.my_ins.Home.SectionAdapter;
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
+import au.edu.unimelb.student.group55.my_ins.Utils.bottomNavTool;
+import au.edu.unimelb.student.group55.my_ins.Home.HomeActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -19,9 +32,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
         setContentView(R.layout.activity_main);
+        setBottom();
+        setPager();
         //setContentView(R.layout.login_layout);
         sharedPrefs = this.getSharedPreferences(MySharedPrefs, Context.MODE_PRIVATE);
 
@@ -30,18 +43,39 @@ public class MainActivity extends AppCompatActivity {
 //            final SharedPreferences.Editor editor = sharedPrefs.edit();
 //            editor.putBoolean( "firststart", false );
 
-            Intent intent = new Intent( this, LoginActivity.class );
-            startActivity( intent );
+            Intent intent_login = new Intent( this, LoginActivity.class );
+            startActivity( intent_login );
             //finish();
             startActivity(getIntent());
 
         }
-//        else{
-//            setContentView(R.layout.activity_main);
-//        }
-
-
-
-
     }
+
+    //    set up bottom view
+    private void setBottom(){
+        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom);
+        bottomNavTool.setBottomNav(bottomNavigationViewEx);
+        bottomNavTool.enableNav(MainActivity.this, bottomNavigationViewEx);
+        Menu menu = bottomNavigationViewEx.getMenu();
+        MenuItem menuItem = menu.getItem(0);
+        menuItem.setChecked(true);
+    }
+
+
+    //    add camera and home tab in nav bar
+    private void setPager(){
+        SectionAdapter sectionAdapter = new SectionAdapter(getSupportFragmentManager());
+        sectionAdapter.addFragment(new CameraFragment());
+        sectionAdapter.addFragment(new HomeFragment());
+        sectionAdapter.addFragment(new PlaceHolder());
+
+        ViewPager viewPager = (ViewPager)findViewById(R.id.body);
+        viewPager.setAdapter(sectionAdapter);
+        TabLayout tabLayout = (TabLayout)findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_camera);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ins);
+    }
+
 }
+
