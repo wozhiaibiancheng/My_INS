@@ -11,7 +11,7 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import au.edu.unimelb.student.group55.my_ins.Discovery.DiscoverActivity;
 import au.edu.unimelb.student.group55.my_ins.Feed.FeedActivity;
-import au.edu.unimelb.student.group55.my_ins.MainActivity;
+import au.edu.unimelb.student.group55.my_ins.Home.HomeActivity;
 import au.edu.unimelb.student.group55.my_ins.Profile.ProfileActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.Upload.UploadActivity;
@@ -33,7 +33,7 @@ public class bottomNavTool {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()){
                     case R.id.ic_home:
-                        Intent home = new Intent(context, MainActivity.class);
+                        Intent home = new Intent(context, HomeActivity.class);
                         context.startActivity(home);
                         break;
                     case R.id.ic_search:
