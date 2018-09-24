@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true">
 
 
@@ -11,7 +11,7 @@
             android:layout_height="match_parent"
             android:id="@+id/bottom"
             app:menu="@menu/bottom_menu"
-            android:background="@drawable/bottom_border">
+            android:background="@drawable/top_border">
 
         </com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx>
 
