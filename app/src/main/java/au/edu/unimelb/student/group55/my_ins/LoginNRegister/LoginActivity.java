@@ -149,7 +149,8 @@ public class LoginActivity extends AppCompatActivity {
 
                 if (user != null) {
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-
+                }
+                else{
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
                 // ...

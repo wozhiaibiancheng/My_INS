@@ -29,8 +29,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.android.support:design:27.1.0'
     implementation 'com.google.firebase:firebase-core:16.0.3'
-    implementation 'com.google.firebase:firebase-auth:16.0.3'
-    implementation 'com.google.firebase:firebase-database:16.0.2'
+//    implementation 'com.google.firebase:firebase-auth:16.0.3'
+//    implementation 'com.google.firebase:firebase-database:16.0.3'
 
 //    coordinator layout
     implementation 'com.android.support:appcompat-v7:27.0.2'
@@ -42,7 +42,7 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
 //    image loader
-    compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 
 }
 
