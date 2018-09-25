@@ -27,6 +27,9 @@
         <activity android:name=".Profile.ProfileActivity"></activity>
         <activity android:name=".Upload.UploadActivity"></activity>
         <activity android:name=".Home.HomeActivity" android:exported="true"></activity>
+        <activity android:name=".PhotoNLibrary.BottomDialog"></activity>
+        <activity android:name=".PhotoNLibrary.TakingPhotoActivity"></activity>
+        <activity android:name=".PhotoNLibrary.PhotoLibraryActivity"></activity>
     </application>
 
 </manifest>
