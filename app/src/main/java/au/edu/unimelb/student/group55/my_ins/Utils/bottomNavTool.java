@@ -1,27 +1,20 @@
 package au.edu.unimelb.student.group55.my_ins.Utils;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.LinearLayout;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import au.edu.unimelb.student.group55.my_ins.Discovery.DiscoverActivity;
 import au.edu.unimelb.student.group55.my_ins.Feed.FeedActivity;
 import au.edu.unimelb.student.group55.my_ins.Home.HomeActivity;
-import au.edu.unimelb.student.group55.my_ins.PhotoNLibrary.BottomDialog;
+import au.edu.unimelb.student.group55.my_ins.PhotoNGallery.BottomDialog;
 import au.edu.unimelb.student.group55.my_ins.Profile.ProfileActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
-import au.edu.unimelb.student.group55.my_ins.Upload.UploadActivity;
 
 public class bottomNavTool {
     private static final String TAG = "bottomNavTool activity";
@@ -51,7 +44,7 @@ public class bottomNavTool {
                         break;
                     case R.id.ic_add:
                         Intent bottomDialog = new Intent(context, BottomDialog.class);
-                        bottomDialog.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        //bottomDialog.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         context.startActivity( bottomDialog );
 //                        Intent upload = new Intent(context, UploadActivity.class);
 //                        context.startActivity(upload);

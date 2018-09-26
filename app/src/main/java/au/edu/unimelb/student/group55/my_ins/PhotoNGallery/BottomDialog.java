@@ -1,33 +1,24 @@
-package au.edu.unimelb.student.group55.my_ins.PhotoNLibrary;
+package au.edu.unimelb.student.group55.my_ins.PhotoNGallery;
 
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
-import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
-
-import au.edu.unimelb.student.group55.my_ins.Home.CameraFragment;
-import au.edu.unimelb.student.group55.my_ins.Home.HomeFragment;
-import au.edu.unimelb.student.group55.my_ins.Home.SectionAdapter;
 import au.edu.unimelb.student.group55.my_ins.R;
-import au.edu.unimelb.student.group55.my_ins.Utils.bottomNavTool;
 
 public class BottomDialog extends AppCompatActivity implements View.OnClickListener{
     private static final String TAG = "BottomDialog Activity";
+
+
+    private static final int VERIFY_PERMISSIONS_REQUEST = 1;
 
     Dialog mCameraDialog;
     @Override
@@ -35,57 +26,35 @@ public class BottomDialog extends AppCompatActivity implements View.OnClickListe
         super.onCreate( savedInstanceState );
         setContentView(R.layout.activity_main);
 
-        setPager();
-        setBottom();
+//        if(checkPermissionsArray( Permissions.PERMISSIONS)){
+//            //setupViewPager();s
+//            setDialog();
+//        }else{
+//            verifyPermissions(Permissions.PERMISSIONS);
+//        }
         setDialog();
     }
 
-    //    add camera and home tab in nav bar
-    private void setPager(){
-        SectionAdapter sectionAdapter = new SectionAdapter(getSupportFragmentManager());
-        sectionAdapter.addFragment(new CameraFragment());
-        sectionAdapter.addFragment(new HomeFragment());
-        ViewPager viewPager = (ViewPager)findViewById(R.id.body);
-        viewPager.setAdapter(sectionAdapter);
-
-        TabLayout tabLayout = (TabLayout)findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
-
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_camera);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_home);
-    }
-
-    //    set up bottom view
-    private void setBottom(){
-        Log.d(TAG,"bottom view setting");
-        BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom);
-        bottomNavTool.setBottomNav(bottomNavigationViewEx);
-        bottomNavTool.enableNav(BottomDialog.this, bottomNavigationViewEx);
-        Menu menu = bottomNavigationViewEx.getMenu();
-        MenuItem menuItem = menu.getItem(1);
-        menuItem.setChecked(true);
-    }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_choose_img:
-                Intent chooseImage = new Intent( this, PhotoLibraryActivity.class );
-                chooseImage.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                Intent chooseImage = new Intent( this, PhotoGalleryActivity.class );
+                //chooseImage.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity( chooseImage );
                 break;
             case R.id.btn_open_camera:
-                Intent openCamera = new Intent( this, PhotoLibraryActivity.class );
-                openCamera.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                Intent openCamera = new Intent( this, TakingPhotoActivity.class );
+                //openCamera.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity( openCamera );
                 break;
             case R.id.btn_cancel:
                 mCameraDialog.cancel();
+                finish();
                 break;
-
         }
     }
-
 
     private void setDialog() {
         mCameraDialog = new Dialog(this, R.style.BottomDialog);
