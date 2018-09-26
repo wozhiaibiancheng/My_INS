@@ -30,6 +30,7 @@
         <activity android:name=".PhotoNLibrary.BottomDialog"></activity>
         <activity android:name=".PhotoNLibrary.TakingPhotoActivity"></activity>
         <activity android:name=".PhotoNLibrary.PhotoLibraryActivity"></activity>
+        <activity android:name=".Profile.EditProfileActivity"></activity>
     </application>
 
 </manifest>

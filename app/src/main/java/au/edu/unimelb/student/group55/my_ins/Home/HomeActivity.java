@@ -1,6 +1,7 @@
 package au.edu.unimelb.student.group55.my_ins.Home;
 
 //import android.content.SharedPreferences;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.design.widget.TabLayout;
@@ -11,10 +12,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 //import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
 
+import au.edu.unimelb.student.group55.my_ins.Profile.EditProfileActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
+import au.edu.unimelb.student.group55.my_ins.Utils.UniversalImageLoader;
 import au.edu.unimelb.student.group55.my_ins.Utils.bottomNavTool;
 
 
@@ -30,6 +34,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setBottom();
         setPager();
+
     }
 
 //    add camera and home tab in nav bar
@@ -57,5 +62,8 @@ public class HomeActivity extends AppCompatActivity {
         MenuItem menuItem = menu.getItem(0);
         menuItem.setChecked(true);
     }
+
+
 }
+
 

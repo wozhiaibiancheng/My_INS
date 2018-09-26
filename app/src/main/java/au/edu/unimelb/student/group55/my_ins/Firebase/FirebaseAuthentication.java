@@ -31,8 +31,8 @@ public class FirebaseAuthentication {
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            Toast.makeText(myContext, R.string.fail_to_auth,
-                                    Toast.LENGTH_SHORT).show();
+                            Toast.makeText(myContext,task.getException().getMessage(),
+                                    Toast.LENGTH_LONG).show();
                         }
                         else if(task.isSuccessful()){
                             userID = myAuth.getCurrentUser().getUid();

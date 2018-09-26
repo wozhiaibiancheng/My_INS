@@ -22,6 +22,10 @@ public class UniversalImageLoader {
     private static int defaultImage = R.drawable.ic_android;
     private Context context;
 
+    public UniversalImageLoader(Context context){
+        this.context = context;
+    }
+
 
     public ImageLoaderConfiguration getConfig() {
         DisplayImageOptions defaultOption = new DisplayImageOptions.Builder()
@@ -42,9 +46,9 @@ public class UniversalImageLoader {
         return config;
     }
 
-    public static void setImage(String imageURL, ImageView imageView, final ProgressBar progressBar, String append){
+    public static void setImage(String imageURL, ImageView imageView, final ProgressBar progressBar, String prefix){
         ImageLoader imageLoader = ImageLoader.getInstance();
-        imageLoader.displayImage(append + imageURL, imageView, new ImageLoadingListener() {
+        imageLoader.displayImage(prefix + imageURL, imageView, new ImageLoadingListener() {
             @Override
             public void onLoadingStarted(String imageUri, View view) {
                 if(progressBar != null){

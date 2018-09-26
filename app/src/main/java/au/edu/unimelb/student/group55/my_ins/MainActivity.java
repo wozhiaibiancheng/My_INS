@@ -14,24 +14,27 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import au.edu.unimelb.student.group55.my_ins.Home.CameraFragment;
 import au.edu.unimelb.student.group55.my_ins.Home.HomeFragment;
 import au.edu.unimelb.student.group55.my_ins.Home.PlaceHolder;
 import au.edu.unimelb.student.group55.my_ins.Home.SectionAdapter;
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
+import au.edu.unimelb.student.group55.my_ins.Utils.UniversalImageLoader;
 import au.edu.unimelb.student.group55.my_ins.Utils.bottomNavTool;
 import au.edu.unimelb.student.group55.my_ins.Home.HomeActivity;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String MySharedPrefs = "MyPrefs";
+    private Context context = MainActivity.this;
     SharedPreferences sharedPrefs;
     //private Button login_button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        initImageLoader();
         setContentView(R.layout.activity_main);
         setBottom();
         setPager();
@@ -75,6 +78,11 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_camera);
         tabLayout.getTabAt(1).setIcon(R.drawable.ins);
+    }
+
+    private void initImageLoader(){
+        UniversalImageLoader universalImageLoader = new UniversalImageLoader(context);
+        ImageLoader.getInstance().init(universalImageLoader.getConfig());
     }
 
 }

@@ -1,5 +1,4 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-    >
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -11,10 +10,10 @@
             android:padding="20dp">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:id="@+id/profile_photo"
-                android:layout_marginTop="20dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:id="@+id/profile_pic"
+                android:layout_margin="15dp"
                 android:layout_centerHorizontal="true"/>
 
             <TextView
@@ -22,16 +21,16 @@
                 android:layout_height="wrap_content"
                 android:text="Change Profile Photo"
                 android:id="@+id/changeProfilePhoto"
-                android:layout_below="@id/profile_photo"
+                android:layout_below="@id/profile_pic"
                 android:layout_centerHorizontal="true"
-                android:textSize="16sp"
+                android:textSize="13sp"
                 android:textColor="@color/link_blue" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_below="@id/changeProfilePhoto"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="12dp"
                 android:id="@+id/relLayout1"
                 android:background="@drawable/white_grey_border_top"
                 >
@@ -41,7 +40,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:text="Name"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:id="@+id/text1"/>
 
                 <EditText
@@ -68,7 +67,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:text="Username"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:id="@+id/text2"/>
 
                 <EditText
@@ -96,7 +95,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:text="Website"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:id="@+id/text3"/>
 
                 <EditText
@@ -123,7 +122,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:text="Bio"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:id="@+id/text4"/>
 
                 <EditText
@@ -149,7 +148,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:textStyle="bold"
                     android:text="Private Information"/>
 
@@ -167,7 +166,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:text="Email"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:id="@+id/text5"/>
 
                 <EditText
@@ -194,7 +193,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:text="Phone"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:id="@+id/text6"/>
 
                 <EditText
@@ -221,7 +220,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:text="Gender"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:id="@+id/text7"/>
 
                 <EditText
