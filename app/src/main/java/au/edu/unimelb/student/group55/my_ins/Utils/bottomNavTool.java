@@ -8,11 +8,13 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import au.edu.unimelb.student.group55.my_ins.Discovery.DiscoverActivity;
 import au.edu.unimelb.student.group55.my_ins.Feed.FeedActivity;
 import au.edu.unimelb.student.group55.my_ins.Home.HomeActivity;
-import au.edu.unimelb.student.group55.my_ins.PhotoNGallery.BottomDialog;
+import au.edu.unimelb.student.group55.my_ins.PhotoNGallery.ApplyFilters;
 import au.edu.unimelb.student.group55.my_ins.Profile.ProfileActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 
@@ -43,11 +45,9 @@ public class bottomNavTool {
                         context.startActivity(discovery);
                         break;
                     case R.id.ic_add:
-                        Intent bottomDialog = new Intent(context, BottomDialog.class);
-                        //bottomDialog.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        context.startActivity( bottomDialog );
-//                        Intent upload = new Intent(context, UploadActivity.class);
-//                        context.startActivity(upload);
+                        Intent applyFilters = new Intent(context, ApplyFilters.class);
+                        applyFilters.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        context.startActivity( applyFilters );
                         break;
                     case R.id.ic_like:
                         Intent feed = new Intent(context, FeedActivity.class);
@@ -64,5 +64,6 @@ public class bottomNavTool {
             }
         });
     }
+
 
 }
