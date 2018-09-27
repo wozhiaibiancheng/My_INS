@@ -15,7 +15,7 @@
         android:layout_height="42dp"
         android:background="@drawable/white_background"
         android:gravity="center"
-        android:text="拍照"
+        android:text="Take a photo"
         android:textColor="#ffffff"
         android:textSize="18sp" />
 
@@ -26,7 +26,7 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/white_background"
         android:gravity="center"
-        android:text="从相册中选取"
+        android:text="Choose pthoto from photo gallery"
         android:textColor="#ffffff"
         android:textSize="18sp" />
 
@@ -37,7 +37,7 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/white_background"
         android:gravity="center"
-        android:text="取消"
+        android:text="Cancel"
         android:textColor="#ffffff"
         android:textSize="18sp" />
 </LinearLayout>

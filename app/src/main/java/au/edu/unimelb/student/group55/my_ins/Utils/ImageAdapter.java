@@ -25,8 +25,6 @@ public class ImageAdapter extends ArrayAdapter<String>{
     private String prefix;
     private ArrayList<String> imageURLs;
 
-
-
     public ImageAdapter(@NonNull Context context,  int layoutResource, String prefix, ArrayList<String> imageURLs) {
         super(context, layoutResource,imageURLs);
         this.context = context;
@@ -57,7 +55,6 @@ public class ImageAdapter extends ArrayAdapter<String>{
             viewHolder = (ViewHolder)convertView.getTag();
         }
 
-//        final ProgressBar progressBar = viewHolder.progressBar;
         String imgURL = getItem(position);
         ImageLoader imageLoader = ImageLoader.getInstance();
 
