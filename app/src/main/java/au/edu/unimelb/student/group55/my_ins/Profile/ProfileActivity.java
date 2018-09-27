@@ -30,6 +30,7 @@ import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.Utils.ImageAdapter;
 import au.edu.unimelb.student.group55.my_ins.Utils.UniversalImageLoader;
 import au.edu.unimelb.student.group55.my_ins.Utils.bottomNavTool;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity {
     private static final String TAG = "Profile Activity";
@@ -37,13 +38,36 @@ public class ProfileActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener authListener;
     private TextView editProfile;
     private ProgressBar progressBar;
-    private ImageView profilePic;
+
     private Context context = ProfileActivity.this;
     private static final int numColumns = 3;
+
+    //widgets
+    private TextView posts, followers, following, displayName, username, description;
+    private CircleImageView profile_pic;
+    private GridView gridView;
+    private Toolbar toolbar;
+    private ImageView profileMenu;
+    private BottomNavigationViewEx bottomNavigationView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        displayName = (TextView) findViewById(R.id.display_name);
+        username = (TextView) findViewById(R.id.username);
+        description = (TextView) findViewById(R.id.description);
+        profile_pic = (CircleImageView) findViewById(R.id.profile_pic);
+        posts = (TextView) findViewById(R.id.posts);
+        followers = (TextView) findViewById(R.id.followers);
+        following = (TextView) findViewById(R.id.following);
+        progressBar = (ProgressBar) findViewById(R.id.profileProgressBar);
+        gridView = (GridView) findViewById(R.id.image_grid);
+        toolbar = (Toolbar) findViewById(R.id.profileToolBar);
+        profileMenu = (ImageView) findViewById(R.id.profile_menu);
+
+
         setContentView(R.layout.activity_profile);
         Log.d("INFO","onCreate started!");
 
@@ -139,13 +163,13 @@ public class ProfileActivity extends AppCompatActivity {
     private void setupActivityWidgets(){
         progressBar = (ProgressBar)findViewById(R.id.profileProgressBar);
 //        progressBar.setVisibility(View.GONE);
-        profilePic = (ImageView) findViewById(R.id.profile_pic);
+          profile_pic = (CircleImageView) findViewById(R.id.profile_pic);
     }
 
     private void setProfilePic() {
         Log.d(TAG, "set profile pic");
         String imgURL = "https://artinsights.com/wp-content/uploads/2013/11/20120919143022.jpg";
-        UniversalImageLoader.setImage(imgURL, profilePic, null, "");
+        UniversalImageLoader.setImage(imgURL, profile_pic, null, "");
     }
 
     private void setImageGrid(ArrayList<String> imgURLs){

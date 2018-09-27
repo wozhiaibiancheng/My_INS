@@ -6,17 +6,28 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import au.edu.unimelb.student.group55.my_ins.R;
-public class FirebaseAuthentication {
+
+
+public class FirebaseMethods {
+
     private static final String TAG = "FirebaseMethods";
-    //firebase
     private com.google.firebase.auth.FirebaseAuth myAuth;
     private com.google.firebase.auth.FirebaseAuth.AuthStateListener myAuthListener;
     private String userID;
     private Context myContext;
-    public FirebaseAuthentication(Context context) {
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
+
+    public FirebaseMethods(Context context) {
         myAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
         myContext = context;
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
+
         if(myAuth.getCurrentUser() != null){
             userID = myAuth.getCurrentUser().getUid();
         }
@@ -41,4 +52,34 @@ public class FirebaseAuthentication {
                     }
                 });
     }
+
+
+    public void addUser(String email,String username,String description, String profile_pic){
+        User user = new User(userID,username,1,email);
+
+        databaseReference.child(myContext.getString(R.string.dbname_users)).child(userID).setValue(user);
+
+        UserAccountSetting userAccountSetting = new UserAccountSetting("", username, 0, 0,0, profile_pic, username);
+
+        databaseReference.child(myContext.getString(R.string.dbname_user_account_settings)).child(userID).setValue(userAccountSetting);
+    }
+
+    public boolean usernameExists(String username, DataSnapshot dataSnapshot){
+
+        User user = new User();
+        System.out.println("checking username");
+//        System.out.println(dataSnapshot.child("users").getChildrenCount());
+//        System.out.println(dataSnapshot.child(userID).getChildrenCount());
+        for(DataSnapshot data: dataSnapshot.child("users").getChildren()){
+            Log.d(TAG,"check if username exists: "+data);
+            user.setUsername(data.getValue(User.class).getUsername());
+
+            if(user.getUsername().equals(username)){
+                Log.d(TAG,"username existes");
+                return true;
+            }
+        }
+        return false;
+    }
 }
+

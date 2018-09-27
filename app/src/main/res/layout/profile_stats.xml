@@ -2,10 +2,10 @@
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="10dp">
+
 
     <TextView
         android:id="@+id/posts"
@@ -14,7 +14,7 @@
         android:layout_marginLeft="30dp"
         android:text="14"
         android:textColor="@color/black"
-        android:textSize="15dp"
+        android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -26,7 +26,7 @@
         android:layout_marginStart="8dp"
         android:text="220"
         android:textColor="@color/black"
-        android:textSize="15dp"
+        android:textSize="15sp"
         app:layout_constraintEnd_toStartOf="@+id/following"
         app:layout_constraintStart_toEndOf="@+id/posts"
         app:layout_constraintTop_toTopOf="parent" />
@@ -38,7 +38,7 @@
         android:layout_marginRight="30dp"
         android:text="33"
         android:textColor="@color/black"
-        android:textSize="15dp"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -75,7 +75,7 @@
 
     <TextView
         android:id="@+id/edit_profile"
-        android:layout_width="172dp"
+        android:layout_width="196dp"
         android:layout_height="24dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
@@ -86,7 +86,7 @@
         android:text="Edit Profile"
         android:textAlignment="center"
         android:textColor="@color/black"
-        android:textSize="15dp"
+        android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.503"

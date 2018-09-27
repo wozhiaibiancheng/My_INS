@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "176468812989-ij3oph28kmrgi14fd3sjh5ilgpiq5ngl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "au.edu.unimelb.student.group55.my_ins",
+            "certificate_hash": "32374ed12b397288d7ed57da88107be36e8da8ca"
+          }
+        },
+        {
           "client_id": "176468812989-fb225bkkq36t0jet2h7ub9no05fqas00.apps.googleusercontent.com",
           "client_type": 3
         }

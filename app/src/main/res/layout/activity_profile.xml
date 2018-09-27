@@ -9,8 +9,7 @@
 
     <RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
+    android:layout_height="match_parent">
 
         <include layout="@layout/profile_body"></include>
 

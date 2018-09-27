@@ -1,6 +1,5 @@
 package au.edu.unimelb.student.group55.my_ins.LoginNRegister;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,14 +9,23 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseAuthentication;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
+import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
 import au.edu.unimelb.student.group55.my_ins.MainActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
+import java.util.Random;
+import java.util.zip.Inflater;
+
+
 public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = "RegisterActivity";
     private Context myContext;
@@ -28,17 +36,23 @@ public class RegisterActivity extends AppCompatActivity {
     //private ProgressBar mProgressBar;
     private FirebaseAuth myAuth;
     private FirebaseAuth.AuthStateListener myAuthListener;
-    private FirebaseAuthentication firebaseAuth;
+    private FirebaseMethods firebaseMethods;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
+    private Random rand = new Random();
+    private int randomSize = 9999999;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView( R.layout.register_layout);
         myContext = RegisterActivity.this;
-        firebaseAuth = new FirebaseAuthentication(myContext);
+        firebaseMethods = new FirebaseMethods(myContext);
         getInputValue();
         setupFirebaseAuth();
         initialization();
     }
+
     private void initialization(){
         Register_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,14 +62,14 @@ public class RegisterActivity extends AppCompatActivity {
                 password = myPassword.getText().toString();
                 if(checkInputs(email, username, password)){
                     Log.d(TAG,"register input valid");
-                    System.out.println(email);
-                    System.out.println(username);
-                    System.out.println(password);
-                    firebaseAuth.registerNewEmail(email, password, username);
+
+                    databaseReference.child("users");
+                    firebaseMethods.registerNewEmail(email, password, username);
                 }
             }
         });
     }
+
     private boolean checkInputs(String email, String username, String password){
         //Log.d(TAG, "checkInputs: checking inputs for null values.");
         if(email.equals("") || username.equals("") || password.equals("")){
@@ -64,6 +78,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
         return true;
     }
+
     private void getInputValue(){
         Log.d(TAG, "getInputValue");
         myEmail = (EditText) findViewById(R.id.input_email);
@@ -72,22 +87,54 @@ public class RegisterActivity extends AppCompatActivity {
         myPassword = (EditText) findViewById(R.id.input_password);
         myContext = RegisterActivity.this;
     }
+
+
     private void setupFirebaseAuth(){
         Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
         myAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
+
         myAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+            public void onAuthStateChanged(@NonNull final FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
+                    System.out.println("user != null");
                     // User is signed in
-                    SharedPreferences prefs = getSharedPreferences(MainActivity.MySharedPrefs, Context.MODE_PRIVATE);
-                    prefs.edit().putBoolean( "firststart", false );
-                    //Intent intent = new Intent( RegisterActivity.this, MainActivity.class );
-                    Toast.makeText(myContext, "You have successfully registered as" + myUsername, Toast.LENGTH_SHORT).show();
-                    finish();
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+
+                    databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+//                            check if username exist
+                            if(firebaseMethods.usernameExists(username,dataSnapshot)) {
+                                System.out.println("username exists");
+                                username += username + Integer.toString(rand.nextInt(randomSize));
+                                Toast.makeText(myContext, "The username isn't available, suffix appended.", Toast.LENGTH_SHORT).show();
+                            }else {
+                                System.out.println("username not exist");}
+
+
+                            firebaseMethods.addUser(email,username,"","");
+
+                            SharedPreferences prefs = getSharedPreferences(MainActivity.MySharedPrefs, Context.MODE_PRIVATE);
+                            prefs.edit().putBoolean( "firststart", false );
+                            //Intent intent = new Intent( RegisterActivity.this, MainActivity.class );
+                            Toast.makeText(myContext, "You have successfully registered as" + myUsername, Toast.LENGTH_LONG).show();
+                            finish();
+                            }
+
+
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+
                 } else {
+                    System.out.println("username == null");
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
@@ -95,6 +142,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         };
     }
+
     @Override
     public void onStart() {
         super.onStart();
