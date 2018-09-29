@@ -46,7 +46,7 @@ public class bottomNavTool {
                         break;
                     case R.id.ic_add:
                         Intent applyFilters = new Intent(context, ApplyFilters.class);
-                        applyFilters.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                        applyFilters.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         context.startActivity( applyFilters );
                         break;
                     case R.id.ic_like:
