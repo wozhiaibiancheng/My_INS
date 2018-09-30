@@ -20,10 +20,17 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
 
+import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
+import au.edu.unimelb.student.group55.my_ins.Firebase.UserAccountSetting;
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.RegisterActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
@@ -38,6 +45,9 @@ public class ProfileActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener authListener;
     private TextView editProfile;
     private ProgressBar progressBar;
+    private FirebaseDatabase firebaseDatabase;
+    private DatabaseReference databaseReference;
+    private FirebaseMethods firebaseMethods;
 
     private Context context = ProfileActivity.this;
     private static final int numColumns = 3;
@@ -53,7 +63,8 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setContentView(R.layout.activity_profile);
+        Log.d("INFO","onCreate started!");
 
         displayName = (TextView) findViewById(R.id.display_name);
         username = (TextView) findViewById(R.id.username);
@@ -66,10 +77,10 @@ public class ProfileActivity extends AppCompatActivity {
         gridView = (GridView) findViewById(R.id.image_grid);
         toolbar = (Toolbar) findViewById(R.id.profileToolBar);
         profileMenu = (ImageView) findViewById(R.id.profile_menu);
+        firebaseMethods = new FirebaseMethods(context);
 
 
-        setContentView(R.layout.activity_profile);
-        Log.d("INFO","onCreate started!");
+
 
         setUpToolbar();
         setBottom();
@@ -119,6 +130,17 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
+    private void setProfile(UserAccountSetting userAccountSetting){
+        UniversalImageLoader.setImage(userAccountSetting.getProfile_pic(),profile_pic,null,"");
+        displayName.setText(userAccountSetting.getDisplay_name());
+        username.setText(userAccountSetting.getUsername());
+        description.setText(userAccountSetting.getDescription());
+        posts.setText(String.valueOf(userAccountSetting.getPosts()));
+        following.setText(String.valueOf(userAccountSetting.getFollowing()));
+        followers.setText(String.valueOf(userAccountSetting.getFollowers()));
+
+    }
+
 
     /**
      * Setup the firebase auth object
@@ -127,6 +149,8 @@ public class ProfileActivity extends AppCompatActivity {
         Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
 
         auth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
 
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -144,6 +168,18 @@ public class ProfileActivity extends AppCompatActivity {
                 // ...
             }
         };
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                setProfile(firebaseMethods.getUserSetting(dataSnapshot));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     //  set up edit_profile button

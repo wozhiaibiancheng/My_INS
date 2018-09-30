@@ -1,6 +1,7 @@
 package au.edu.unimelb.student.group55.my_ins.Firebase;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.constraint.solver.widgets.Snapshot;
 import android.util.Log;
 import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,11 +29,12 @@ public class FirebaseMethods {
         firebaseDatabase = FirebaseDatabase.getInstance();
         databaseReference = firebaseDatabase.getReference();
 
-        if(myAuth.getCurrentUser() != null){
+        if (myAuth.getCurrentUser() != null) {
             userID = myAuth.getCurrentUser().getUid();
         }
     }
-    public void registerNewEmail(final String email, String password, final String username){
+
+    public void registerNewEmail(final String email, String password, final String username) {
         myAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -42,10 +44,9 @@ public class FirebaseMethods {
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
                         if (!task.isSuccessful()) {
-                            Toast.makeText(myContext,task.getException().getMessage(),
+                            Toast.makeText(myContext, task.getException().getMessage(),
                                     Toast.LENGTH_LONG).show();
-                        }
-                        else if(task.isSuccessful()){
+                        } else if (task.isSuccessful()) {
                             userID = myAuth.getCurrentUser().getUid();
                             Log.d(TAG, "onComplete: Authstate changed: " + userID);
                         }
@@ -54,32 +55,57 @@ public class FirebaseMethods {
     }
 
 
-    public void addUser(String email,String username,String description, String profile_pic){
-        User user = new User(userID,username,1,email);
+    public void addUser(String email, String username, String description, String profile_pic) {
+        User user = new User(userID, username, 1, email);
 
         databaseReference.child(myContext.getString(R.string.dbname_users)).child(userID).setValue(user);
 
-        UserAccountSetting userAccountSetting = new UserAccountSetting("", username, 0, 0,0, profile_pic, username);
+        UserAccountSetting userAccountSetting = new UserAccountSetting("", username, 0, 0, 0, profile_pic, username);
 
         databaseReference.child(myContext.getString(R.string.dbname_user_account_settings)).child(userID).setValue(userAccountSetting);
     }
 
-    public boolean usernameExists(String username, DataSnapshot dataSnapshot){
+    public boolean usernameExists(String username, DataSnapshot dataSnapshot) {
 
         User user = new User();
         System.out.println("checking username");
 //        System.out.println(dataSnapshot.child("users").getChildrenCount());
 //        System.out.println(dataSnapshot.child(userID).getChildrenCount());
-        for(DataSnapshot data: dataSnapshot.child("users").getChildren()){
-            Log.d(TAG,"check if username exists: "+data);
+        for (DataSnapshot data : dataSnapshot.child("users").getChildren()) {
+            Log.d(TAG, "check if username exists: " + data);
             user.setUsername(data.getValue(User.class).getUsername());
 
-            if(user.getUsername().equals(username)){
-                Log.d(TAG,"username existes");
+            if (user.getUsername().equals(username)) {
+                Log.d(TAG, "username existes");
                 return true;
             }
         }
         return false;
+    }
+
+    public UserAccountSetting getUserSetting(DataSnapshot dataSnapshot) {
+        UserAccountSetting setting = new UserAccountSetting();
+
+        for (DataSnapshot userInfo : dataSnapshot.getChildren()) {
+
+            if (userInfo.getKey().equals(myContext.getString(R.string.dbname_user_account_settings))) {
+
+                try {
+                    setting.setUsername(userInfo.child(userID).getValue(UserAccountSetting.class).getUsername());
+                    setting.setDescription(userInfo.child(userID).getValue(UserAccountSetting.class).getDescription());
+                    setting.setDisplay_name(userInfo.child(userID).getValue(UserAccountSetting.class).getDisplay_name());
+                    setting.setPosts(userInfo.child(userID).getValue(UserAccountSetting.class).getPosts());
+                    setting.setFollowing(userInfo.child(userID).getValue(UserAccountSetting.class).getFollowing());
+                    setting.setFollowers(userInfo.child(userID).getValue(UserAccountSetting.class).getFollowers());
+                    setting.setProfile_pic(userInfo.child(userID).getValue(UserAccountSetting.class).getProfile_pic());
+
+                } catch (NullPointerException e) {
+                    Log.d(TAG, "user account setting null pointer error: " + e.getMessage());
+                }
+
+            }
+        }
+        return setting;
     }
 }
 
