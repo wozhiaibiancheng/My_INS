@@ -34,12 +34,20 @@ public class PhotoUploadService extends Service {
     private String uid;
     private byte[] imageData;
     private Task<Uri> downloadUri;
+    private String downloadLink;
+    private Uri imageUri;
+    private String FILE_NAME;
+    private String WORKING_DIRECTORY;
+
+    private String PHOTO_UPLOAD_SERVICE = "Photo Upload Service";
+    private ByteArrayOutputStream baos;
+
+    private String currentLocation;
+    private String postMessage;
 
     @Override
     public void onCreate(){
         super.onCreate();
-
-        String date = DateFormat.getDateTimeInstance().format(new Date());
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -47,11 +55,39 @@ public class PhotoUploadService extends Service {
         }
 
         storage = FirebaseStorage.getInstance();
-        final StorageReference imagesRef = storage.getReference().child( uid ).child(date + ".jpg");
+        baos = new ByteArrayOutputStream();
 
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-//        byte[] imageData = baos.toByteArray();
+        currentLocation = "Location not available";
+
+        //This is the user input message attached with the image
+        // will need to be passed from Apply Filter activity through Intent
+        postMessage = "message not available";
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+    }
+
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        super.onStartCommand( intent, flags, startId );
+
+        imageUri = (Uri) intent.getParcelableExtra(PHOTO_UPLOAD_SERVICE);
+
+        FILE_NAME = intent.getStringExtra( "filename" );
+        WORKING_DIRECTORY = intent.getStringExtra( "working directory" );
+
+
+        Bitmap resultImageBitmap = new ImageSaver(this).
+                setFileName(FILE_NAME).
+                setDirectoryName(WORKING_DIRECTORY).
+                load();
+
+//        Bitmap resultImageBitmap = (Bitmap) intent.getParcelableExtra( PHOTO_UPLOAD_SERVICE );
+        resultImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        imageData = baos.toByteArray();
+
+        String currentDate1 = DateFormat.getDateTimeInstance().format(new Date());
+
+        final StorageReference imagesRef = storage.getReference().child( uid ).child(currentDate1 + ".jpg");
 
         UploadTask uploadTask = imagesRef.putBytes(imageData);
         uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -62,23 +98,32 @@ public class PhotoUploadService extends Service {
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                //Once the image is uploaded successfully, show the message and get its download URL
                 downloadUri = imagesRef.getDownloadUrl();
+                downloadLink = downloadUri.toString();
                 Toast.makeText(PhotoUploadService.this, "Upload image successfully", Toast.LENGTH_SHORT).show();
+
+                String currentDate2 = DateFormat.getDateTimeInstance().format(new Date());
+
+
+                //Get the image url and offload to Real-time database here
+                String post_message = currentLocation + "," + postMessage + "," + downloadLink;
+                mDatabase.child( uid ).child( currentDate2 ).setValue( post_message );
+                Toast.makeText(PhotoUploadService.this,
+                        "Set Upload message record successfully", Toast.LENGTH_SHORT).show();
+
+                //After the upload task finished, finish the serivce itself
+                stopSelf();
             }
         });
 
-        String location = "Location not available";
-        String message = "message not available";
-        //uid + date + location + message + url +
+        return startId;
 
-        String post_message = location + "," + message + "," + downloadUri;
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase.child( uid ).child( date ).setValue( post_message );
     }
 
     @Override
     public IBinder onBind(Intent intent) {
-        imageData = intent.getByteArrayExtra("resultImage");
         return null;
     }
 }
