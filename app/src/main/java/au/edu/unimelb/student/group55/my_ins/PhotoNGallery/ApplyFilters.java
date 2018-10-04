@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,13 +24,22 @@ import java.io.InputStream;
 import au.edu.unimelb.student.group55.my_ins.R;
 import iamutkarshtiwari.github.io.ananas.editimage.EditImageActivity;
 
+
+// This class allows user to either select a photo from library or take a photo with camera
+// User can crop their image and apply filters on the image
+// After these procedures, the brightness and contrast of the image can also be changed
+// the final image is stored in the external storage and the path of the image is passed to photo upload service
+
 public class ApplyFilters extends AppCompatActivity {
 
-    ImageView imageView;
-    Bitmap selectedImage;
+    private ImageView imageView;
+    private Bitmap selectedImage;
     private String FILE_NAME = "/test.jpg";
     public static final String WORKING_DIRECTORY = "MyINS/test.jpg";
     private String imagePath;
+
+    private EditText userInputEditText;
+    private String postMessage;
 
     public String cropPath;
 
@@ -39,11 +49,9 @@ public class ApplyFilters extends AppCompatActivity {
         setContentView( R.layout.photo_gallery );
 
         imagePath = applicationFolder();
-
-//        Toast.makeText(ApplyFilters.this, dataDirectory, Toast.LENGTH_SHORT).show();
-
         imageView = (ImageView) findViewById(R.id.imageView);
 
+        userInputEditText = (EditText) findViewById(R.id.post_message);
         TextView shareClose = (TextView) findViewById(R.id.gallery_cancel);
         shareClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,12 +64,23 @@ public class ApplyFilters extends AppCompatActivity {
         nextScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                postMessage = userInputEditText.getText().toString();
+                if (postMessage.matches("")) {
+                    notice();
+                    return;
+                }
 
-                // Upload the image in the background to avoid stop front-end UI
-                Intent photoUploadService = new Intent( ApplyFilters.this, PhotoUploadService.class );
-                photoUploadService.putExtra( "file path", imagePath );
-                startService( photoUploadService );
-                finish();
+
+                if(postMessage == ""){
+                    Toast.makeText(ApplyFilters.this, "Please say something about your post~", Toast.LENGTH_SHORT).show();
+                }else{
+                    // Upload the image in the background to avoid stop front-end UI
+                    Intent photoUploadService = new Intent( ApplyFilters.this, PhotoUploadService.class );
+                    photoUploadService.putExtra( "file path", imagePath );
+                    photoUploadService.putExtra( "post message", postMessage );
+                    startService( photoUploadService );
+                    finish();
+                }
 
             }
         });
@@ -70,6 +89,9 @@ public class ApplyFilters extends AppCompatActivity {
                 .setGuidelines(CropImageView.Guidelines.ON)
                 .start(this);
 
+    }
+    public void notice(){
+        Toast.makeText(this, "Please say something for your post", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -99,36 +121,35 @@ public class ApplyFilters extends AppCompatActivity {
                 Uri resultUri = result.getUri();
                 try{
                     cropPath = resultUri.getPath();
-
+                    // After having cropped the image, start the next procedure
+                    // start to add filters etc.
                     startImageFilter( cropPath, imagePath );
-                    Toast.makeText(ApplyFilters.this, imagePath, Toast.LENGTH_SHORT).show();
 
                 }
                 catch(Exception e){
-
+                    Toast.makeText(ApplyFilters.this, "failed to read image data", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
-
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }
         }
 
-
         // After having finished the filters & brightness contrast setting
         // return the image data to image view
-
         if (requestCode == 100) { // same code you used while starting
+
+            // Set the corresponding factors of the library class
             String newFilePath = data.getStringExtra(EditImageActivity.EXTRA_OUTPUT);
             boolean isImageEdit = data.getBooleanExtra(EditImageActivity.IMAGE_IS_EDIT, false);
 
+            //Read the image to bitmap from storage
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
-//
-//
-//            InputStream imageStream = getContentResolver().openInputStream(resultUri);
-//            selectedImage = BitmapFactory.decodeStream(imageStream);
-            imageView.setImageBitmap( bitmap );
+            selectedImage = BitmapFactory.decodeFile(imagePath, options);
+
+            // show the image in the corresponding image View
+            imageView.setImageBitmap( selectedImage );
         }
 
     }

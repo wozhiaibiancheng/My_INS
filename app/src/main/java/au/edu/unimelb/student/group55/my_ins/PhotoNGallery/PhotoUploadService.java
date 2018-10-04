@@ -4,6 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.net.Uri;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -27,7 +28,6 @@ import java.util.Date;
 
 public class PhotoUploadService extends Service {
     @Nullable
-
     private FirebaseUser user;
     private FirebaseStorage storage;
     private DatabaseReference mDatabase;
@@ -43,6 +43,11 @@ public class PhotoUploadService extends Service {
 
     private String currentLocation;
     private String postMessage;
+    private String likeUrl;
+    private String commentUrl;
+
+    private double latitude;
+    private double longitude;
 
     @Override
     public void onCreate(){
@@ -52,15 +57,10 @@ public class PhotoUploadService extends Service {
         if (user != null) {
             uid = user.getUid();
         }
-
         storage = FirebaseStorage.getInstance();
         baos = new ByteArrayOutputStream();
 
         currentLocation = "Location not available";
-
-        //This is the user input message attached with the image
-        // will need to be passed from Apply Filter activity through Intent
-        postMessage = "message not available";
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -72,10 +72,12 @@ public class PhotoUploadService extends Service {
         IMAGE_PATH = intent.getStringExtra( "file path" );
         resultImageBitmap = readImage( IMAGE_PATH );
 
+        postMessage = intent.getStringExtra( "post message" );
+
         resultImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         imageData = baos.toByteArray();
 
-        String currentDate1 = DateFormat.getDateTimeInstance().format(new Date());
+        final String currentDate1 = DateFormat.getDateTimeInstance().format(new Date());
 
         final StorageReference imagesRef = storage.getReference().child( uid ).child(currentDate1 + ".jpg");
 
@@ -96,10 +98,14 @@ public class PhotoUploadService extends Service {
 
                 String currentDate2 = DateFormat.getDateTimeInstance().format(new Date());
 
+                likeUrl = currentDate2 + "-likes";
+                commentUrl = currentDate2 + "-comments";
 
                 //Get the image url and offload to Real-time database here
-                String post_message = currentLocation + "," + postMessage + "," + downloadLink;
-                mDatabase.child( uid ).child( currentDate2 ).setValue( post_message );
+                String post_message = uid + "," + currentLocation + "," + postMessage + "," + downloadLink
+                        + "," + likeUrl + "," + commentUrl;
+                mDatabase.child( uid ).child( currentDate2 ).child( "post" ).setValue( post_message );
+
                 Toast.makeText(PhotoUploadService.this,
                         "Set Upload message record successfully", Toast.LENGTH_SHORT).show();
 
