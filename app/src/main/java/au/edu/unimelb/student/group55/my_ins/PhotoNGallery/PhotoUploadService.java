@@ -3,6 +3,7 @@ package au.edu.unimelb.student.group55.my_ins.PhotoNGallery;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
@@ -35,11 +36,9 @@ public class PhotoUploadService extends Service {
     private byte[] imageData;
     private Task<Uri> downloadUri;
     private String downloadLink;
-    private Uri imageUri;
-    private String FILE_NAME;
-    private String WORKING_DIRECTORY;
+    private String IMAGE_PATH;
 
-    private String PHOTO_UPLOAD_SERVICE = "Photo Upload Service";
+    private Bitmap resultImageBitmap;
     private ByteArrayOutputStream baos;
 
     private String currentLocation;
@@ -70,18 +69,9 @@ public class PhotoUploadService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand( intent, flags, startId );
 
-        imageUri = (Uri) intent.getParcelableExtra(PHOTO_UPLOAD_SERVICE);
+        IMAGE_PATH = intent.getStringExtra( "file path" );
+        resultImageBitmap = readImage( IMAGE_PATH );
 
-        FILE_NAME = intent.getStringExtra( "filename" );
-        WORKING_DIRECTORY = intent.getStringExtra( "working directory" );
-
-
-        Bitmap resultImageBitmap = new ImageSaver(this).
-                setFileName(FILE_NAME).
-                setDirectoryName(WORKING_DIRECTORY).
-                load();
-
-//        Bitmap resultImageBitmap = (Bitmap) intent.getParcelableExtra( PHOTO_UPLOAD_SERVICE );
         resultImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         imageData = baos.toByteArray();
 
@@ -120,6 +110,14 @@ public class PhotoUploadService extends Service {
 
         return startId;
 
+    }
+
+    public Bitmap readImage(String imagePath){
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
+
+        return bitmap;
     }
 
     @Override

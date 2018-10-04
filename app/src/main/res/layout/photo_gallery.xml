@@ -14,17 +14,28 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:weightSum="100"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:orientation="vertical"
-        android:layout_below="@id/relLayout1">
+        android:layout_marginTop="50dp"
+        android:weightSum="100">
 
         <au.edu.unimelb.student.group55.my_ins.Utils.SquareImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="400dp"
             android:layout_marginTop="1dp" />
-
     </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+
+    </RelativeLayout>
+
+
 
 </RelativeLayout>

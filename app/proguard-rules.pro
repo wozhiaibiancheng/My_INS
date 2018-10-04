@@ -21,3 +21,7 @@
 #-renamesourcefileattribute SourceFile
 -keepattributes *Annotation*
 -keep @**annotation** class * {*;}
+
+-keepclasseswithmembers class * {
+    native <methods>;
+}
