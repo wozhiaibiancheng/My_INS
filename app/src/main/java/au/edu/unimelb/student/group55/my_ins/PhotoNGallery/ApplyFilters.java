@@ -6,50 +6,52 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
-import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.InputStream;
-import java.text.DateFormat;
-import java.util.Date;
 
-import au.edu.unimelb.student.group55.my_ins.MainActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
+import iamutkarshtiwari.github.io.ananas.editimage.EditImageActivity;
+
+
+// This class allows user to either select a photo from library or take a photo with camera
+// User can crop their image and apply filters on the image
+// After these procedures, the brightness and contrast of the image can also be changed
+// the final image is stored in the external storage and the path of the image is passed to photo upload service
 
 public class ApplyFilters extends AppCompatActivity {
 
-    ImageView imageView;
-    private Task<Uri> downloadUri;
-    String uid;
-    private DatabaseReference mDatabase;
-    private String downloadLink;
+    private ImageView imageView;
+    private Bitmap selectedImage;
+    private String FILE_NAME = "/test.jpg";
+    public static final String WORKING_DIRECTORY = "MyINS/test.jpg";
+    private String imagePath;
+
+    private EditText userInputEditText;
+    private String postMessage;
+
+    public String cropPath;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.photo_gallery );
 
+        imagePath = applicationFolder();
         imageView = (ImageView) findViewById(R.id.imageView);
 
+        userInputEditText = (EditText) findViewById(R.id.post_message);
         TextView shareClose = (TextView) findViewById(R.id.gallery_cancel);
         shareClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,57 +64,24 @@ public class ApplyFilters extends AppCompatActivity {
         nextScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent( ApplyFilters.this, MainActivity.class );
-                startActivity( intent );
-                Bitmap bitmap = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
-
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] imageData = baos.toByteArray();
-
-
-                String date = DateFormat.getDateTimeInstance().format(new Date());
-
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                if (user != null) {
-                    uid = user.getUid();
+                postMessage = userInputEditText.getText().toString();
+                if (postMessage.matches("")) {
+                    notice();
+                    return;
                 }
 
-                FirebaseStorage storage = FirebaseStorage.getInstance();
-                final StorageReference imagesRef = storage.getReference().child( uid ).child(date + ".jpg");
 
-//                final StorageReference imagesRef = storage.getReference().child( "test.jpg");
+                if(postMessage == ""){
+                    Toast.makeText(ApplyFilters.this, "Please say something about your post~", Toast.LENGTH_SHORT).show();
+                }else{
+                    // Upload the image in the background to avoid stop front-end UI
+                    Intent photoUploadService = new Intent( ApplyFilters.this, PhotoUploadService.class );
+                    photoUploadService.putExtra( "file path", imagePath );
+                    photoUploadService.putExtra( "post message", postMessage );
+                    startService( photoUploadService );
+                    finish();
+                }
 
-                UploadTask uploadTask = imagesRef.putBytes(imageData);
-                uploadTask.addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-                        Toast.makeText(ApplyFilters.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
-                    }
-                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        downloadUri = imagesRef.getDownloadUrl();
-                        downloadLink = downloadUri.toString();
-                        Toast.makeText(ApplyFilters.this, "Upload image successfully", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-
-                String location = "Location not available";
-                String message = "message not available";
-                //uid + date + location + message + url +
-
-                String post_message = location + "," + message + "," + downloadLink;
-                mDatabase = FirebaseDatabase.getInstance().getReference();
-                mDatabase.child( uid ).child( date ).setValue( post_message );
-
-//                Intent intentSensorService = new Intent(ApplyFilters.this, PhotoUploadService.class);
-//                intentSensorService.putExtra( "resultImage", imageData );
-//                startService(intentSensorService);
-
-
-//                ApplyFilters.this.finish();
             }
         });
 
@@ -121,6 +90,22 @@ public class ApplyFilters extends AppCompatActivity {
                 .start(this);
 
     }
+    public void notice(){
+        Toast.makeText(this, "Please say something for your post", Toast.LENGTH_SHORT).show();
+    }
+
+
+    public String applicationFolder(){
+
+        //change the result image name to ensure image is stored properly
+        String temp = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "test.jpg";
+        return temp;
+    }
+
+    public void startImageFilter(String sourcePath, String destinationPath){
+//        String workingDirectory = path + filename;
+        EditImageActivity.start(this, sourcePath, destinationPath, 100, true);
+    }
 
 
 
@@ -128,24 +113,47 @@ public class ApplyFilters extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        // get the result image path from image crop procedure
+
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 Uri resultUri = result.getUri();
                 try{
-                    InputStream imageStream = getContentResolver().openInputStream(resultUri);
-                    Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                    imageView.setImageBitmap( selectedImage );
+                    cropPath = resultUri.getPath();
+                    // After having cropped the image, start the next procedure
+                    // start to add filters etc.
+                    startImageFilter( cropPath, imagePath );
+
                 }
                 catch(Exception e){
-
+                    Toast.makeText(ApplyFilters.this, "failed to read image data", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
-
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }
         }
 
+        // After having finished the filters & brightness contrast setting
+        // return the image data to image view
+        if (requestCode == 100) { // same code you used while starting
+
+            // Set the corresponding factors of the library class
+            String newFilePath = data.getStringExtra(EditImageActivity.EXTRA_OUTPUT);
+            boolean isImageEdit = data.getBooleanExtra(EditImageActivity.IMAGE_IS_EDIT, false);
+
+            //Read the image to bitmap from storage
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            selectedImage = BitmapFactory.decodeFile(imagePath, options);
+
+            // show the image in the corresponding image View
+            imageView.setImageBitmap( selectedImage );
+        }
+
     }
+
+
 
 }
