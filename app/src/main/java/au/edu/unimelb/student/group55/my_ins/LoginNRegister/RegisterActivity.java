@@ -1,5 +1,6 @@
 package au.edu.unimelb.student.group55.my_ins.LoginNRegister;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,6 +17,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
@@ -65,9 +67,10 @@ public class RegisterActivity extends AppCompatActivity {
                 password = myPassword.getText().toString();
                 if(checkInputs(email, username, password)){
                     Log.d(TAG,"register input valid");
+                    checkUsernameExists(username,email,password);
 
-                    databaseReference.child("users");
-                    firebaseMethods.registerNewEmail(email, password, username);
+//                    databaseReference.child("users");
+//                    firebaseMethods.registerNewEmail(email, password, username);
                 }
             }
         });
@@ -112,22 +115,24 @@ public class RegisterActivity extends AppCompatActivity {
                     databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+//                            checkUsernameExists(username);
 //                            check if username exist
-                            if(firebaseMethods.usernameExists(username,dataSnapshot)) {
-                                System.out.println("username exists");
-                                username += username + Integer.toString(rand.nextInt(randomSize));
-                                Toast.makeText(myContext, "The username isn't available, suffix appended.", Toast.LENGTH_SHORT).show();
-                            }else {
-                                System.out.println("username not exist");}
+//                            if(firebaseMethods.usernameExists(username,dataSnapshot)) {
+//                                System.out.println("username exists");
+//                                username += username + Integer.toString(rand.nextInt(randomSize));
+//                                Toast.makeText(myContext, "The username isn't available, suffix appended.", Toast.LENGTH_SHORT).show();
+//                            }else {
+//                                System.out.println("username not exist");}
 
 
-                            firebaseMethods.addUser(email,username,"","");
+//                            firebaseMethods.addUser(email,username,"","");
 
-                            SharedPreferences prefs = getSharedPreferences(MainActivity.MySharedPrefs, Context.MODE_PRIVATE);
-                            prefs.edit().putBoolean( "firststart", false );
-                            //Intent intent = new Intent( RegisterActivity.this, MainActivity.class );
-                            Toast.makeText(myContext, "You have successfully registered as" + myUsername, Toast.LENGTH_LONG).show();
-                            finish();
+//                            SharedPreferences prefs = getSharedPreferences(MainActivity.MySharedPrefs, Context.MODE_PRIVATE);
+//                            prefs.edit().putBoolean( "firststart", false );
+////                            Intent intent = new Intent( RegisterActivity.this, MainActivity.class );
+//                            Toast.makeText(myContext, "You have successfully registered!" , Toast.LENGTH_LONG).show();
+//                            finish();
+
                             }
 
 
@@ -161,4 +166,76 @@ public class RegisterActivity extends AppCompatActivity {
             myAuth.removeAuthStateListener(myAuthListener);
         }
     }
+
+
+    private void checkUsernameExists(final String username,final String email, final String password){
+        Log.d(TAG,"checking" + username);
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        Query query = databaseReference.child("users").orderByChild("username").equalTo(username);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()){
+                    firebaseMethods.registerNewEmail(email, password, username);
+//                    firebaseMethods.addUser(email,username,"","");
+                    SharedPreferences prefs = getSharedPreferences(MainActivity.MySharedPrefs, Context.MODE_PRIVATE);
+                    prefs.edit().putBoolean( "firststart", false );
+                    Toast.makeText(myContext, "You have successfully registered!" , Toast.LENGTH_LONG).show();
+                    myAuth.signOut();
+//                    finish();
+
+                }else {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        if (ds.exists()) {
+                            Log.d(TAG, "username exists");
+                            Toast.makeText(myContext, "username exists" , Toast.LENGTH_LONG).show();
+
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void checkUsernameExists(final String username){
+        Log.d(TAG,"checking" + username);
+
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        Query query = databaseReference.child("users").orderByChild("username").equalTo(username);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()){
+                    firebaseMethods.registerNewEmail(email, password, username);
+//                    firebaseMethods.addUser(email,username,"","");
+                    SharedPreferences prefs = getSharedPreferences(MainActivity.MySharedPrefs, Context.MODE_PRIVATE);
+                    prefs.edit().putBoolean( "firststart", false );
+                    Toast.makeText(myContext, "You have successfully registered!" , Toast.LENGTH_LONG).show();
+                    myAuth.signOut();
+                    finish();
+
+                }else {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        if (ds.exists()) {
+                            Log.d(TAG, "username exists");
+                            Toast.makeText(myContext, "username is not available, please try again!" , Toast.LENGTH_LONG).show();
+
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
 }

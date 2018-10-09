@@ -48,6 +48,8 @@ public class FirebaseMethods {
                                     Toast.LENGTH_LONG).show();
                         } else if (task.isSuccessful()) {
                             userID = myAuth.getCurrentUser().getUid();
+                            addUser(email,username,"","",userID);
+
                             Log.d(TAG, "onComplete: Authstate changed: " + userID);
                         }
                     }
@@ -55,33 +57,34 @@ public class FirebaseMethods {
     }
 
 
-    public void addUser(String email, String username, String description, String profile_pic) {
+    public void addUser(String email, String username, String description, String profile_pic,String userID) {
         User user = new User(userID, username, 1, email);
+        System.out.println("11111111111111: " + userID);
 
-        databaseReference.child(myContext.getString(R.string.dbname_users)).child(userID).setValue(user);
+        databaseReference.child("users").child(userID).setValue(user);
 
-        UserAccountSetting userAccountSetting = new UserAccountSetting("", username, 0, 0, 0, profile_pic, username);
+        UserAccountSetting userAccountSetting = new UserAccountSetting("", username, 0, 0, 0, profile_pic, username,0);
 
         databaseReference.child(myContext.getString(R.string.dbname_user_account_settings)).child(userID).setValue(userAccountSetting);
     }
 
-    public boolean usernameExists(String username, DataSnapshot dataSnapshot) {
-
-        User user = new User();
-        System.out.println("checking username");
-//        System.out.println(dataSnapshot.child("users").getChildrenCount());
-//        System.out.println(dataSnapshot.child(userID).getChildrenCount());
-        for (DataSnapshot data : dataSnapshot.child("users").getChildren()) {
-            Log.d(TAG, "check if username exists: " + data);
-            user.setUsername(data.getValue(User.class).getUsername());
-
-            if (user.getUsername().equals(username)) {
-                Log.d(TAG, "username existes");
-                return true;
-            }
-        }
-        return false;
-    }
+//    public boolean usernameExists(String username, DataSnapshot dataSnapshot) {
+//
+//        User user = new User();
+//        System.out.println("checking username");
+////        System.out.println(dataSnapshot.child("users").getChildrenCount());
+////        System.out.println(dataSnapshot.child(userID).getChildrenCount());
+//        for (DataSnapshot data : dataSnapshot.child("users").getChildren()) {
+//            Log.d(TAG, "check if username exists: " + data);
+//            user.setUsername(data.getValue(User.class).getUsername());
+//
+//            if (user.getUsername().equals(username)) {
+//                Log.d(TAG, "username existes");
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     public UserAccountSetting getUserSetting(DataSnapshot dataSnapshot) {
         UserAccountSetting setting = new UserAccountSetting();
@@ -106,6 +109,11 @@ public class FirebaseMethods {
             }
         }
         return setting;
+    }
+
+    public void updateUsername(String username){
+        databaseReference.child("users").child(userID).child("username").setValue(username);
+
     }
 }
 

@@ -20,7 +20,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Change Profile Photo"
-                android:id="@+id/changeProfilePhoto"
+                android:id="@+id/change_profile_pic"
                 android:layout_below="@id/profile_pic"
                 android:layout_centerHorizontal="true"
                 android:textSize="13sp"
@@ -29,7 +29,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_below="@id/changeProfilePhoto"
+                android:layout_below="@id/change_profile_pic"
                 android:layout_marginTop="12dp"
                 android:id="@+id/relLayout1"
                 android:background="@drawable/white_grey_border_top"
@@ -51,8 +51,9 @@
                     android:layout_centerVertical="true"
                     android:inputType="textNoSuggestions"
                     android:background="@drawable/white_grey_border_bottom"
-                    android:id="@+id/textName"
-                    android:hint="Name" />
+                    android:id="@+id/display_name"
+                    android:hint="Name"
+                    android:textSize="15sp"/>
 
             </RelativeLayout>
 
@@ -78,8 +79,9 @@
                     android:layout_centerVertical="true"
                     android:inputType="textNoSuggestions"
                     android:background="@drawable/white_grey_border_bottom"
-                    android:id="@+id/textUsername"
-                    android:hint="Username"/>
+                    android:id="@+id/username"
+                    android:hint="Username"
+                    android:textSize="15sp"/>
 
             </RelativeLayout>
 
@@ -94,7 +96,7 @@
                     android:layout_width="90dp"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:text="Website"
+                    android:text="Description"
                     android:textSize="15sp"
                     android:id="@+id/text3"/>
 
@@ -106,42 +108,43 @@
                     android:layout_centerVertical="true"
                     android:inputType="textNoSuggestions"
                     android:background="@drawable/white_grey_border_bottom"
-                    android:id="@+id/textWebsite"
-                    android:hint="Website"/>
+                    android:id="@+id/description"
+                    android:hint="Description"
+                    android:textSize="15sp"/>
 
             </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_below="@id/relLayout3"
-                android:id="@+id/relLayout4">
+            <!--<RelativeLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="50dp"-->
+                <!--android:layout_below="@id/relLayout3"-->
+                <!--android:id="@+id/relLayout4">-->
 
-                <TextView
-                    android:layout_width="90dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="Bio"
-                    android:textSize="15sp"
-                    android:id="@+id/text4"/>
+                <!--<TextView-->
+                    <!--android:layout_width="90dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:text="Bio"-->
+                    <!--android:textSize="15sp"-->
+                    <!--android:id="@+id/text4"/>-->
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/text4"
-                    android:layout_marginStart="40dp"
-                    android:layout_centerVertical="true"
-                    android:inputType="textNoSuggestions"
-                    android:background="@null"
-                    android:id="@+id/textBio"
-                    android:hint="Bio"/>
-            </RelativeLayout>
+                <!--<EditText-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_toEndOf="@id/text4"-->
+                    <!--android:layout_marginStart="40dp"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:inputType="textNoSuggestions"-->
+                    <!--android:background="@null"-->
+                    <!--android:id="@+id/textBio"-->
+                    <!--android:hint="Bio"/>-->
+            <!--</RelativeLayout>-->
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/relLayout4"
-                android:id="@+id/relLayout8"
+                android:layout_below="@+id/relLayout3"
+                android:id="@+id/relLayout4"
                 android:background="@drawable/white_grey_border_top">
 
                 <TextView
@@ -154,38 +157,38 @@
 
             </RelativeLayout>
 
+            <!--<RelativeLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="50dp"-->
+                <!--android:layout_below="@id/relLayout4"-->
+                <!--android:layout_marginTop="20dp"-->
+                <!--android:id="@+id/relLayout5">-->
+
+                <!--<TextView-->
+                    <!--android:layout_width="90dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:text="Email"-->
+                    <!--android:textSize="15sp"-->
+                    <!--android:id="@+id/text5"/>-->
+
+                <!--<EditText-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_toEndOf="@id/text5"-->
+                    <!--android:layout_marginStart="40dp"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:inputType="textNoSuggestions"-->
+                    <!--android:background="@drawable/white_grey_border_bottom"-->
+                    <!--android:id="@+id/textEmail"-->
+                    <!--android:hint="Email" />-->
+
+            <!--</RelativeLayout>-->
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_below="@id/relLayout8"
-                android:layout_marginTop="20dp"
-                android:id="@+id/relLayout5">
-
-                <TextView
-                    android:layout_width="90dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="Email"
-                    android:textSize="15sp"
-                    android:id="@+id/text5"/>
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/text5"
-                    android:layout_marginStart="40dp"
-                    android:layout_centerVertical="true"
-                    android:inputType="textNoSuggestions"
-                    android:background="@drawable/white_grey_border_bottom"
-                    android:id="@+id/textEmail"
-                    android:hint="Email" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_below="@id/relLayout5"
+                android:layout_below="@id/relLayout4"
                 android:id="@+id/relLayout6">
 
                 <TextView
@@ -204,35 +207,36 @@
                     android:layout_centerVertical="true"
                     android:inputType="textNoSuggestions"
                     android:background="@drawable/white_grey_border_bottom"
-                    android:id="@+id/textPhone"
-                    android:hint="Phone"/>
+                    android:id="@+id/phone_num"
+                    android:hint="Phone"
+                    android:textSize="15sp"/>
 
             </RelativeLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_below="@id/relLayout6"
-                android:id="@+id/relLayout7">
+            <!--<RelativeLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="50dp"-->
+                <!--android:layout_below="@id/relLayout6"-->
+                <!--android:id="@+id/relLayout7">-->
 
-                <TextView
-                    android:layout_width="90dp"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="Gender"
-                    android:textSize="15sp"
-                    android:id="@+id/text7"/>
+                <!--<TextView-->
+                    <!--android:layout_width="90dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:text="Gender"-->
+                    <!--android:textSize="15sp"-->
+                    <!--android:id="@+id/text7"/>-->
 
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/text7"
-                    android:layout_marginStart="40dp"
-                    android:layout_centerVertical="true"
-                    android:inputType="textNoSuggestions"
-                    android:background="@drawable/white_grey_border_bottom"
-                    android:id="@+id/textGender"
-                    android:hint="Gender"/>
+                <!--<EditText-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_toEndOf="@id/text7"-->
+                    <!--android:layout_marginStart="40dp"-->
+                    <!--android:layout_centerVertical="true"-->
+                    <!--android:inputType="textNoSuggestions"-->
+                    <!--android:background="@drawable/white_grey_border_bottom"-->
+                    <!--android:id="@+id/textGender"-->
+                    <!--android:hint="Gender"/>-->
 
             </RelativeLayout>
 
@@ -241,9 +245,6 @@
 
 
 
-        </RelativeLayout>
+        </ScrollView>
 
-    </ScrollView>
-
-
-</merge>
+    </merge>

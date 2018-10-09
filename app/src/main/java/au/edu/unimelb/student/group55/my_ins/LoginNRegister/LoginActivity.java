@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.MainActivity;
+import au.edu.unimelb.student.group55.my_ins.Home.HomeActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -91,20 +92,16 @@ public class LoginActivity extends AppCompatActivity {
                                         Toast.makeText(myContext, "You have successfully Logged in", Toast.LENGTH_SHORT).show();
 //                                        SharedPreferences prefs = getSharedPreferences(MainActivity.MySharedPrefs, Context.MODE_PRIVATE);
 //                                        prefs.edit().putBoolean( "firststart", false );
-//
-//                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                                        startActivity(intent);
-//                                        finish();
+
 
                                         prefs = getSharedPreferences(MainActivity.MySharedPrefs, Context.MODE_PRIVATE);
                                         prefs.edit().putBoolean( "firststart", false );
                                         prefs.edit().commit();
+
+                                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(intent);
                                         finish();
-//                                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//                                        startActivity(intent);
-//                                        LoginActivity.this.finish();
-//                                        finish();
-//                                        startActivity(getIntent());
                                     }
                                 }
                             });

@@ -41,13 +41,15 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity {
     private static final String TAG = "Profile Activity";
-    private FirebaseAuth auth;
-    private FirebaseAuth.AuthStateListener authListener;
+
     private TextView editProfile;
     private ProgressBar progressBar;
+
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     private FirebaseMethods firebaseMethods;
+    private FirebaseAuth auth;
+    private FirebaseAuth.AuthStateListener authListener;
 
     private Context context = ProfileActivity.this;
     private static final int numColumns = 3;
@@ -64,7 +66,7 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        Log.d("INFO","onCreate started!");
+        Log.d("INFO", "onCreate started!");
 
         displayName = (TextView) findViewById(R.id.display_name);
         username = (TextView) findViewById(R.id.username);
@@ -73,13 +75,11 @@ public class ProfileActivity extends AppCompatActivity {
         posts = (TextView) findViewById(R.id.posts);
         followers = (TextView) findViewById(R.id.followers);
         following = (TextView) findViewById(R.id.following);
-        progressBar = (ProgressBar) findViewById(R.id.profileProgressBar);
+//        progressBar = (ProgressBar) findViewById(R.id.profileProgressBar);
         gridView = (GridView) findViewById(R.id.image_grid);
         toolbar = (Toolbar) findViewById(R.id.profileToolBar);
         profileMenu = (ImageView) findViewById(R.id.profile_menu);
         firebaseMethods = new FirebaseMethods(context);
-
-
 
 
         setUpToolbar();
@@ -91,7 +91,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-//    set up toolbar
+    //    set up toolbar
     private void setUpToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.profile_toolbar);
         setSupportActionBar(toolbar);
@@ -99,10 +99,10 @@ public class ProfileActivity extends AppCompatActivity {
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Log.d(TAG,"clicked menu icon"+ item);
-                switch (item.getItemId()){
+                Log.d(TAG, "clicked menu icon" + item);
+                switch (item.getItemId()) {
                     case R.id.profile_menu:
-                        Log.d(TAG,"on menuItem click");
+                        Log.d(TAG, "on menuItem click");
                         auth.signOut();
                         finish();
                 }
@@ -113,8 +113,8 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     //    set up bottom view
-    private void setBottom(){
-        Log.d(TAG,"bottom view setting");
+    private void setBottom() {
+        Log.d(TAG, "bottom view setting");
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom);
         bottomNavTool.setBottomNav(bottomNavigationViewEx);
         bottomNavTool.enableNav(ProfileActivity.this, bottomNavigationViewEx);
@@ -125,13 +125,13 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.profile_menu,menu);
+        getMenuInflater().inflate(R.menu.profile_menu, menu);
         return true;
     }
 
 
-    private void setProfile(UserAccountSetting userAccountSetting){
-        UniversalImageLoader.setImage(userAccountSetting.getProfile_pic(),profile_pic,null,"");
+    private void setProfile(UserAccountSetting userAccountSetting) {
+        UniversalImageLoader.setImage(userAccountSetting.getProfile_pic(), profile_pic, null, "");
         displayName.setText(userAccountSetting.getDisplay_name());
         username.setText(userAccountSetting.getUsername());
         description.setText(userAccountSetting.getDescription());
@@ -145,7 +145,7 @@ public class ProfileActivity extends AppCompatActivity {
     /**
      * Setup the firebase auth object
      */
-    private void FirebaseAuth(){
+    private void FirebaseAuth() {
         Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
 
         auth = FirebaseAuth.getInstance();
@@ -158,8 +158,8 @@ public class ProfileActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
 
                 if (user != null) {
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());}
-                else{
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                } else {
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                     Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -182,58 +182,6 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-    //  set up edit_profile button
-    private void setUpEditProfile() {
-        editProfile = (TextView) findViewById(R.id.edit_profile);
-        editProfile.setOnClickListener(new TextView.OnClickListener() {
-            @Override
-            public void onClick(View item) {
-                Log.d(TAG,"clicked edit profile");
-                Intent intent = new Intent(ProfileActivity.this,EditProfileActivity.class);
-                startActivity(intent);
-            }
-        });
-    }
-
-
-    private void setupActivityWidgets(){
-        progressBar = (ProgressBar)findViewById(R.id.profileProgressBar);
-//        progressBar.setVisibility(View.GONE);
-          profile_pic = (CircleImageView) findViewById(R.id.profile_pic);
-    }
-
-    private void setProfilePic() {
-        Log.d(TAG, "set profile pic");
-        String imgURL = "https://artinsights.com/wp-content/uploads/2013/11/20120919143022.jpg";
-        UniversalImageLoader.setImage(imgURL, profile_pic, null, "");
-    }
-
-    private void setImageGrid(ArrayList<String> imgURLs){
-        GridView imgGrid = (GridView)findViewById(R.id.image_grid);
-
-        int screenWidth = getResources().getDisplayMetrics().widthPixels;
-        int imgWidth = screenWidth/numColumns;
-        imgGrid.setColumnWidth(imgWidth);
-
-
-        ImageAdapter imageAdapter = new ImageAdapter(context,R.layout.image_grid,"",imgURLs);
-        imgGrid.setAdapter(imageAdapter);
-
-    }
-
-    private void temGridSetup(){
-        ArrayList<String> imgURLs = new ArrayList<>();
-        imgURLs.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz1WudxjK_akg8ZwryyxpzLzDNodquERTqGmPFqFNRcu5pNA-EVw");
-        imgURLs.add("https://frontiersinblog.files.wordpress.com/2018/02/psychology-influence-behavior-with-images.jpg?w=940");
-        imgURLs.add("https://secure.i.telegraph.co.uk/multimedia/archive/03290/kitten_potd_3290498k.jpg");
-        imgURLs.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz1WudxjK_akg8ZwryyxpzLzDNodquERTqGmPFqFNRcu5pNA-EVw");
-        imgURLs.add("https://vignette.wikia.nocookie.net/parody/images/e/ef/Alice-PNG-alice-in-wonderland-33923432-585-800.png/revision/latest?cb=20141029225915");
-        imgURLs.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz1WudxjK_akg8ZwryyxpzLzDNodquERTqGmPFqFNRcu5pNA-EVw");
-
-        setImageGrid(imgURLs);
-    }
-
-
 
     @Override
     public void onStart() {
@@ -248,6 +196,67 @@ public class ProfileActivity extends AppCompatActivity {
             auth.removeAuthStateListener(authListener);
         }
     }
+
+
+
+
+
+
+
+    //  set up edit_profile button
+    private void setUpEditProfile() {
+        editProfile = (TextView) findViewById(R.id.edit_profile);
+        editProfile.setOnClickListener(new TextView.OnClickListener() {
+            @Override
+            public void onClick(View item) {
+                Log.d(TAG, "clicked edit profile");
+                Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+
+    private void setupActivityWidgets() {
+//        progressBar = (ProgressBar)findViewById(R.id.profileProgressBar);
+//        progressBar.setVisibility(View.GONE);
+        profile_pic = (CircleImageView) findViewById(R.id.profile_pic);
+    }
+
+    private void setProfilePic() {
+        Log.d(TAG, "set profile pic");
+        String imgURL = "";
+//        String imgURL = "https://artinsights.com/wp-content/uploads/2013/11/20120919143022.jpg";
+        UniversalImageLoader.setImage(imgURL, profile_pic, null, "");
+    }
+
+    private void setImageGrid(ArrayList<String> imgURLs) {
+        GridView imgGrid = (GridView) findViewById(R.id.image_grid);
+
+        int screenWidth = getResources().getDisplayMetrics().widthPixels;
+        int imgWidth = screenWidth / numColumns;
+        imgGrid.setColumnWidth(imgWidth);
+
+
+        ImageAdapter imageAdapter = new ImageAdapter(context, R.layout.image_grid, "", imgURLs);
+        imgGrid.setAdapter(imageAdapter);
+
+    }
+
+    private void temGridSetup() {
+        ArrayList<String> imgURLs = new ArrayList<>();
+        imgURLs.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz1WudxjK_akg8ZwryyxpzLzDNodquERTqGmPFqFNRcu5pNA-EVw");
+        imgURLs.add("https://frontiersinblog.files.wordpress.com/2018/02/psychology-influence-behavior-with-images.jpg?w=940");
+        imgURLs.add("https://secure.i.telegraph.co.uk/multimedia/archive/03290/kitten_potd_3290498k.jpg");
+        imgURLs.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz1WudxjK_akg8ZwryyxpzLzDNodquERTqGmPFqFNRcu5pNA-EVw");
+        imgURLs.add("https://vignette.wikia.nocookie.net/parody/images/e/ef/Alice-PNG-alice-in-wonderland-33923432-585-800.png/revision/latest?cb=20141029225915");
+        imgURLs.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz1WudxjK_akg8ZwryyxpzLzDNodquERTqGmPFqFNRcu5pNA-EVw");
+
+        setImageGrid(imgURLs);
+    }
+
 }
+
+
 
 
