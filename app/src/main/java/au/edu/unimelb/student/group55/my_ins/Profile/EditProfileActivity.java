@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -19,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -27,6 +29,7 @@ import org.w3c.dom.Text;
 import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
 import au.edu.unimelb.student.group55.my_ins.Firebase.UserAccountSetting;
 import au.edu.unimelb.student.group55.my_ins.Firebase.User;
+import au.edu.unimelb.student.group55.my_ins.Home.HomeActivity;
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.Utils.UniversalImageLoader;
@@ -44,11 +47,14 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
     private Context context;
+    private String uid;
 
     private EditText description,displayName, username,phoneNum;
     private CircleImageView profilePic;
     private TextView changeProfilePic;
-    private String uid;
+    private TextView cancel;
+    private  TextView done;
+
 
     private UserAccountSetting userAccountSetting;
 
@@ -76,10 +82,8 @@ public class EditProfileActivity extends AppCompatActivity {
 
         FirebaseAuth();
 
-
-
 //        click cancel to go back to profile page
-        TextView cancel = (TextView) findViewById(R.id.edit_profile_cancel);
+        cancel = (TextView) findViewById(R.id.edit_profile_cancel);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,6 +91,17 @@ public class EditProfileActivity extends AppCompatActivity {
                 EditProfileActivity.this.finish();
             }
         });
+
+        done = (TextView) findViewById(R.id.edit_profile_done);
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG,"profile settings changed: clicked done!");
+                saveProfileSettings();
+            }
+        });
+
+
 
     }
 
@@ -102,6 +117,8 @@ public class EditProfileActivity extends AppCompatActivity {
         username.setText(userAccountSetting.getUsername());
         description.setText(userAccountSetting.getDescription());
         phoneNum.setText(String.valueOf(userAccountSetting.getPhone_number()));
+        System.out.println(String.valueOf(userAccountSetting.getPhone_number()));
+        this.userAccountSetting = userAccountSetting;
     }
 
 
@@ -111,24 +128,97 @@ public class EditProfileActivity extends AppCompatActivity {
         final String description = this.description.getText().toString();
         final long phoneNum = Long.parseLong(this.phoneNum.getText().toString());
 
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                User user = new User();
-                for(DataSnapshot ds:dataSnapshot.child("users").getChildren()){
-                    if(ds.getKey().equals(uid)){
 
+        if(!userAccountSetting.getUsername().equals(username)){
+//            only if new username unique, we can update all information
+            checkUsername(username,displayName,description,phoneNum);
+        }else{
+//           username is not changed, so we can update other information
+            if(!userAccountSetting.getDisplay_name().equals(displayName)){
+                firebaseMethods.updateDisplayName(displayName);
+            }
+            if(!userAccountSetting.getDescription().equals(description)){
+                firebaseMethods.updateDescription(description);
+            }
+            if(userAccountSetting.getPhone_number()!=(phoneNum)){
+                firebaseMethods.updatePhoneNum(phoneNum);
+            }
+            Toast.makeText(context, "saved", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(context, ProfileActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            finish();
+        }
+
+
+//        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                User user = new User();
+//                for(DataSnapshot ds:dataSnapshot.child("users").getChildren()){
+//                    if(ds.getKey().equals(uid)){
+//
+//                    }
+//
+//                };
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+    }
+
+
+//    check id username unique, if yes, update
+    private void checkUsername(final String username,final String displayName, final String description, final long phoneNum) {
+        Log.d(TAG, "checkIfUsernameExists: Checking if  " + username + " already exists.");
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        Query query = reference
+                .child("users")
+                .orderByChild("username")
+                .equalTo(username);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if(!dataSnapshot.exists()){
+                    //add the username
+                    firebaseMethods.updateUsername(username);
+                    if(!userAccountSetting.getDisplay_name().equals(displayName)){
+                        firebaseMethods.updateDisplayName(displayName);
                     }
 
-                };
-            }
+                    if(!userAccountSetting.getDescription().equals(description)){
+                        firebaseMethods.updateDescription(description);
+                    }
 
+                    if(userAccountSetting.getPhone_number()!=(phoneNum)){
+                        firebaseMethods.updatePhoneNum(phoneNum);
+                    }
+
+                    Toast.makeText(context, "saved", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(context, ProfileActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                }
+                for(DataSnapshot singleSnapshot: dataSnapshot.getChildren()){
+                    if (singleSnapshot.exists()){
+//                        Log.d(TAG, "checkIfUsernameExists: FOUND A MATCH: " + singleSnapshot.getValue(User.class).getUsername());
+                        Toast.makeText(context, "This username is not available, please try again.", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public void onCancelled(DatabaseError databaseError) {
 
             }
         });
     }
+
 
     /**
      * Setup the firebase auth object

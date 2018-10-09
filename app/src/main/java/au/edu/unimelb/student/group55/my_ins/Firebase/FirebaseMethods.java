@@ -101,6 +101,7 @@ public class FirebaseMethods {
                     setting.setFollowing(userInfo.child(userID).getValue(UserAccountSetting.class).getFollowing());
                     setting.setFollowers(userInfo.child(userID).getValue(UserAccountSetting.class).getFollowers());
                     setting.setProfile_pic(userInfo.child(userID).getValue(UserAccountSetting.class).getProfile_pic());
+                    setting.setPhone_number(userInfo.child(userID).getValue(UserAccountSetting.class).getPhone_number());
 
                 } catch (NullPointerException e) {
                     Log.d(TAG, "user account setting null pointer error: " + e.getMessage());
@@ -113,7 +114,22 @@ public class FirebaseMethods {
 
     public void updateUsername(String username){
         databaseReference.child("users").child(userID).child("username").setValue(username);
+        databaseReference.child("user_account_settings").child(userID).child("username").setValue(username);
+    }
 
+    public void updateDisplayName(String displayName){
+        databaseReference.child("users").child(userID).child("display_name").setValue(displayName);
+        databaseReference.child("user_account_settings").child(userID).child("display_name").setValue(displayName);
+    }
+
+    public void updateDescription(String description){
+        databaseReference.child("users").child(userID).child("description").setValue(description);
+        databaseReference.child("user_account_settings").child(userID).child("description").setValue(description);
+    }
+
+    public void updatePhoneNum(long phoneNum){
+        databaseReference.child("users").child(userID).child("phone_number").setValue(phoneNum);
+        databaseReference.child("user_account_settings").child(userID).child("phone_number").setValue(phoneNum);
     }
 }
 

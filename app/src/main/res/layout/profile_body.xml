@@ -76,7 +76,7 @@ android:layout_below="@+id/profile_top">
             android:id="@+id/display_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Jupiter"
+            android:text=""
             android:textSize="15sp"
             android:paddingLeft="30dp"
             android:textColor="@color/black"
@@ -87,7 +87,7 @@ android:layout_below="@+id/profile_top">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/display_name"
-            android:text="Hey, how are you?"
+            android:text=""
             android:paddingLeft="30dp" />
 
     </RelativeLayout>
