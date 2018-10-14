@@ -2,7 +2,9 @@ package au.edu.unimelb.student.group55.my_ins.Profile;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,7 +19,12 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -25,14 +32,20 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
 import au.edu.unimelb.student.group55.my_ins.Firebase.UserAccountSetting;
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
-import au.edu.unimelb.student.group55.my_ins.LoginNRegister.RegisterActivity;
+import au.edu.unimelb.student.group55.my_ins.Utils.ImageManager;
 import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.Utils.ImageAdapter;
 import au.edu.unimelb.student.group55.my_ins.Utils.UniversalImageLoader;
@@ -54,6 +67,8 @@ public class ProfileActivity extends AppCompatActivity {
     private Context context = ProfileActivity.this;
     private static final int numColumns = 3;
 
+
+
     //widgets
     private TextView posts, followers, following, displayName, username, description;
     private CircleImageView profile_pic;
@@ -61,6 +76,14 @@ public class ProfileActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private ImageView profileMenu;
     private BottomNavigationViewEx bottomNavigationView;
+
+    private StorageReference storageReference;
+    private FirebaseUser user;
+    private String uid;
+
+
+    private Task<Uri> downloadUri;
+    private String downloadLink;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,6 +103,12 @@ public class ProfileActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.profileToolBar);
         profileMenu = (ImageView) findViewById(R.id.profile_menu);
         firebaseMethods = new FirebaseMethods(context);
+
+        storageReference = FirebaseStorage.getInstance().getReference();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            uid = user.getUid();
+        }
 
 
         setUpToolbar();
@@ -245,6 +274,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void temGridSetup() {
         ArrayList<String> imgURLs = new ArrayList<>();
+
         imgURLs.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz1WudxjK_akg8ZwryyxpzLzDNodquERTqGmPFqFNRcu5pNA-EVw");
         imgURLs.add("https://frontiersinblog.files.wordpress.com/2018/02/psychology-influence-behavior-with-images.jpg?w=940");
         imgURLs.add("https://secure.i.telegraph.co.uk/multimedia/archive/03290/kitten_potd_3290498k.jpg");
@@ -255,7 +285,15 @@ public class ProfileActivity extends AppCompatActivity {
         setImageGrid(imgURLs);
     }
 
+
+
+
+
+
 }
+
+
+
 
 
 

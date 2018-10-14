@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -21,6 +22,8 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 import java.io.File;
 import java.io.InputStream;
 
+import au.edu.unimelb.student.group55.my_ins.Profile.EditProfileActivity;
+import au.edu.unimelb.student.group55.my_ins.Profile.ProfileActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 import iamutkarshtiwari.github.io.ananas.editimage.EditImageActivity;
 
@@ -42,11 +45,14 @@ public class ApplyFilters extends AppCompatActivity {
     private String postMessage;
 
     public String cropPath;
+    private static final String TAG = "Photo Activity";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.photo_gallery );
+
+
 
         imagePath = applicationFolder();
         imageView = (ImageView) findViewById(R.id.imageView);
@@ -64,23 +70,36 @@ public class ApplyFilters extends AppCompatActivity {
         nextScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                postMessage = userInputEditText.getText().toString();
-                if (postMessage.matches("")) {
-                    notice();
-                    return;
-                }
+                if(isRootTask()){
+                    postMessage = userInputEditText.getText().toString();
+                    if (postMessage.matches("")) {
+                        notice();
+                        return;
+                    }
 
 
-                if(postMessage == ""){
-                    Toast.makeText(ApplyFilters.this, "Please say something about your post~", Toast.LENGTH_SHORT).show();
-                }else{
-                    // Upload the image in the background to avoid stop front-end UI
-                    Intent photoUploadService = new Intent( ApplyFilters.this, PhotoUploadService.class );
-                    photoUploadService.putExtra( "file path", imagePath );
-                    photoUploadService.putExtra( "post message", postMessage );
-                    startService( photoUploadService );
+                    if(postMessage == ""){
+                        Toast.makeText(ApplyFilters.this, "Please say something about your post~", Toast.LENGTH_SHORT).show();
+                    }else{
+
+
+                        // Upload the image in the background to avoid stop front-end UI
+                        Intent photoUploadService = new Intent( ApplyFilters.this, PhotoUploadService.class );
+                        photoUploadService.putExtra( "file path", imagePath );
+                        photoUploadService.putExtra( "post message", postMessage );
+                        startService( photoUploadService );
+                        finish();
+                    }
+                }else {
+                    Intent intent = new Intent( ApplyFilters.this, EditProfileActivity.class );
+                    intent.putExtra( "profilePicPath", imagePath );
+//                    photoUploadService.putExtra( "post message", postMessage );
+//                    startService( photoUploadService );
+                    startActivity(intent);
                     finish();
+
                 }
+
 
             }
         });
@@ -153,6 +172,20 @@ public class ApplyFilters extends AppCompatActivity {
         }
 
     }
+
+    private boolean isRootTask(){
+
+        int task = getIntent().getFlags();
+        Log.d(TAG,"Flag task: " + task);
+        if(task == 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
+
 
 
 

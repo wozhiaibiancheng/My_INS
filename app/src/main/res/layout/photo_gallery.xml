@@ -29,7 +29,7 @@
             android:layout_height="100dp"
             android:ems="10"
             android:inputType="textMultiLine"
-            android:hint="Say something about your post here"/>
+            android:hint="Write a caption..."/>
 
         <au.edu.unimelb.student.group55.my_ins.Utils.SquareImageView
             android:id="@+id/imageView"

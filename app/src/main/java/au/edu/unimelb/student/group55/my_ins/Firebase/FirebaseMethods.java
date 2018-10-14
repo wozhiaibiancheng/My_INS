@@ -59,7 +59,6 @@ public class FirebaseMethods {
 
     public void addUser(String email, String username, String description, String profile_pic,String userID) {
         User user = new User(userID, username, 1, email);
-        System.out.println("11111111111111: " + userID);
 
         databaseReference.child("users").child(userID).setValue(user);
 

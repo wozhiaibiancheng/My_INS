@@ -2,7 +2,11 @@ package au.edu.unimelb.student.group55.my_ins.Profile;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +18,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -22,16 +29,27 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.w3c.dom.Text;
 
+import java.io.ByteArrayOutputStream;
+import java.text.DateFormat;
+import java.util.Date;
+
 import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
 import au.edu.unimelb.student.group55.my_ins.Firebase.UserAccountSetting;
-import au.edu.unimelb.student.group55.my_ins.Firebase.User;
+import au.edu.unimelb.student.group55.my_ins.PhotoNGallery.ApplyFilters;
 import au.edu.unimelb.student.group55.my_ins.Home.HomeActivity;
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
+import au.edu.unimelb.student.group55.my_ins.PhotoNGallery.ApplyFilters;
+import au.edu.unimelb.student.group55.my_ins.PhotoNGallery.PhotoUploadService;
 import au.edu.unimelb.student.group55.my_ins.R;
+import au.edu.unimelb.student.group55.my_ins.Utils.ImageManager;
 import au.edu.unimelb.student.group55.my_ins.Utils.UniversalImageLoader;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -58,6 +76,19 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private UserAccountSetting userAccountSetting;
 
+    private StorageReference storageReference;
+    private FirebaseStorage storage;
+    private FirebaseUser user;
+
+    private Task<Uri> downloadUri;
+    private String downloadLink;
+    private double mPhotoUploadProgress = 0;
+
+    private String IMAGE_PATH;
+
+    private Bitmap resultImageBitmap;
+    private ByteArrayOutputStream baos;
+    private byte[] imageData;
 
 
 
@@ -79,8 +110,12 @@ public class EditProfileActivity extends AppCompatActivity {
         changeProfilePic = (TextView)findViewById(R.id.change_profile_pic);
         context = EditProfileActivity.this;
         firebaseMethods = new FirebaseMethods(context);
+        changeProfilePic = (TextView)findViewById(R.id.change_profile_pic);
+        baos = new ByteArrayOutputStream();
+        storage = FirebaseStorage.getInstance();
 
         FirebaseAuth();
+
 
 //        click cancel to go back to profile page
         cancel = (TextView) findViewById(R.id.edit_profile_cancel);
@@ -101,6 +136,8 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
+        getIncomingIntent();
+
 
 
     }
@@ -119,6 +156,17 @@ public class EditProfileActivity extends AppCompatActivity {
         phoneNum.setText(String.valueOf(userAccountSetting.getPhone_number()));
         System.out.println(String.valueOf(userAccountSetting.getPhone_number()));
         this.userAccountSetting = userAccountSetting;
+
+        changeProfilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG,"changing profile picture");
+                Intent intent = new Intent(context, ApplyFilters.class);
+//                set a none-zero flag to differentiate post and chang profile methods
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -218,6 +266,104 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    private void uploadProfilePic(final String imgUrl,
+                                  Bitmap bm){
+        Log.d(TAG, "uploadProfilePic: attempting to uplaod new profile pic.");
+
+        final String currentDate = DateFormat.getDateTimeInstance().format(new Date());
+
+//        FilePaths filePaths = new FilePaths();
+        String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        storageReference = storage.getReference().
+                child( uid ).child(currentDate + ".jpg");
+
+        //convert image url to bitmap
+        if(bm == null){
+            bm = ImageManager.getBitmap(imgUrl);
+        }
+        byte[] bytes = ImageManager.getBytesFromBitmap(bm, 100);
+
+        UploadTask uploadTask = null;
+        uploadTask = storageReference.putBytes(bytes);
+
+        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                downloadUri = storageReference.getDownloadUrl();
+                downloadLink = downloadUri.toString();
+
+                Toast.makeText(context, "photo upload success", Toast.LENGTH_SHORT).show();
+
+                //insert into 'user_account_settings' node
+                setProfilePhoto(downloadLink);
+
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d(TAG, "onFailure: Photo upload failed.");
+                Toast.makeText(context, "Photo upload failed ", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+
+                if(progress - 15 > mPhotoUploadProgress){
+                    Toast.makeText(context, "photo upload progress: " + String.format("%.0f", progress) + "%", Toast.LENGTH_SHORT).show();
+                    mPhotoUploadProgress = progress;
+                }
+
+                Log.d(TAG, "onProgress: upload progress: " + progress + "% done");
+            }
+        });
+    }
+
+
+    private void getIncomingIntent(){
+        Intent intent = getIntent();
+
+        if(intent.hasExtra("profilePicPath")){
+            //if there is an imageUrl attached as an extra, then it was chosen from the gallery/photo fragment
+            Log.d(TAG, "getIncomingIntent: New incoming imgUrl");
+            //set the new profile picture
+            IMAGE_PATH = intent.getStringExtra( "profilePicPath" );
+            resultImageBitmap = readImage( IMAGE_PATH );
+            resultImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+
+
+            uploadProfilePic(null,resultImageBitmap);
+        }
+            }
+
+//            update profile pic url to db
+    private void setProfilePhoto(String url){
+        Log.d(TAG, "setProfilePhoto: setting new profile image: " + url);
+
+        databaseReference.child("user_account_settings")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .child("profile_photo")
+                .setValue(url);
+    }
+
+    public Bitmap readImage(String imagePath){
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
+        System.out.println("11111111111111111: " + imagePath);
+
+        return bitmap;
+    }
+
+
+
+
+
+
+
 
 
     /**
