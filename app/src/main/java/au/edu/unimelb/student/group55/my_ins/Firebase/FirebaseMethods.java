@@ -66,7 +66,7 @@ public class FirebaseMethods {
 
         databaseReference.child("users").child(userID).setValue(user);
 
-        UserAccountSetting userAccountSetting = new UserAccountSetting("", username, 0, 0, 0, profile_pic, username,0);
+        UserAccountSetting userAccountSetting = new UserAccountSetting("", username, 0, 0, 0, profile_pic, username,0,userID);
 
         databaseReference.child(myContext.getString(R.string.dbname_user_account_settings)).child(userID).setValue(userAccountSetting);
     }
