@@ -18,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -80,7 +82,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private FirebaseStorage storage;
     private FirebaseUser user;
 
-    private Task<Uri> downloadUri;
+//    private Task<Uri> downloadUri;
     private String downloadLink;
     private double mPhotoUploadProgress = 0;
 
@@ -277,7 +279,7 @@ public class EditProfileActivity extends AppCompatActivity {
 //        FilePaths filePaths = new FilePaths();
         String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
         storageReference = storage.getReference().
-                child( uid ).child(currentDate + ".jpg");
+                child(uid + "/"+ currentDate + ".jpg");
 
         //convert image url to bitmap
         if(bm == null){
@@ -288,39 +290,101 @@ public class EditProfileActivity extends AppCompatActivity {
         UploadTask uploadTask = null;
         uploadTask = storageReference.putBytes(bytes);
 
-        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
             @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                downloadUri = storageReference.getDownloadUrl();
-                downloadLink = downloadUri.toString();
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+
+                // Continue with the task to get the download URL
+                return storageReference.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                    downloadLink = downloadUri.toString();
+                    Log.d(TAG,"downloadLink: " + downloadLink);
 
                 Toast.makeText(context, "photo upload success", Toast.LENGTH_SHORT).show();
 
-                //insert into 'user_account_settings' node
+//                    insert into 'user_account_settings' node
                 setProfilePhoto(downloadLink);
 
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.d(TAG, "onFailure: Photo upload failed.");
-                Toast.makeText(context, "Photo upload failed ", Toast.LENGTH_SHORT).show();
-            }
-        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-
-                if(progress - 15 > mPhotoUploadProgress){
-                    Toast.makeText(context, "photo upload progress: " + String.format("%.0f", progress) + "%", Toast.LENGTH_SHORT).show();
-                    mPhotoUploadProgress = progress;
+                //navigate to the main feed so the user can see their photo
+                Intent intent = new Intent(context, ProfileActivity.class);
+                startActivity(intent);
+                } else {
+                    // Handle failures
+                    // ...
                 }
-
-                Log.d(TAG, "onProgress: upload progress: " + progress + "% done");
             }
         });
-    }
+
+
+//        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                    @Override
+//                    public void onSuccess(Uri uri) {
+//                        // Got the download URL for 'users/me/profile.png'
+//                        Uri downloadUri = taskSnapshot.getMetadata().getDownloadUrl();
+//                        generatedFilePath = downloadUri.toString(); /// The string(file link) that you need
+//                    }
+//                }).addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception exception) {
+//                        // Handle any errors
+//                    }
+//                });
+//                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener() {
+//                    @override
+//                    public void onSuccess(Uri uri) {
+//                        Uri firebaseUrl = uri;
+////Task firebaseUrl = taskSnapshot.getStorage().getDownloadUrl();
+////Toast meassage
+//                        Toast.makeText(mContext, "Photo upload successful !", Toast.LENGTH_SHORT).show();
+//                        addPhotoToDatabase(caption, firebaseUrl.toString());
+//                Uri firebaseUrl = taskSnapshot.getDownloadUrl();
+//                Uri download = taskSnapshot.getMetadata().getReference().getDownloadUrl();
+
+//                downloadLink = downloadUri.toString();
+//                Log.d(TAG,"downloadLink: " + downloadLink);
+
+//                Toast.makeText(context, "photo upload success", Toast.LENGTH_SHORT).show();
+
+                //insert into 'user_account_settings' node
+//                setProfilePhoto(downloadLink);
+//
+//                //navigate to the main feed so the user can see their photo
+//                Intent intent = new Intent(context, ProfileActivity.class);
+//                startActivity(intent);
+//
+//
+//            }
+//        }).addOnFailureListener(new OnFailureListener() {
+//            @Override
+//            public void onFailure(@NonNull Exception e) {
+//                Log.d(TAG, "onFailure: Photo upload failed.");
+//                Toast.makeText(context, "Photo upload failed ", Toast.LENGTH_SHORT).show();
+//            }
+//        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+//            @Override
+//            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+//                double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+//
+//                if(progress - 15 > mPhotoUploadProgress){
+//                    Toast.makeText(context, "photo upload progress: " + String.format("%.0f", progress) + "%", Toast.LENGTH_SHORT).show();
+//                    mPhotoUploadProgress = progress;
+//                }
+//
+//                Log.d(TAG, "onProgress: upload progress: " + progress + "% done");
+            }
+        ;
+
 
 
     private void getIncomingIntent(){
@@ -345,7 +409,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         databaseReference.child("user_account_settings")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .child("profile_photo")
+                .child("profile_pic")
                 .setValue(url);
     }
 

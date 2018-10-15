@@ -10,6 +10,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import au.edu.unimelb.student.group55.my_ins.LoginNRegister.RegisterActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 
 
@@ -49,8 +51,10 @@ public class FirebaseMethods {
                         } else if (task.isSuccessful()) {
                             userID = myAuth.getCurrentUser().getUid();
                             addUser(email,username,"","",userID);
+                            Toast.makeText(myContext, "You have successfully registered!" , Toast.LENGTH_LONG).show();
 
                             Log.d(TAG, "onComplete: Authstate changed: " + userID);
+                            RegisterActivity.getInstance().finish();
                         }
                     }
                 });

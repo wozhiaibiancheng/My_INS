@@ -67,7 +67,7 @@ public class ProfileActivity extends AppCompatActivity {
     private Context context = ProfileActivity.this;
     private static final int numColumns = 3;
 
-
+    private UserAccountSetting userAccountSetting;
 
     //widgets
     private TextView posts, followers, following, displayName, username, description;
@@ -80,6 +80,8 @@ public class ProfileActivity extends AppCompatActivity {
     private StorageReference storageReference;
     private FirebaseUser user;
     private String uid;
+
+    private UserAccountSetting userAccountSettings;
 
 
     private Task<Uri> downloadUri;
@@ -115,7 +117,8 @@ public class ProfileActivity extends AppCompatActivity {
         setBottom();
         setUpEditProfile();
         setupActivityWidgets();
-        setProfilePic();
+//        setProfile();
+//        setProfilePic();
         temGridSetup();
     }
 
@@ -252,12 +255,13 @@ public class ProfileActivity extends AppCompatActivity {
         profile_pic = (CircleImageView) findViewById(R.id.profile_pic);
     }
 
-    private void setProfilePic() {
-        Log.d(TAG, "set profile pic");
-        String imgURL = "";
-//        String imgURL = "https://artinsights.com/wp-content/uploads/2013/11/20120919143022.jpg";
-        UniversalImageLoader.setImage(imgURL, profile_pic, null, "");
-    }
+//    private void setProfilePic() {
+//        Log.d(TAG, "set profile pic");
+//        String imgURL = "";
+//        imgURL = "https://artinsights.com/wp-content/uploads/2013/11/20120919143022.jpg";
+//        UserAccountSettings userAccountSettings = userSettings.getSettings();
+//        UniversalImageLoader.setImage(userAccountSetting.getProfile_pic(), profile_pic, null, "");
+//    }
 
     private void setImageGrid(ArrayList<String> imgURLs) {
         GridView imgGrid = (GridView) findViewById(R.id.image_grid);

@@ -44,8 +44,10 @@ public class RegisterActivity extends AppCompatActivity {
     private FirebaseMethods firebaseMethods;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
-    private Random rand = new Random();
-    private int randomSize = 9999999;
+
+
+    static RegisterActivity registerActivity;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,6 +58,12 @@ public class RegisterActivity extends AppCompatActivity {
         getInputValue();
         setupFirebaseAuth();
         initialization();
+
+        registerActivity = this;
+    }
+
+    public static RegisterActivity getInstance(){
+        return   registerActivity;
     }
 
     private void initialization(){
@@ -178,47 +186,10 @@ public class RegisterActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.exists()){
                     firebaseMethods.registerNewEmail(email, password, username);
-//                    firebaseMethods.addUser(email,username,"","");
                     SharedPreferences prefs = getSharedPreferences(MainActivity.MySharedPrefs, Context.MODE_PRIVATE);
                     prefs.edit().putBoolean( "firststart", false );
-                    Toast.makeText(myContext, "You have successfully registered!" , Toast.LENGTH_LONG).show();
                     myAuth.signOut();
-//                    finish();
 
-                }else {
-                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                        if (ds.exists()) {
-                            Log.d(TAG, "username exists");
-                            Toast.makeText(myContext, "username exists" , Toast.LENGTH_LONG).show();
-
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void checkUsernameExists(final String username){
-        Log.d(TAG,"checking" + username);
-
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        Query query = databaseReference.child("users").orderByChild("username").equalTo(username);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.exists()){
-                    firebaseMethods.registerNewEmail(email, password, username);
-//                    firebaseMethods.addUser(email,username,"","");
-                    SharedPreferences prefs = getSharedPreferences(MainActivity.MySharedPrefs, Context.MODE_PRIVATE);
-                    prefs.edit().putBoolean( "firststart", false );
-                    Toast.makeText(myContext, "You have successfully registered!" , Toast.LENGTH_LONG).show();
-                    myAuth.signOut();
-                    finish();
 
                 }else {
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
@@ -237,5 +208,40 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
     }
+
+//    private void checkUsernameExists(final String username){
+//        Log.d(TAG,"checking" + username);
+//
+//        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+//        Query query = databaseReference.child("users").orderByChild("username").equalTo(username);
+//        query.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if(!dataSnapshot.exists()){
+//                    firebaseMethods.registerNewEmail(email, password, username);
+////                    firebaseMethods.addUser(email,username,"","");
+//                    SharedPreferences prefs = getSharedPreferences(MainActivity.MySharedPrefs, Context.MODE_PRIVATE);
+//                    prefs.edit().putBoolean( "firststart", false );
+//                    Toast.makeText(myContext, "You have successfully registered!" , Toast.LENGTH_LONG).show();
+//                    myAuth.signOut();
+//                    finish();
+//
+//                }else {
+//                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+//                        if (ds.exists()) {
+//                            Log.d(TAG, "username exists");
+//                            Toast.makeText(myContext, "username is not available, please try again!" , Toast.LENGTH_LONG).show();
+//
+//                        }
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
 }

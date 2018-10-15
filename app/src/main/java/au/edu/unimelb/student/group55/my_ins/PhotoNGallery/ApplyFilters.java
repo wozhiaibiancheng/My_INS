@@ -93,6 +93,7 @@ public class ApplyFilters extends AppCompatActivity {
                 }else {
                     Intent intent = new Intent( ApplyFilters.this, EditProfileActivity.class );
                     intent.putExtra( "profilePicPath", imagePath );
+                    Log.d(TAG,"imagePath: " + imagePath);
 //                    photoUploadService.putExtra( "post message", postMessage );
 //                    startService( photoUploadService );
                     startActivity(intent);
