@@ -31,7 +31,7 @@ import java.util.Locale;
 import au.edu.unimelb.student.group55.my_ins.Firebase.User;
 import au.edu.unimelb.student.group55.my_ins.Profile.ProfileActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
-import au.edu.unimelb.student.group55.my_ins.Utils.bottomNavTool;
+import au.edu.unimelb.student.group55.my_ins.SupportFunctions.BottomNavTool;
 
 public class DiscoverActivity extends AppCompatActivity {
     private static final String TAG = "Discover Activity";
@@ -152,8 +152,8 @@ public class DiscoverActivity extends AppCompatActivity {
     private void setBottom(){
         Log.d(TAG,"bottom view setting");
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom);
-        bottomNavTool.setBottomNav(bottomNavigationViewEx);
-        bottomNavTool.enableNav(DiscoverActivity.this, bottomNavigationViewEx);
+        BottomNavTool.setBottomNav(bottomNavigationViewEx);
+        BottomNavTool.enableNav(DiscoverActivity.this, bottomNavigationViewEx);
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(1);
         menuItem.setChecked(true);

@@ -31,7 +31,7 @@
             android:inputType="textMultiLine"
             android:hint="Write a caption..."/>
 
-        <au.edu.unimelb.student.group55.my_ins.Utils.SquareImageView
+        <au.edu.unimelb.student.group55.my_ins.SupportFunctions.SquareImageView
             android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="400dp"

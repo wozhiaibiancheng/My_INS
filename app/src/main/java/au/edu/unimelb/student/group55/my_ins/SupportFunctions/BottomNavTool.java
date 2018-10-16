@@ -1,4 +1,4 @@
-package au.edu.unimelb.student.group55.my_ins.Utils;
+package au.edu.unimelb.student.group55.my_ins.SupportFunctions;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,8 +8,6 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
-import com.theartofdev.edmodo.cropper.CropImage;
-import com.theartofdev.edmodo.cropper.CropImageView;
 
 import au.edu.unimelb.student.group55.my_ins.Discovery.DiscoverActivity;
 import au.edu.unimelb.student.group55.my_ins.Feed.FeedActivity;
@@ -18,8 +16,8 @@ import au.edu.unimelb.student.group55.my_ins.PhotoNGallery.ApplyFilters;
 import au.edu.unimelb.student.group55.my_ins.Profile.ProfileActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 
-public class bottomNavTool {
-    private static final String TAG = "bottomNavTool activity";
+public class BottomNavTool {
+    private static final String TAG = "BottomNavTool activity";
 
     public static void setBottomNav(BottomNavigationViewEx bottomNavigationViewEx){
         Log.d(TAG,"setting nav view");

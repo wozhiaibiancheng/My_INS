@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import au.edu.unimelb.student.group55.my_ins.R;
-import au.edu.unimelb.student.group55.my_ins.Utils.bottomNavTool;
+import au.edu.unimelb.student.group55.my_ins.SupportFunctions.BottomNavTool;
 
 public class UploadActivity extends AppCompatActivity {
     private static final String TAG = "Upload Activity";
@@ -30,8 +30,8 @@ public class UploadActivity extends AppCompatActivity {
     private void setBottom(){
         Log.d(TAG,"bottom view setting");
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom);
-        bottomNavTool.setBottomNav(bottomNavigationViewEx);
-        bottomNavTool.enableNav(UploadActivity.this, bottomNavigationViewEx);
+        BottomNavTool.setBottomNav(bottomNavigationViewEx);
+        BottomNavTool.enableNav(UploadActivity.this, bottomNavigationViewEx);
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(2);
         menuItem.setChecked(true);

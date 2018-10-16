@@ -1,6 +1,5 @@
 package au.edu.unimelb.student.group55.my_ins.LoginNRegister;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -21,14 +20,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
-import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
-import au.edu.unimelb.student.group55.my_ins.Firebase.UserAccountSetting;
 import au.edu.unimelb.student.group55.my_ins.MainActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
-import au.edu.unimelb.student.group55.my_ins.Utils.UniversalImageLoader;
-
-import java.util.Random;
-import java.util.zip.Inflater;
 
 
 public class RegisterActivity extends AppCompatActivity {

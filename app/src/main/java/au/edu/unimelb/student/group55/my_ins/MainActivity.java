@@ -21,9 +21,8 @@ import au.edu.unimelb.student.group55.my_ins.Home.HomeFragment;
 import au.edu.unimelb.student.group55.my_ins.Home.PlaceHolder;
 import au.edu.unimelb.student.group55.my_ins.Home.SectionAdapter;
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
-import au.edu.unimelb.student.group55.my_ins.Utils.UniversalImageLoader;
-import au.edu.unimelb.student.group55.my_ins.Utils.bottomNavTool;
-import au.edu.unimelb.student.group55.my_ins.Home.HomeActivity;
+import au.edu.unimelb.student.group55.my_ins.SupportFunctions.UniversalImageLoader;
+import au.edu.unimelb.student.group55.my_ins.SupportFunctions.BottomNavTool;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -57,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
     //    set up bottom view
     private void setBottom(){
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom);
-        bottomNavTool.setBottomNav(bottomNavigationViewEx);
-        bottomNavTool.enableNav(MainActivity.this, bottomNavigationViewEx);
+        BottomNavTool.setBottomNav(bottomNavigationViewEx);
+        BottomNavTool.enableNav(MainActivity.this, bottomNavigationViewEx);
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(0);
         menuItem.setChecked(true);
