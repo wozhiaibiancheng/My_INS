@@ -290,6 +290,22 @@ public class EditProfileActivity extends AppCompatActivity {
         UploadTask uploadTask = null;
         uploadTask = storageReference.putBytes(bytes);
 
+        uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+
+                if(progress - 15 > mPhotoUploadProgress){
+                    Toast.makeText(context, "photo upload progress: " + String.format("%.0f", progress) + "%", Toast.LENGTH_SHORT).show();
+                    mPhotoUploadProgress = progress;
+                }
+
+                Log.d(TAG, "onProgress: upload progress: " + progress + "% done");
+            }
+        });
+
+
+
         Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
             @Override
             public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
@@ -417,7 +433,6 @@ public class EditProfileActivity extends AppCompatActivity {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
         Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
-        System.out.println("11111111111111111: " + imagePath);
 
         return bitmap;
     }
