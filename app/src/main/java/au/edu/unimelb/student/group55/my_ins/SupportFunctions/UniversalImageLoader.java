@@ -1,4 +1,4 @@
-package au.edu.unimelb.student.group55.my_ins.Utils;
+package au.edu.unimelb.student.group55.my_ins.SupportFunctions;
 
 import android.content.Context;
 import android.graphics.Bitmap;

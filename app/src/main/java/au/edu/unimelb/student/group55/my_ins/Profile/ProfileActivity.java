@@ -2,13 +2,10 @@ package au.edu.unimelb.student.group55.my_ins.Profile;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -19,11 +16,8 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,23 +27,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
 import au.edu.unimelb.student.group55.my_ins.Firebase.UserAccountSetting;
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
-import au.edu.unimelb.student.group55.my_ins.Utils.ImageManager;
 import au.edu.unimelb.student.group55.my_ins.R;
-import au.edu.unimelb.student.group55.my_ins.Utils.ImageAdapter;
-import au.edu.unimelb.student.group55.my_ins.Utils.UniversalImageLoader;
-import au.edu.unimelb.student.group55.my_ins.Utils.bottomNavTool;
+import au.edu.unimelb.student.group55.my_ins.SupportFunctions.ImageAdapter;
+import au.edu.unimelb.student.group55.my_ins.SupportFunctions.UniversalImageLoader;
+import au.edu.unimelb.student.group55.my_ins.SupportFunctions.BottomNavTool;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileActivity extends AppCompatActivity {
@@ -148,8 +137,8 @@ public class ProfileActivity extends AppCompatActivity {
     private void setBottom() {
         Log.d(TAG, "bottom view setting");
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom);
-        bottomNavTool.setBottomNav(bottomNavigationViewEx);
-        bottomNavTool.enableNav(ProfileActivity.this, bottomNavigationViewEx);
+        BottomNavTool.setBottomNav(bottomNavigationViewEx);
+        BottomNavTool.enableNav(ProfileActivity.this, bottomNavigationViewEx);
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(4);
         menuItem.setChecked(true);

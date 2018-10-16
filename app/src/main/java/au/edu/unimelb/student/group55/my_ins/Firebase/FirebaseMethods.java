@@ -7,9 +7,11 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.StorageReference;
 
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.RegisterActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
@@ -24,6 +26,7 @@ public class FirebaseMethods {
     private Context myContext;
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
+    private StorageReference mStorageReference;
 
     public FirebaseMethods(Context context) {
         myAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
@@ -36,12 +39,22 @@ public class FirebaseMethods {
         }
     }
 
+    public int getImageNumber(DataSnapshot dataSnapshot){
+        int imageNumber = 0;
+        for(DataSnapshot ds: dataSnapshot
+                .child( FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .getChildren()){
+            imageNumber++;
+        }
+        return imageNumber;
+    }
+
+
     public void registerNewEmail(final String email, String password, final String username) {
         myAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "createUserWithEmail:onComplete:" + task.isSuccessful());
                         // If sign in fails, display a message to the user. If sign in succeeds
                         // the auth state listener will be notified and logic to handle the
                         // signed in user can be handled in the listener.
@@ -52,8 +65,6 @@ public class FirebaseMethods {
                             userID = myAuth.getCurrentUser().getUid();
                             addUser(email,username,"","",userID);
                             Toast.makeText(myContext, "You have successfully registered!" , Toast.LENGTH_LONG).show();
-
-                            Log.d(TAG, "onComplete: Authstate changed: " + userID);
                             RegisterActivity.getInstance().finish();
                         }
                     }
@@ -107,7 +118,6 @@ public class FirebaseMethods {
                     setting.setPhone_number(userInfo.child(userID).getValue(UserAccountSetting.class).getPhone_number());
 
                 } catch (NullPointerException e) {
-                    Log.d(TAG, "user account setting null pointer error: " + e.getMessage());
                 }
 
             }

@@ -1,9 +1,7 @@
 package au.edu.unimelb.student.group55.my_ins.Home;
 
 //import android.content.SharedPreferences;
-import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.DrawableRes;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -12,14 +10,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 //import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
 
-import au.edu.unimelb.student.group55.my_ins.Profile.EditProfileActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
-import au.edu.unimelb.student.group55.my_ins.Utils.UniversalImageLoader;
-import au.edu.unimelb.student.group55.my_ins.Utils.bottomNavTool;
+import au.edu.unimelb.student.group55.my_ins.SupportFunctions.BottomNavTool;
 
 
 public class HomeActivity extends AppCompatActivity {
@@ -56,8 +51,8 @@ public class HomeActivity extends AppCompatActivity {
     private void setBottom(){
         Log.d(TAG,"bottom view setting");
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom);
-        bottomNavTool.setBottomNav(bottomNavigationViewEx);
-        bottomNavTool.enableNav(HomeActivity.this, bottomNavigationViewEx);
+        BottomNavTool.setBottomNav(bottomNavigationViewEx);
+        BottomNavTool.enableNav(HomeActivity.this, bottomNavigationViewEx);
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(0);
         menuItem.setChecked(true);
