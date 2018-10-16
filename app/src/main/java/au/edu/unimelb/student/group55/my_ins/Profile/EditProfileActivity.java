@@ -45,11 +45,12 @@ import java.util.Date;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
 import au.edu.unimelb.student.group55.my_ins.Firebase.UserAccountSetting;
-import au.edu.unimelb.student.group55.my_ins.PhotoNGallery.ApplyFilters;
+import au.edu.unimelb.student.group55.my_ins.PhotoNGallery.ProfilePicActivity;
 import au.edu.unimelb.student.group55.my_ins.Home.HomeActivity;
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
-import au.edu.unimelb.student.group55.my_ins.PhotoNGallery.ApplyFilters;
+//import au.edu.unimelb.student.group55.my_ins.PhotoNGallery.ApplyFilters;
 import au.edu.unimelb.student.group55.my_ins.PhotoNGallery.PhotoUploadService;
+import au.edu.unimelb.student.group55.my_ins.PhotoNGallery.ProfilePicActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.Utils.ImageManager;
 import au.edu.unimelb.student.group55.my_ins.Utils.UniversalImageLoader;
@@ -112,7 +113,6 @@ public class EditProfileActivity extends AppCompatActivity {
         changeProfilePic = (TextView)findViewById(R.id.change_profile_pic);
         context = EditProfileActivity.this;
         firebaseMethods = new FirebaseMethods(context);
-        changeProfilePic = (TextView)findViewById(R.id.change_profile_pic);
         baos = new ByteArrayOutputStream();
         storage = FirebaseStorage.getInstance();
 
@@ -163,7 +163,7 @@ public class EditProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d(TAG,"changing profile picture");
-                Intent intent = new Intent(context, ApplyFilters.class);
+                Intent intent = new Intent(context, ProfilePicActivity.class);
 //                set a none-zero flag to differentiate post and chang profile methods
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
@@ -356,7 +356,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
 //                Toast.makeText(context, "photo upload success", Toast.LENGTH_SHORT).show();
 
-                //insert into 'user_account_settings' node
+        //insert into 'user_account_settings' node
 //                setProfilePhoto(downloadLink);
 //
 //                //navigate to the main feed so the user can see their photo
@@ -382,7 +382,7 @@ public class EditProfileActivity extends AppCompatActivity {
 //                }
 //
 //                Log.d(TAG, "onProgress: upload progress: " + progress + "% done");
-            }
+    }
         ;
 
 
