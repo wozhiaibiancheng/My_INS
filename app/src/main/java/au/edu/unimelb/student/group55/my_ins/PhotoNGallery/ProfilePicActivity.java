@@ -60,7 +60,6 @@ public class ProfilePicActivity extends AppCompatActivity {
         imagePath = applicationFolder();
         imageView = (ImageView) findViewById(R.id.profile_pic);
 
-//        userInputEditText = (TextView) findViewById(R.id.profile_pic_text);
         TextView shareClose = (TextView) findViewById(R.id.gallery_cancel);
         shareClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,10 +73,7 @@ public class ProfilePicActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                     Intent intent = new Intent( context, EditProfileActivity.class );
-                    intent.putExtra( "profilePicPath", imagePath );
-                    Log.d(TAG,"imagePath: " + imagePath);
-//                    photoUploadService.putExtra( "post message", postMessage );
-//                    startService( photoUploadService );
+                    intent.putExtra( "profilePicPath", imagePath );;
                     startActivity(intent);
                     finish();
 
@@ -92,10 +88,6 @@ public class ProfilePicActivity extends AppCompatActivity {
                 .start(this);
 
     }
-    public void notice(){
-        Toast.makeText(this, "Please say something for your post", Toast.LENGTH_SHORT).show();
-    }
-
 
     public String applicationFolder(){
 
