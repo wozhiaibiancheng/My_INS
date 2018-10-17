@@ -174,7 +174,6 @@ public class EditProfileActivity extends AppCompatActivity {
         final String description = this.description.getText().toString();
         final long phoneNum = Long.parseLong(this.phoneNum.getText().toString());
 
-
         if(!userAccountSetting.getUsername().equals(username)){
 //            only if new username unique, we can update all information
             checkUsername(username,displayName,description,phoneNum);

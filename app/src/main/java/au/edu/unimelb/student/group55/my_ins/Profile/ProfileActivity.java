@@ -267,19 +267,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-    private void temGridSetup() {
-        ArrayList<String> imgURLs = new ArrayList<>();
-
-
-        imgURLs.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz1WudxjK_akg8ZwryyxpzLzDNodquERTqGmPFqFNRcu5pNA-EVw");
-        imgURLs.add("https://frontiersinblog.files.wordpress.com/2018/02/psychology-influence-behavior-with-images.jpg?w=940");
-        imgURLs.add("https://secure.i.telegraph.co.uk/multimedia/archive/03290/kitten_potd_3290498k.jpg");
-        imgURLs.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz1WudxjK_akg8ZwryyxpzLzDNodquERTqGmPFqFNRcu5pNA-EVw");
-        imgURLs.add("https://vignette.wikia.nocookie.net/parody/images/e/ef/Alice-PNG-alice-in-wonderland-33923432-585-800.png/revision/latest?cb=20141029225915");
-        imgURLs.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz1WudxjK_akg8ZwryyxpzLzDNodquERTqGmPFqFNRcu5pNA-EVw");
-
-        setImageGrid(imgURLs);
-    }
 
     private void gridSetup(){
         Log.d(TAG, "setupGridView: Setting up image grid.");
@@ -364,7 +351,8 @@ public class ProfileActivity extends AppCompatActivity {
 //
 //
 //};});
-    }}
+    }
+}
 
 
 

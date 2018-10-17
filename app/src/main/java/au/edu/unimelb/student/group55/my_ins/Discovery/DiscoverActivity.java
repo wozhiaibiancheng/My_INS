@@ -3,6 +3,7 @@ package au.edu.unimelb.student.group55.my_ins.Discovery;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -11,10 +12,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,6 +31,7 @@ import java.util.Locale;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.User;
 import au.edu.unimelb.student.group55.my_ins.Profile.ProfileActivity;
+import au.edu.unimelb.student.group55.my_ins.Profile.ViewProfileActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.SupportFunctions.BottomNavTool;
 
@@ -46,7 +48,6 @@ public class DiscoverActivity extends AppCompatActivity {
     //vars
     private List<User> mUserList;
     private UserAdapter mAdapter;
-    private TextView suggestText;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,8 +57,6 @@ public class DiscoverActivity extends AppCompatActivity {
         setContentView(R.layout.activity_discovery);
         mSearchParam = (EditText) findViewById(R.id.search);
         mListView = (ListView) findViewById(R.id.listView);
-        suggestText = (TextView)findViewById(R.id.textView);
-        suggestText.setVisibility(View.GONE);
 
         setBottom();
         initTextListener();
@@ -67,17 +66,6 @@ public class DiscoverActivity extends AppCompatActivity {
         Log.d(TAG, "initTextListener: initializing");
 
         mUserList = new ArrayList<>();
-
-        mSearchParam.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (hasWindowFocus()){
-                    suggestText.setVisibility(View.VISIBLE);
-                    String text = mSearchParam.getText().toString().toLowerCase(Locale.getDefault());
-                    searchForMatch(text);
-                }
-            }
-        });
 
         mSearchParam.addTextChangedListener(new TextWatcher() {
             @Override
@@ -100,24 +88,18 @@ public class DiscoverActivity extends AppCompatActivity {
     }
 
 
-
     private void searchForMatch(String keyword){
-        Log.d(TAG, "searchForMatch: searching for a match: " + keyword);
         mUserList.clear();
-        //update the users list view
         if(keyword.length() ==0){
-            suggestText.setVisibility(View.VISIBLE);
-//            suggest friends
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
             Query query = reference.child("users");
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
-//                        Log.d(TAG, "suggest friends:" + singleSnapshot.getValue(User.class).toString());
+                        Log.d(TAG, "suggest friends:" + singleSnapshot.getValue(User.class).toString());
 
                         mUserList.add(singleSnapshot.getValue(User.class));
-                        //update the users list view
                         updateUsersList();
                     }
                 }
@@ -128,7 +110,6 @@ public class DiscoverActivity extends AppCompatActivity {
                 }
             });
         }else{
-            suggestText.setVisibility(View.GONE);
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
             Query query = reference.child("users")
                     .orderByChild("username").equalTo(keyword);
@@ -165,14 +146,14 @@ public class DiscoverActivity extends AppCompatActivity {
                 Log.d(TAG, "onItemClick: selected user: " + mUserList.get(position).toString());
 
                 //navigate to profile activity
-                Intent intent =  new Intent(mContext, ProfileActivity.class);
+                Intent intent =  new Intent(mContext, ViewProfileActivity.class);
                 intent.putExtra("calling_activity", "discover_activity");
-//                intent.putExtra("intent_user", mUserList.get(position));
+                intent.putExtra("intent_user", mUserList.get(position) );
+                Log.d(TAG, mUserList.get(position).getUsername());
                 startActivity(intent);
             }
         });
     }
-
 
     //    set up bottom view
     private void setBottom(){
