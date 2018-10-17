@@ -119,12 +119,16 @@ public class ApplyFilters extends AppCompatActivity {
             // Set the corresponding factors of the library class
             String newFilePath = data.getStringExtra(EditImageActivity.EXTRA_OUTPUT);
             boolean isImageEdit = data.getBooleanExtra(EditImageActivity.IMAGE_IS_EDIT, false);
-
-            //Read the image to bitmap from storage
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            selectedImage = BitmapFactory.decodeFile(newFilePath, options);
 
+            //Read the image to bitmap from storage
+            if(isImageEdit == false){
+                selectedImage = BitmapFactory.decodeFile(cropPath, options);
+            }
+            else{
+                selectedImage = BitmapFactory.decodeFile(newFilePath, options);
+            }
             writePosts( selectedImage );
         }
 
