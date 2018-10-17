@@ -55,8 +55,6 @@ public class ProfilePicActivity extends AppCompatActivity {
         setContentView( R.layout.profilepic_gallery );
         context = ProfilePicActivity.this;
 
-
-
         imagePath = applicationFolder();
         imageView = (ImageView) findViewById(R.id.profile_pic);
 

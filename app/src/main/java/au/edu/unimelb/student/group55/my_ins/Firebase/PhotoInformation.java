@@ -7,19 +7,19 @@ public class PhotoInformation {
     private String imageUrl;
     private String photoID;
     private String userID;
-    private String longitute;
+    private String longitude;
     private String latitude;
 
 
     public PhotoInformation(){}
 
-    public PhotoInformation(String postMessage, String dateCreated, String imageUrl, String photoID, String userID, String longitute, String latitude) {
+    public PhotoInformation(String postMessage, String dateCreated, String imageUrl, String photoID, String userID, String longitude, String latitude) {
         this.postMessage = postMessage;
         this.dateCreated = dateCreated;
         this.imageUrl = imageUrl;
         this.photoID = photoID;
         this.userID = userID;
-        this.longitute = longitute;
+        this.longitude = longitude;
         this.latitude = latitude;
     }
 
@@ -63,12 +63,12 @@ public class PhotoInformation {
         this.userID = userID;
     }
 
-    public String getLongitute() {
-        return longitute;
+    public String getLongitude() {
+        return longitude;
     }
 
-    public void setLongitute(String longitute) {
-        this.longitute = longitute;
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
     }
 
     public String getLatitude() {
@@ -87,7 +87,7 @@ public class PhotoInformation {
                 ", imageUrl = '" + imageUrl + '\'' +
                 ", photoID = '" + photoID + '\'' +
                 ", userID = '" + userID + '\'' +
-                "longitude = '" + longitute + '\'' +
+                "longitude = '" + longitude + '\'' +
                 "latitude = '" + latitude + '\'' +
                 '}';
     }

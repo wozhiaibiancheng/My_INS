@@ -4,12 +4,10 @@ import android.app.Service;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.Location;
 import android.net.Uri;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -69,9 +67,7 @@ public class PhotoUploadService extends Service {
         super.onCreate();
 
         mFirebaseMethods = new FirebaseMethods(PhotoUploadService.this);
-        mAuth.addAuthStateListener(mAuthListener);
         setupFirebaseAuth();
-
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -103,9 +99,9 @@ public class PhotoUploadService extends Service {
 
         final String currentDate1 = DateFormat.getDateTimeInstance().format(new Date());
 
-
-        int currentImageNumber = imageNumber + 1;
-        final StorageReference imagesRef = storage.getReference().child( uid ).child(currentImageNumber + ".jpg");
+//        int currentImageNumber = imageNumber + 1;
+//        final StorageReference imagesRef = storage.getReference().child( uid ).child(currentImageNumber + ".jpg");
+        final StorageReference imagesRef = storage.getReference().child( uid ).child(currentDate1 + ".jpg");
 
         UploadTask uploadTask = imagesRef.putBytes(imageData);
         uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -138,7 +134,7 @@ public class PhotoUploadService extends Service {
                 photoInformation.setDateCreated( currentDate2 );
                 photoInformation.setImageUrl( downloadLink );
                 photoInformation.setLatitude( latitude );
-                photoInformation.setLongitute( longitude );
+                photoInformation.setLongitude( longitude );
                 photoInformation.setPhotoID( photoID );
                 photoInformation.setPostMessage( postMessage );
 
@@ -189,7 +185,7 @@ public class PhotoUploadService extends Service {
             }
         };
 
-
+        mAuth.addAuthStateListener(mAuthListener);
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -209,5 +205,4 @@ public class PhotoUploadService extends Service {
             mAuth.removeAuthStateListener(mAuthListener);
         }
     }
-
 }
