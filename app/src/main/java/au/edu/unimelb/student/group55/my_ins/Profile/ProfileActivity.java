@@ -25,14 +25,18 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
+import au.edu.unimelb.student.group55.my_ins.Firebase.PhotoInformation;
 import au.edu.unimelb.student.group55.my_ins.Firebase.UserAccountSetting;
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
@@ -108,7 +112,7 @@ public class ProfileActivity extends AppCompatActivity {
         setupActivityWidgets();
 //        setProfile();
 //        setProfilePic();
-        temGridSetup();
+        gridSetup();
     }
 
 
@@ -268,6 +272,7 @@ public class ProfileActivity extends AppCompatActivity {
     private void temGridSetup() {
         ArrayList<String> imgURLs = new ArrayList<>();
 
+
         imgURLs.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz1WudxjK_akg8ZwryyxpzLzDNodquERTqGmPFqFNRcu5pNA-EVw");
         imgURLs.add("https://frontiersinblog.files.wordpress.com/2018/02/psychology-influence-behavior-with-images.jpg?w=940");
         imgURLs.add("https://secure.i.telegraph.co.uk/multimedia/archive/03290/kitten_potd_3290498k.jpg");
@@ -278,12 +283,90 @@ public class ProfileActivity extends AppCompatActivity {
         setImageGrid(imgURLs);
     }
 
+    private void gridSetup(){
+        Log.d(TAG, "setupGridView: Setting up image grid.");
 
+//        GridView imgGrid = (GridView) findViewById(R.id.image_grid);
+//
+//        int screenWidth = getResources().getDisplayMetrics().widthPixels;
+//        int imgWidth = screenWidth / numColumns;
+//        imgGrid.setColumnWidth(imgWidth);
+        final ArrayList<String> imgURLs = new ArrayList<>();
 
+        final ArrayList<PhotoInformation> photos = new ArrayList<>();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        Query query = reference
+                .child("posts")
+                .child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds:dataSnapshot.getChildren()){
+                    photos.add(ds.getValue(PhotoInformation.class));
+                }
 
+                for(int i = 0; i < photos.size();i++){
+                    imgURLs.add(photos.get(i).getImageUrl());
+                }
+                setImageGrid(imgURLs);
+            }
 
-}
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG,"onCancelled");
+            }
+        });
+
+//        query.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                for ( DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
+//
+//                    PhotoInformation photo = new PhotoInformation();
+//                    Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
+//
+//                    try {
+//                        photo.setCaption(objectMap.get(getString(R.string.field_caption)).toString());
+//                        photo.setTags(objectMap.get(getString(R.string.field_tags)).toString());
+//                        photo.setPhoto_id(objectMap.get(getString(R.string.field_photo_id)).toString());
+//                        photo.setUser_id(objectMap.get(getString(R.string.field_user_id)).toString());
+//                        photo.setDate_created(objectMap.get(getString(R.string.field_date_created)).toString());
+//                        photo.setImage_path(objectMap.get(getString(R.string.field_image_path)).toString());
+//
+//                        ArrayList<Comment> comments = new ArrayList<Comment>();
+//                        for (DataSnapshot dSnapshot : singleSnapshot
+//                                .child(getString(R.string.field_comments)).getChildren()) {
+//                            Comment comment = new Comment();
+//                            comment.setUser_id(dSnapshot.getValue(Comment.class).getUser_id());
+//                            comment.setComment(dSnapshot.getValue(Comment.class).getComment());
+//                            comment.setDate_created(dSnapshot.getValue(Comment.class).getDate_created());
+//                            comments.add(comment);
+//                        }
+//
+//                        photo.setComments(comments);
+//
+//                        List<Like> likesList = new ArrayList<Like>();
+//                        for (DataSnapshot dSnapshot : singleSnapshot
+//                                .child(getString(R.string.field_likes)).getChildren()) {
+//                            Like like = new Like();
+//                            like.setUser_id(dSnapshot.getValue(Like.class).getUser_id());
+//                            likesList.add(like);
+//                        }
+//                        photo.setLikes(likesList);
+//                        photos.add(photo);
+//                    }catch(NullPointerException e){
+//                        Log.e(TAG, "onDataChange: NullPointerException: " + e.getMessage() );
+//                    }
+//                }
+//
+//
+//
+//
+//
+//
+//};});
+    }}
 
 
 

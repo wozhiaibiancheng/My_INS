@@ -101,6 +101,51 @@ public class ProfilePicActivity extends AppCompatActivity {
 
 
 
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        // get the result image path from image crop procedure
+//
+//        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+//            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+//            if (resultCode == RESULT_OK) {
+//                Uri resultUri = result.getUri();
+//                try{
+//                    cropPath = resultUri.getPath();
+//                    // After having cropped the image, start the next procedure
+//                    // start to add filters etc.
+//                    startImageFilter( cropPath, imagePath );
+//
+//                }
+//                catch(Exception e){
+//                    Toast.makeText(context, "failed to read image data", Toast.LENGTH_SHORT).show();
+//                    finish();
+//                }
+//            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+//                Exception error = result.getError();
+//            }
+//        }
+//
+//        // After having finished the filters & brightness contrast setting
+//        // return the image data to image view
+//        if (requestCode == 100) { // same code you used while starting
+//
+//            // Set the corresponding factors of the library class
+//            String newFilePath = data.getStringExtra(EditImageActivity.EXTRA_OUTPUT);
+//            boolean isImageEdit = data.getBooleanExtra(EditImageActivity.IMAGE_IS_EDIT, false);
+//
+//            //Read the image to bitmap from storage
+//            BitmapFactory.Options options = new BitmapFactory.Options();
+//            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+//            selectedImage = BitmapFactory.decodeFile(imagePath, options);
+//
+//            // show the image in the corresponding image View
+//            imageView.setImageBitmap( selectedImage );
+//        }
+//
+//    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -116,7 +161,6 @@ public class ProfilePicActivity extends AppCompatActivity {
                     // After having cropped the image, start the next procedure
                     // start to add filters etc.
                     startImageFilter( cropPath, imagePath );
-
                 }
                 catch(Exception e){
                     Toast.makeText(context, "failed to read image data", Toast.LENGTH_SHORT).show();
@@ -124,6 +168,9 @@ public class ProfilePicActivity extends AppCompatActivity {
                 }
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
+            }
+            else{
+                finish();
             }
         }
 
@@ -134,21 +181,50 @@ public class ProfilePicActivity extends AppCompatActivity {
             // Set the corresponding factors of the library class
             String newFilePath = data.getStringExtra(EditImageActivity.EXTRA_OUTPUT);
             boolean isImageEdit = data.getBooleanExtra(EditImageActivity.IMAGE_IS_EDIT, false);
-
-            //Read the image to bitmap from storage
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            selectedImage = BitmapFactory.decodeFile(imagePath, options);
 
-            // show the image in the corresponding image View
-            imageView.setImageBitmap( selectedImage );
+            //Read the image to bitmap from storage
+            if(isImageEdit == false){
+                selectedImage = BitmapFactory.decodeFile(cropPath, options);
+                imagePath = cropPath;
+            }
+            else{
+                selectedImage = BitmapFactory.decodeFile(newFilePath, options);
+                imagePath = newFilePath;
+            }
+            writePosts( selectedImage );
         }
 
     }
 
+    public void writePosts(Bitmap selectedImage){
+//        setContentView( R.layout. );
+//        imageView = (ImageView) findViewById(R.id.imageView);
+//        // show the image in the corresponding image View
+//        imageView.setImageBitmap( selectedImage );
+//
+////        userInputEditText = (EditText) findViewById(R.id.post_message);
+//        TextView shareClose = (TextView) findViewById(R.id.gallery_cancel);
+//        shareClose.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//        });
+//
+//        TextView nextScreen = (TextView) findViewById(R.id.gallery_next);
+//        nextScreen.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
 
-
-
-
-
-}
+                    Intent intent = new Intent( context, EditProfileActivity.class );
+                    intent.putExtra( "profilePicPath", imagePath );
+                    Log.d(TAG,"imagePath: " + imagePath);
+//                    photoUploadService.putExtra( "post message", postMessage );
+//                    startService( photoUploadService );
+                    startActivity(intent);
+                    finish();
+                }
+//        });
+    }
