@@ -10,6 +10,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -47,7 +49,6 @@ public class PhotoUploadService extends Service {
 
     private String uid;
     private byte[] imageData;
-    private Task<Uri> downloadUri;
     private String downloadLink;
     private String IMAGE_PATH;
 
@@ -113,38 +114,54 @@ public class PhotoUploadService extends Service {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                //Once the image is uploaded successfully, show the message and get its download URL
-                downloadUri = imagesRef.getDownloadUrl();
-                downloadLink = downloadUri.toString();
                 Toast.makeText(PhotoUploadService.this, "Upload image successfully", Toast.LENGTH_SHORT).show();
 
-                String currentDate2 = DateFormat.getDateTimeInstance().format(new Date());
-                String photoID = myRef.child( "posts" ).child( uid ).push().getKey();
+            }
+        });
 
-                likeUrl = currentDate2 + "-likes";
-                commentUrl = currentDate2 + "-comments";
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
 
-                //Get the image url and offload to Real-time database here
-//                String post_message = uid + "," + currentLocation + "," + postMessage + "," + downloadLink
-//                        + "," + likeUrl + "," + commentUrl;
-//                mDatabase.child( uid ).child( currentDate2 ).child( "post" ).setValue( post_message );
+                // Continue with the task to get the download URL
+                return imagesRef.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    //Once the image is uploaded successfully, show the message and get its download URL
+                    Uri downloadUri = task.getResult();
+                    downloadLink = downloadUri.toString();
+                    String currentDate2 = DateFormat.getDateTimeInstance().format(new Date());
+                    String photoID = myRef.child( "posts" ).child( uid ).push().getKey();
 
-//                mFirebaseMethods.uploadPhotos( "postPhoto",postMessage, );
-                PhotoInformation photoInformation = new PhotoInformation(  );
-                photoInformation.setDateCreated( currentDate2 );
-                photoInformation.setImageUrl( downloadLink );
-                photoInformation.setLatitude( latitude );
-                photoInformation.setLongitude( longitude );
-                photoInformation.setPhotoID( photoID );
-                photoInformation.setPostMessage( postMessage );
+                    PhotoInformation photoInformation = new PhotoInformation(  );
+                    photoInformation.setDateCreated( currentDate2 );
+                    photoInformation.setImageUrl( downloadLink );
+                    photoInformation.setLatitude( latitude );
+                    photoInformation.setLongitude( longitude );
+                    photoInformation.setPhotoID( photoID );
+                    photoInformation.setPostMessage( postMessage );
 
-                mDatabase.child( "posts" ).child( uid ).child( photoID ).setValue( photoInformation );
+                    mDatabase.child( "posts" ).child( uid ).child( photoID ).setValue( photoInformation );
 
-                Toast.makeText(PhotoUploadService.this,
-                        "Set Upload message record successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PhotoUploadService.this,
+                            "Set Upload message record successfully", Toast.LENGTH_SHORT).show();
 
-                //After the upload task finished, finish the serivce itself
-                stopSelf();
+                    //After the upload task finished, finish the serivce itself
+                    stopSelf();
+
+                } else {
+                    Toast.makeText(PhotoUploadService.this,
+                            "Failed to set Upload message", Toast.LENGTH_SHORT).show();
+                    stopSelf();
+                    // Handle failures
+                    // ...
+                }
             }
         });
 
