@@ -142,7 +142,7 @@ public class ProfileActivity extends AppCompatActivity {
         Log.d(TAG, "bottom view setting");
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom);
         BottomNavTool.setBottomNav(bottomNavigationViewEx);
-        BottomNavTool.enableNav(ProfileActivity.this, bottomNavigationViewEx);
+        BottomNavTool.enableNav(ProfileActivity.this,this, bottomNavigationViewEx);
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(4);
         menuItem.setChecked(true);
@@ -237,6 +237,7 @@ public class ProfileActivity extends AppCompatActivity {
                 Log.d(TAG, "clicked edit profile");
                 Intent intent = new Intent(ProfileActivity.this, EditProfileActivity.class);
                 startActivity(intent);
+                overridePendingTransition(R.anim.enter,R.anim.exit);
             }
         });
     }

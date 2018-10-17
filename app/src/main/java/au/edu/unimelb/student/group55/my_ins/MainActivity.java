@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     private void setBottom(){
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom);
         BottomNavTool.setBottomNav(bottomNavigationViewEx);
-        BottomNavTool.enableNav(MainActivity.this, bottomNavigationViewEx);
+        BottomNavTool.enableNav(MainActivity.this,this, bottomNavigationViewEx);
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(0);
         menuItem.setChecked(true);

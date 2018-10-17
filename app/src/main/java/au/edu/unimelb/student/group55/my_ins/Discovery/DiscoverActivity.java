@@ -153,7 +153,7 @@ public class DiscoverActivity extends AppCompatActivity {
         Log.d(TAG,"bottom view setting");
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom);
         BottomNavTool.setBottomNav(bottomNavigationViewEx);
-        BottomNavTool.enableNav(DiscoverActivity.this, bottomNavigationViewEx);
+        BottomNavTool.enableNav(DiscoverActivity.this,this, bottomNavigationViewEx);
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(1);
         menuItem.setChecked(true);

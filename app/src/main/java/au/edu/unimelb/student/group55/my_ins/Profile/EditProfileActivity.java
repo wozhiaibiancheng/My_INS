@@ -10,6 +10,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -31,6 +33,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
@@ -42,6 +45,7 @@ import au.edu.unimelb.student.group55.my_ins.PhotoNGallery.ProfilePicActivity;
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
 //import au.edu.unimelb.student.group55.my_ins.PhotoNGallery.ApplyFilters;
 import au.edu.unimelb.student.group55.my_ins.R;
+import au.edu.unimelb.student.group55.my_ins.SupportFunctions.BottomNavTool;
 import au.edu.unimelb.student.group55.my_ins.SupportFunctions.ImageManager;
 import au.edu.unimelb.student.group55.my_ins.SupportFunctions.UniversalImageLoader;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -105,6 +109,8 @@ public class EditProfileActivity extends AppCompatActivity {
         firebaseMethods = new FirebaseMethods(context);
         baos = new ByteArrayOutputStream();
         storage = FirebaseStorage.getInstance();
+
+//        setBottom();
 
         FirebaseAuth();
 
@@ -490,6 +496,8 @@ public class EditProfileActivity extends AppCompatActivity {
             auth.removeAuthStateListener(authListener);
         }
     }
+
+
 
 
 }

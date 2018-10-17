@@ -31,7 +31,7 @@ public class UploadActivity extends AppCompatActivity {
         Log.d(TAG,"bottom view setting");
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom);
         BottomNavTool.setBottomNav(bottomNavigationViewEx);
-        BottomNavTool.enableNav(UploadActivity.this, bottomNavigationViewEx);
+        BottomNavTool.enableNav(UploadActivity.this,this, bottomNavigationViewEx);
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(2);
         menuItem.setChecked(true);

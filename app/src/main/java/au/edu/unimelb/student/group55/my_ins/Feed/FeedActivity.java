@@ -29,7 +29,7 @@ public class FeedActivity extends AppCompatActivity {
         Log.d(TAG,"bottom view setting");
         BottomNavigationViewEx bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom);
         BottomNavTool.setBottomNav(bottomNavigationViewEx);
-        BottomNavTool.enableNav(FeedActivity.this, bottomNavigationViewEx);
+        BottomNavTool.enableNav(FeedActivity.this,this,bottomNavigationViewEx);
         Menu menu = bottomNavigationViewEx.getMenu();
         MenuItem menuItem = menu.getItem(3);
         menuItem.setChecked(true);
