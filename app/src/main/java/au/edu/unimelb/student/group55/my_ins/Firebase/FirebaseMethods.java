@@ -131,12 +131,12 @@ public class FirebaseMethods {
     }
 
     public void updateDisplayName(String displayName){
-        databaseReference.child("users").child(userID).child("display_name").setValue(displayName);
+//        databaseReference.child("users").child(userID).child("display_name").setValue(displayName);
         databaseReference.child("user_account_settings").child(userID).child("display_name").setValue(displayName);
     }
 
     public void updateDescription(String description){
-        databaseReference.child("users").child(userID).child("description").setValue(description);
+//        databaseReference.child("users").child(userID).child("description").setValue(description);
         databaseReference.child("user_account_settings").child(userID).child("description").setValue(description);
     }
 

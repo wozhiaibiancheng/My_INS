@@ -120,11 +120,13 @@ public class DiscoverActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
 //                        Log.d(TAG, "suggest friends:" + singleSnapshot.getValue(User.class).toString());
-
                         mUserList.add(singleSnapshot.getValue(User.class));
                         //update the users list view
-                        updateUsersList();
+
+
+
                     }
+                    updateUsersList();
                 }
 
                 @Override
