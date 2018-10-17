@@ -16,6 +16,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -49,6 +50,9 @@ public class DiscoverActivity extends AppCompatActivity {
     private List<User> mUserList;
     private UserAdapter mAdapter;
 
+    private TextView suggestText;
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +61,8 @@ public class DiscoverActivity extends AppCompatActivity {
         setContentView(R.layout.activity_discovery);
         mSearchParam = (EditText) findViewById(R.id.search);
         mListView = (ListView) findViewById(R.id.listView);
+        suggestText = (TextView)findViewById(R.id.textView);
+        suggestText.setVisibility(View.GONE);
 
         setBottom();
         initTextListener();
@@ -66,6 +72,17 @@ public class DiscoverActivity extends AppCompatActivity {
         Log.d(TAG, "initTextListener: initializing");
 
         mUserList = new ArrayList<>();
+
+        mSearchParam.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (hasWindowFocus()){
+                    suggestText.setVisibility(View.VISIBLE);
+                    String text = mSearchParam.getText().toString().toLowerCase(Locale.getDefault());
+                    searchForMatch(text);
+                }
+            }
+        });
 
         mSearchParam.addTextChangedListener(new TextWatcher() {
             @Override
@@ -88,18 +105,24 @@ public class DiscoverActivity extends AppCompatActivity {
     }
 
 
+
     private void searchForMatch(String keyword){
+        Log.d(TAG, "searchForMatch: searching for a match: " + keyword);
         mUserList.clear();
+        //update the users list view
         if(keyword.length() ==0){
+            suggestText.setVisibility(View.VISIBLE);
+//            suggest friends
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
             Query query = reference.child("users");
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
-                        Log.d(TAG, "suggest friends:" + singleSnapshot.getValue(User.class).toString());
+//                        Log.d(TAG, "suggest friends:" + singleSnapshot.getValue(User.class).toString());
 
                         mUserList.add(singleSnapshot.getValue(User.class));
+                        //update the users list view
                         updateUsersList();
                     }
                 }
@@ -110,6 +133,7 @@ public class DiscoverActivity extends AppCompatActivity {
                 }
             });
         }else{
+            suggestText.setVisibility(View.GONE);
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
             Query query = reference.child("users")
                     .orderByChild("username").equalTo(keyword);

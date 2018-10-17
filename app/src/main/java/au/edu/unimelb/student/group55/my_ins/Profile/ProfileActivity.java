@@ -246,14 +246,6 @@ public class ProfileActivity extends AppCompatActivity {
         profile_pic = (CircleImageView) findViewById(R.id.profile_pic);
     }
 
-//    private void setProfilePic() {
-//        Log.d(TAG, "set profile pic");
-//        String imgURL = "";
-//        imgURL = "https://artinsights.com/wp-content/uploads/2013/11/20120919143022.jpg";
-//        UserAccountSettings userAccountSettings = userSettings.getSettings();
-//        UniversalImageLoader.setImage(userAccountSetting.getProfile_pic(), profile_pic, null, "");
-//    }
-
     private void setImageGrid(ArrayList<String> imgURLs) {
         GridView imgGrid = (GridView) findViewById(R.id.image_grid);
 
