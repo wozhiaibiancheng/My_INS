@@ -50,13 +50,11 @@ public class DiscoverActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
+
         Log.d("INFO","onCreate started!");
         setContentView(R.layout.activity_discovery);
         mSearchParam = (EditText) findViewById(R.id.search);
         mListView = (ListView) findViewById(R.id.listView);
-
-//        hideSoftKeyboard();
 
         setBottom();
         initTextListener();
@@ -66,6 +64,16 @@ public class DiscoverActivity extends AppCompatActivity {
         Log.d(TAG, "initTextListener: initializing");
 
         mUserList = new ArrayList<>();
+
+        mSearchParam.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (hasWindowFocus()){
+                    String text = mSearchParam.getText().toString().toLowerCase(Locale.getDefault());
+                    searchForMatch(text);
+                }
+            }
+        });
 
         mSearchParam.addTextChangedListener(new TextWatcher() {
             @Override
@@ -94,7 +102,26 @@ public class DiscoverActivity extends AppCompatActivity {
         mUserList.clear();
         //update the users list view
         if(keyword.length() ==0){
+//            suggest friends
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+            Query query = reference.child("users");
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
+                        Log.d(TAG, "suggest friends:" + singleSnapshot.getValue(User.class).toString());
 
+                        mUserList.add(singleSnapshot.getValue(User.class));
+                        //update the users list view
+                        updateUsersList();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
         }else{
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
             Query query = reference.child("users")
@@ -140,13 +167,6 @@ public class DiscoverActivity extends AppCompatActivity {
         });
     }
 
-
-    private void hideSoftKeyboard(){
-        if(getCurrentFocus() != null){
-            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        }
-    }
 
     //    set up bottom view
     private void setBottom(){
