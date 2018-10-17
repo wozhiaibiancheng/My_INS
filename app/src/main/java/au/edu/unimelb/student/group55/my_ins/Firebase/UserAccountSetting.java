@@ -98,4 +98,18 @@ public class UserAccountSetting {
     public void setUser_id(String user_id) {
         this.user_id = user_id;
     }
+
+    @Override
+    public String toString() {
+        return "UserAccountSetting{" +
+                "description='" + description + '\'' +
+                ", display_name='" + display_name + '\'' +
+                ", followers=" + followers +
+                ", following=" + following +
+                ", posts=" + posts +
+                ", profile_picture='" + profile_pic + '\'' +
+                ", username='" + username + '\'' +
+                ", phone_number='" + phone_number + '\'' +
+                '}';
+    }
 }

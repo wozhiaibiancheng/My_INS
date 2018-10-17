@@ -3,6 +3,7 @@ package au.edu.unimelb.student.group55.my_ins.Discovery;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -30,6 +31,7 @@ import java.util.Locale;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.User;
 import au.edu.unimelb.student.group55.my_ins.Profile.ProfileActivity;
+import au.edu.unimelb.student.group55.my_ins.Profile.ViewProfileActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.SupportFunctions.BottomNavTool;
 
@@ -65,16 +67,6 @@ public class DiscoverActivity extends AppCompatActivity {
 
         mUserList = new ArrayList<>();
 
-        mSearchParam.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if (hasWindowFocus()){
-                    String text = mSearchParam.getText().toString().toLowerCase(Locale.getDefault());
-                    searchForMatch(text);
-                }
-            }
-        });
-
         mSearchParam.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -96,13 +88,9 @@ public class DiscoverActivity extends AppCompatActivity {
     }
 
 
-
     private void searchForMatch(String keyword){
-        Log.d(TAG, "searchForMatch: searching for a match: " + keyword);
         mUserList.clear();
-        //update the users list view
         if(keyword.length() ==0){
-//            suggest friends
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
             Query query = reference.child("users");
             query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -112,7 +100,6 @@ public class DiscoverActivity extends AppCompatActivity {
                         Log.d(TAG, "suggest friends:" + singleSnapshot.getValue(User.class).toString());
 
                         mUserList.add(singleSnapshot.getValue(User.class));
-                        //update the users list view
                         updateUsersList();
                     }
                 }
@@ -159,14 +146,14 @@ public class DiscoverActivity extends AppCompatActivity {
                 Log.d(TAG, "onItemClick: selected user: " + mUserList.get(position).toString());
 
                 //navigate to profile activity
-                Intent intent =  new Intent(mContext, ProfileActivity.class);
+                Intent intent =  new Intent(mContext, ViewProfileActivity.class);
                 intent.putExtra("calling_activity", "discover_activity");
-//                intent.putExtra("intent_user", mUserList.get(position));
+                intent.putExtra("intent_user", mUserList.get(position) );
+                Log.d(TAG, mUserList.get(position).getUsername());
                 startActivity(intent);
             }
         });
     }
-
 
     //    set up bottom view
     private void setBottom(){

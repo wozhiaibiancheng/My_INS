@@ -1,5 +1,9 @@
 package au.edu.unimelb.student.group55.my_ins.Firebase;
 
+import org.w3c.dom.Comment;
+
+import java.util.List;
+
 public class PhotoInformation {
 
     private String postMessage;
@@ -9,6 +13,8 @@ public class PhotoInformation {
     private String userID;
     private String longitude;
     private String latitude;
+    private List<Like> likes;
+    private List<Comment> comments;
 
 
     public PhotoInformation(){}
