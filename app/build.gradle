@@ -5,7 +5,7 @@ android {
     buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "au.edu.unimelb.student.group55.my_ins"
-        minSdkVersion 22
+        minSdkVersion 24
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"

@@ -94,7 +94,6 @@ public class UserAdapter extends ArrayAdapter<User>{
                     imageLoader.displayImage(singleSnapshot.getValue(UserAccountSetting.class).getProfile_pic(),
                             holder.profileImage);
 
-                    System.out.println("99999999999999" + singleSnapshot.getValue(UserAccountSetting.class).getProfile_pic());
                 }
             }
 
