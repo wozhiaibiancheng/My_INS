@@ -125,9 +125,11 @@ public class ApplyFilters extends AppCompatActivity {
             //Read the image to bitmap from storage
             if(isImageEdit == false){
                 selectedImage = BitmapFactory.decodeFile(cropPath, options);
+                imagePath = cropPath;
             }
             else{
                 selectedImage = BitmapFactory.decodeFile(newFilePath, options);
+                imagePath = newFilePath;
             }
             writePosts( selectedImage );
         }
@@ -159,7 +161,6 @@ public class ApplyFilters extends AppCompatActivity {
                         notice();
                         return;
                     }
-
 
                     if(postMessage == ""){
                         Toast.makeText(ApplyFilters.this, "Please say something about your post~", Toast.LENGTH_SHORT).show();
