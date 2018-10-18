@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -89,7 +88,7 @@ public class DiscoverActivity extends AppCompatActivity {
                     for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
                         myUserList.add(singleSnapshot.getValue(User.class));
                         //update the users list view
-                        updateUsersList();
+                        refreshUsersList();
                     }
                 }
 
@@ -108,7 +107,7 @@ public class DiscoverActivity extends AppCompatActivity {
                     for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
                         myUserList.add(singleSnapshot.getValue(User.class));
                         //update the users list view
-                        updateUsersList();
+                        refreshUsersList();
                     }
                 }
                 @Override
@@ -119,7 +118,7 @@ public class DiscoverActivity extends AppCompatActivity {
         }
     }
 
-    private void updateUsersList(){
+    private void refreshUsersList(){
         myAdapter = new UserAdapter(mContext, R.layout.discovery_userlist, myUserList );
         myListView.setAdapter( myAdapter );
         myListView.setOnItemClickListener( new AdapterView.OnItemClickListener() {

@@ -37,6 +37,7 @@ import java.util.Map;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
 import au.edu.unimelb.student.group55.my_ins.Firebase.PhotoInformation;
+import au.edu.unimelb.student.group55.my_ins.Firebase.User;
 import au.edu.unimelb.student.group55.my_ins.Firebase.UserAccountSetting;
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
@@ -80,6 +81,10 @@ public class ProfileActivity extends AppCompatActivity {
     private Task<Uri> downloadUri;
     private String downloadLink;
 
+    private int followers_number = 0;
+    private int following_number = 0;
+    private int posts_number = 0;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,8 +115,6 @@ public class ProfileActivity extends AppCompatActivity {
         setBottom();
         setUpEditProfile();
         setupActivityWidgets();
-//        setProfile();
-//        setProfilePic();
         gridSetup();
     }
 
@@ -161,8 +164,79 @@ public class ProfileActivity extends AppCompatActivity {
         username.setText(userAccountSetting.getUsername());
         description.setText(userAccountSetting.getDescription());
         posts.setText(String.valueOf(userAccountSetting.getPosts()));
-        following.setText(String.valueOf(userAccountSetting.getFollowing()));
-        followers.setText(String.valueOf(userAccountSetting.getFollowers()));
+        getFollowersNumber();
+        getFollowingNumber();
+        getPostsNumber();
+//        following.setText(String.valueOf(userAccountSetting.getFollowing()));
+//        followers.setText(String.valueOf(userAccountSetting.getFollowers()));
+
+    }
+
+    private void getFollowersNumber(){
+        followers_number = 0;
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        Query query = reference.child(getString( R.string.dbname_followers))
+                .child( FirebaseAuth.getInstance().getCurrentUser().getUid());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
+                    Log.d(TAG, "onDataChange: followers number:" + singleSnapshot.getValue(User.class).toString());
+                    followers_number = followers_number +1;
+                }
+                followers.setText(String.valueOf(followers_number));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void getFollowingNumber(){
+        following_number = 0;
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        Query query = reference.child(getString( R.string.dbname_following))
+                .child( FirebaseAuth.getInstance().getCurrentUser().getUid());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
+                    Log.d(TAG, "onDataChange: following number:" + singleSnapshot.getValue(User.class).toString());
+                    following_number = following_number +1;
+                }
+                following.setText(String.valueOf(following_number));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+    private void getPostsNumber(){
+        posts_number = 0;
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        Query query = reference.child("posts")
+                .child( FirebaseAuth.getInstance().getCurrentUser().getUid());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
+                    Log.d(TAG, "onDataChange: posts number:" + singleSnapshot.getValue(User.class).toString());
+                    posts_number = posts_number +1;
+                }
+                posts.setText(String.valueOf(posts_number));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
@@ -222,12 +296,6 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-
-
-
-
-
-
     //  set up edit_profile button
     private void setUpEditProfile() {
         editProfile = (TextView) findViewById(R.id.edit_profile);
@@ -242,20 +310,9 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-
     private void setupActivityWidgets() {
-//        progressBar = (ProgressBar)findViewById(R.id.profileProgressBar);
-//        progressBar.setVisibility(View.GONE);
         profile_pic = (CircleImageView) findViewById(R.id.profile_pic);
     }
-
-//    private void setProfilePic() {
-//        Log.d(TAG, "set profile pic");
-//        String imgURL = "";
-//        imgURL = "https://artinsights.com/wp-content/uploads/2013/11/20120919143022.jpg";
-//        UserAccountSettings userAccountSettings = userSettings.getSettings();
-//        UniversalImageLoader.setImage(userAccountSetting.getProfile_pic(), profile_pic, null, "");
-//    }
 
     private void setImageGrid(ArrayList<String> imgURLs) {
         GridView imgGrid = (GridView) findViewById(R.id.image_grid);
@@ -272,13 +329,7 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     private void gridSetup(){
-        Log.d(TAG, "setupGridView: Setting up image grid.");
 
-//        GridView imgGrid = (GridView) findViewById(R.id.image_grid);
-//
-//        int screenWidth = getResources().getDisplayMetrics().widthPixels;
-//        int imgWidth = screenWidth / numColumns;
-//        imgGrid.setColumnWidth(imgWidth);
         final ArrayList<String> imgURLs = new ArrayList<>();
 
         final ArrayList<PhotoInformation> photos = new ArrayList<>();
@@ -306,54 +357,6 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-//        query.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                for ( DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
-//
-//                    PhotoInformation photo = new PhotoInformation();
-//                    Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
-//
-//                    try {
-//                        photo.setCaption(objectMap.get(getString(R.string.field_caption)).toString());
-//                        photo.setTags(objectMap.get(getString(R.string.field_tags)).toString());
-//                        photo.setPhoto_id(objectMap.get(getString(R.string.field_photo_id)).toString());
-//                        photo.setUser_id(objectMap.get(getString(R.string.field_user_id)).toString());
-//                        photo.setDate_created(objectMap.get(getString(R.string.field_date_created)).toString());
-//                        photo.setImage_path(objectMap.get(getString(R.string.field_image_path)).toString());
-//
-//                        ArrayList<Comment> comments = new ArrayList<Comment>();
-//                        for (DataSnapshot dSnapshot : singleSnapshot
-//                                .child(getString(R.string.field_comments)).getChildren()) {
-//                            Comment comment = new Comment();
-//                            comment.setUser_id(dSnapshot.getValue(Comment.class).getUser_id());
-//                            comment.setComment(dSnapshot.getValue(Comment.class).getComment());
-//                            comment.setDate_created(dSnapshot.getValue(Comment.class).getDate_created());
-//                            comments.add(comment);
-//                        }
-//
-//                        photo.setComments(comments);
-//
-//                        List<Like> likesList = new ArrayList<Like>();
-//                        for (DataSnapshot dSnapshot : singleSnapshot
-//                                .child(getString(R.string.field_likes)).getChildren()) {
-//                            Like like = new Like();
-//                            like.setUser_id(dSnapshot.getValue(Like.class).getUser_id());
-//                            likesList.add(like);
-//                        }
-//                        photo.setLikes(likesList);
-//                        photos.add(photo);
-//                    }catch(NullPointerException e){
-//                        Log.e(TAG, "onDataChange: NullPointerException: " + e.getMessage() );
-//                    }
-//                }
-//
-//
-//
-//
-//
-//
-//};});
     }
 }
 

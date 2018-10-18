@@ -48,6 +48,9 @@ dependencies {
 
     implementation 'com.github.iamutkarshtiwari:Ananas:v1.0.0'
 
+    // The location service API
+    implementation 'com.github.delight-im:Android-SimpleLocation:v1.0.1'
+
 
 
 }

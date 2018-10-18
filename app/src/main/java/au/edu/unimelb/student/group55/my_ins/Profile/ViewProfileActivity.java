@@ -14,7 +14,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.Task;
@@ -67,15 +66,15 @@ public class ViewProfileActivity extends AppCompatActivity {
     private BottomNavigationViewEx bottomNavigationView;
 
     private StorageReference storageReference;
-  //  private FirebaseUser user;
-
     private UserAccountSetting userAccountSettings;
 
 
     private Task<Uri> downloadUri;
     private String downloadLink;
 
-    private User mUser;
+    private User myUser;
+    private String myUserID;
+    private UserAccountSetting myUserAccountSetting;
     private int followers_number = 0;
     private int following_number = 0;
     private int posts_number = 0;
@@ -106,11 +105,9 @@ public class ViewProfileActivity extends AppCompatActivity {
         storageReference = FirebaseStorage.getInstance().getReference();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        mUser = getUser();
+        myUser = getUser();
+        myUserID = myUser.getUser_id();
         init();
-
-        //This need to be changed later
-        temGridSetup();
 
         setUpToolbar();
         setBottom();
@@ -121,7 +118,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         getFollowersNumber();
         getFollowingNumber();
         getPostsNumber();
-//        setUpGrid();
+        setUpGrid();
 
         follow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,14 +126,14 @@ public class ViewProfileActivity extends AppCompatActivity {
                 FirebaseDatabase.getInstance().getReference()
                         .child(getString( R.string.dbname_following))
                         .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                        .child(mUser.getUser_id())
+                        .child( myUser.getUser_id())
                         .child("user_id")
-                        .setValue(mUser.getUser_id());
+                        .setValue( myUser.getUser_id());
 
 
                 FirebaseDatabase.getInstance().getReference()
                         .child(getString( R.string.dbname_followers))
-                        .child(mUser.getUser_id())
+                        .child( myUser.getUser_id())
                         .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                         .child("user_id")
                         .setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -151,13 +148,13 @@ public class ViewProfileActivity extends AppCompatActivity {
                 FirebaseDatabase.getInstance().getReference()
                         .child(getString( R.string.dbname_following))             //database following
                         .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                        .child(mUser.getUser_id())
+                        .child( myUser.getUser_id())
                         .removeValue();
 
 
                 FirebaseDatabase.getInstance().getReference()
                         .child(getString( R.string.dbname_followers))
-                        .child(mUser.getUser_id())
+                        .child( myUser.getUser_id())
                         .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                         .removeValue();
 
@@ -178,7 +175,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         followers_number = 0;
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         Query query = reference.child(getString( R.string.dbname_followers))
-                .child(mUser.getUser_id());
+                .child( myUser.getUser_id());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -201,7 +198,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         following_number = 0;
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         Query query = reference.child(getString( R.string.dbname_following))
-                .child(mUser.getUser_id());
+                .child( myUser.getUser_id());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -224,7 +221,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         posts_number = 0;
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         Query query = reference.child(getString( R.string.dbname_user_photos))
-                .child(mUser.getUser_id());
+                .child( myUser.getUser_id());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -260,7 +257,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         Query query = reference.child(getString( R.string.dbname_following))
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .orderByChild("user_id").equalTo(mUser.getUser_id());
+                .orderByChild("user_id").equalTo( myUser.getUser_id());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -282,7 +279,7 @@ public class ViewProfileActivity extends AppCompatActivity {
     private void init() {
         DatabaseReference _reference = FirebaseDatabase.getInstance().getReference();
         Query _query = _reference.child("users")
-                .orderByChild("username").equalTo(mUser.getUsername());
+                .orderByChild("username").equalTo( myUser.getUsername());
         _query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -290,7 +287,7 @@ public class ViewProfileActivity extends AppCompatActivity {
                     Log.d(TAG, "onDataChange: found user:" + singleSnapshot.getValue(User.class).toString());
 
                     UserRetrieving set = new UserRetrieving();
-                    set.setUser(mUser);
+                    set.setUser( myUser );
                     set.setSettings(singleSnapshot.getValue(UserAccountSetting.class));
                     setProfile(set.getSettings());
                 }
@@ -301,60 +298,6 @@ public class ViewProfileActivity extends AppCompatActivity {
 
             }
         });
-
-//        DatabaseReference reference_ = FirebaseDatabase.getInstance().getReference();
-//        Query query_ = reference_
-//                .child("user_photos")
-//                .child(mUser.getUser_id());
-//        query_.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//
-//                ArrayList<Photo> photos = new ArrayList<Photo>();
-//                for ( DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
-//
-//                    Photo photo = new Photo();
-//                    Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
-//
-//                    photo.setCaption(objectMap.get(getString(R.string.field_caption)).toString());
-//                    photo.setTags(objectMap.get(getString(R.string.field_tags)).toString());
-//                    photo.setPhoto_id(objectMap.get(getString(R.string.field_photo_id)).toString());
-//                    photo.setUser_id(objectMap.get(getString(R.string.field_user_id)).toString());
-//                    photo.setDate_created(objectMap.get(getString(R.string.field_date_created)).toString());
-//                    photo.setImage_path(objectMap.get(getString(R.string.field_image_path)).toString());
-//
-//                    ArrayList<Comment> comments = new ArrayList<Comment>();
-//                    for (DataSnapshot dSnapshot : singleSnapshot
-//                            .child(getString(R.string.field_comments)).getChildren()){
-//                        Comment comment = new Comment();
-//                        comment.setUser_id(dSnapshot.getValue(Comment.class).getUser_id());
-//                        comment.setComment(dSnapshot.getValue(Comment.class).getComment());
-//                        comment.setDate_created(dSnapshot.getValue(Comment.class).getDate_created());
-//                        comments.add(comment);
-//                    }
-//
-//                    photo.setComments(comments);
-//
-//                    List<Like> likesList = new ArrayList<Like>();
-//                    for (DataSnapshot dSnapshot : singleSnapshot
-//                            .child(getString(R.string.field_likes)).getChildren()){
-//                        Like like = new Like();
-//                        like.setUser_id(dSnapshot.getValue(Like.class).getUser_id());
-//                        likesList.add(like);
-//                    }
-//                    photo.setLikes(likesList);
-//                    photos.add(photo);
-//                }
-//                setupImageGrid(photos);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                Log.d(TAG, "onCancelled: query cancelled.");
-//            }
-//        });
-
-        //////////////////////////////////////////////////////////////////
     }
 
 
@@ -399,6 +342,7 @@ public class ViewProfileActivity extends AppCompatActivity {
 
     private void setProfile(UserAccountSetting userAccountSetting) {
         UniversalImageLoader.setImage(userAccountSetting.getProfile_pic(), profile_pic, null, "");
+//        setUserProfilePicture();
         displayName.setText(userAccountSetting.getDisplay_name());
         username.setText(userAccountSetting.getUsername());
         description.setText(userAccountSetting.getDescription());
@@ -467,46 +411,34 @@ public class ViewProfileActivity extends AppCompatActivity {
         imgGrid.setAdapter(imageAdapter);
     }
 
-//    private void setUpGrid(){
-//        Log.d(TAG, "setupGridView: Setting up image grid.");
-//        final ArrayList<String> imgURLs = new ArrayList<>();
-//        final ArrayList<PhotoInformation> photos = new ArrayList<>();
-//        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-//        Query query = reference
-//                .child("posts")
-//                .child(mUser.getUser_id());
-//
-//        query.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                for(DataSnapshot ds:dataSnapshot.getChildren()){
-//                    photos.add(ds.getValue(PhotoInformation.class));
-//                }
-//
-//                for(int i = 0; i < photos.size();i++){
-//                    imgURLs.add(photos.get(i).getImageUrl());
-//                }
-//                setImageGrid(imgURLs);
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//                Log.d(TAG,"onCancelled");
-//            }
-//        });
-//    }
 
-    private void temGridSetup() {
-        ArrayList<String> imgURLs = new ArrayList<>();
+    private void setUpGrid(){
+        final ArrayList<String> imgURLs = new ArrayList<>();
 
-        imgURLs.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz1WudxjK_akg8ZwryyxpzLzDNodquERTqGmPFqFNRcu5pNA-EVw");
-        imgURLs.add("https://frontiersinblog.files.wordpress.com/2018/02/psychology-influence-behavior-with-images.jpg?w=940");
-        imgURLs.add("https://secure.i.telegraph.co.uk/multimedia/archive/03290/kitten_potd_3290498k.jpg");
-        imgURLs.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz1WudxjK_akg8ZwryyxpzLzDNodquERTqGmPFqFNRcu5pNA-EVw");
-        imgURLs.add("https://vignette.wikia.nocookie.net/parody/images/e/ef/Alice-PNG-alice-in-wonderland-33923432-585-800.png/revision/latest?cb=20141029225915");
-        imgURLs.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz1WudxjK_akg8ZwryyxpzLzDNodquERTqGmPFqFNRcu5pNA-EVw");
+        final ArrayList<PhotoInformation> photoInformation = new ArrayList<>();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        Query query = reference
+                .child("posts")
+                .child(myUserID);
 
-        setImageGrid(imgURLs);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds:dataSnapshot.getChildren()){
+                    photoInformation.add(ds.getValue(PhotoInformation.class));
+                }
+
+                for(int i = 0; i < photoInformation.size();i++){
+                    imgURLs.add(photoInformation.get(i).getImageUrl());
+                }
+                setImageGrid(imgURLs);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG,"onCancelled");
+            }
+        });
     }
 
 

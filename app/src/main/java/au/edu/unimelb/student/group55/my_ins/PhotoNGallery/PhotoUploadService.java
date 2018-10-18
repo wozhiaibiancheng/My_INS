@@ -32,6 +32,7 @@ import java.util.Date;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
 import au.edu.unimelb.student.group55.my_ins.Firebase.PhotoInformation;
+import im.delight.android.location.SimpleLocation;
 
 public class PhotoUploadService extends Service {
     @Nullable
@@ -60,7 +61,8 @@ public class PhotoUploadService extends Service {
     private String likeUrl;
     private String commentUrl;
 
-    private String latitude;
+    private SimpleLocation location;
+    private String altitude;
     private String longitude;
 
     @Override
@@ -78,8 +80,22 @@ public class PhotoUploadService extends Service {
 
         baos = new ByteArrayOutputStream();
 
-        longitude = "longitude not available";
-        latitude = "latitude not available";
+        // The location service API is referenced from Github
+        // https://github.com/delight-im/Android-SimpleLocation
+        // construct a new instance of SimpleLocation
+        location = new SimpleLocation(this);
+
+        // if we can't access the location yet
+        if (!location.hasLocationEnabled()) {
+            // ask the user to enable location access
+            SimpleLocation.openSettings(this);
+        }
+
+        longitude = String.valueOf( location.getLatitude() );
+        altitude = String.valueOf( location.getAltitude() );
+
+//        longitude = "longitude not available";
+//        altitude = "altitude not available";
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -98,8 +114,6 @@ public class PhotoUploadService extends Service {
 
         final String currentDate1 = DateFormat.getDateTimeInstance().format(new Date());
 
-//        int currentImageNumber = imageNumber + 1;
-//        final StorageReference imagesRef = storage.getReference().child( uid ).child(currentImageNumber + ".jpg");
         final StorageReference imagesRef = storage.getReference().child( uid ).child(currentDate1 + ".jpg");
 
         UploadTask uploadTask = imagesRef.putBytes(imageData);
@@ -140,7 +154,7 @@ public class PhotoUploadService extends Service {
                     PhotoInformation photoInformation = new PhotoInformation(  );
                     photoInformation.setDateCreated( currentDate2 );
                     photoInformation.setImageUrl( downloadLink );
-                    photoInformation.setLatitude( latitude );
+                    photoInformation.setLatitude( altitude );
                     photoInformation.setLongitude( longitude );
                     photoInformation.setPhotoID( photoID );
                     photoInformation.setPostMessage( postMessage );

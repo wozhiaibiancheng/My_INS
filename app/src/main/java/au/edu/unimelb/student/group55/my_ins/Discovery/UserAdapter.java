@@ -27,8 +27,7 @@ import au.edu.unimelb.student.group55.my_ins.Firebase.User;
 
 
 public class UserAdapter extends ArrayAdapter<User>{
-
-    private static final String TAG = "UserAdapter";
+    
     private LayoutInflater myInflater;
     private List<User> currentUsers = null;
     private int layoutResource;
@@ -53,7 +52,6 @@ public class UserAdapter extends ArrayAdapter<User>{
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         final ViewHolder holder;
-
         if(convertView == null){
             convertView = myInflater.inflate(layoutResource, parent, false);
             holder = new ViewHolder();
@@ -81,8 +79,9 @@ public class UserAdapter extends ArrayAdapter<User>{
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot singleSnapshot: dataSnapshot.getChildren()){
-                    ImageLoader imageLoader = ImageLoader.getInstance();
 
+                    //Found the user successfully and display the corresponding user profile picture
+                    ImageLoader imageLoader = ImageLoader.getInstance();
                     imageLoader.displayImage(singleSnapshot.getValue(UserAccountSetting.class).getProfile_pic(),
                             holder.profileImage);
                 }
