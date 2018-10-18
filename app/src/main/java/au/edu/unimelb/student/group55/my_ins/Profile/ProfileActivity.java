@@ -34,6 +34,7 @@ import java.util.ArrayList;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
 import au.edu.unimelb.student.group55.my_ins.Firebase.PhotoInformation;
+import au.edu.unimelb.student.group55.my_ins.Firebase.User;
 import au.edu.unimelb.student.group55.my_ins.Firebase.UserAccountSetting;
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
@@ -73,6 +74,10 @@ public class ProfileActivity extends AppCompatActivity {
 
     private UserAccountSetting userAccountSettings;
 
+    private int followers_number = 0;
+    private int following_number = 0;
+    private int posts_number = 0;
+
 
     private Task<Uri> downloadUri;
     private String downloadLink;
@@ -95,6 +100,9 @@ public class ProfileActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.profileToolBar);
         profileMenu = (ImageView) findViewById(R.id.profile_menu);
         firebaseMethods = new FirebaseMethods(context);
+        posts = (TextView) findViewById( R.id.posts);
+        followers = (TextView) findViewById( R.id.followers);
+        following = (TextView) findViewById( R.id.following);
 
         storageReference = FirebaseStorage.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -110,6 +118,9 @@ public class ProfileActivity extends AppCompatActivity {
 //        setProfile();
 //        setProfilePic();
         gridSetup();
+        getFollowersNumber();
+        getFollowingNumber();
+        getPostsNumber();
     }
 
 
@@ -157,6 +168,9 @@ public class ProfileActivity extends AppCompatActivity {
         displayName.setText(userAccountSetting.getDisplay_name());
         username.setText(userAccountSetting.getUsername());
         description.setText(userAccountSetting.getDescription());
+        posts.setText(String.valueOf(userAccountSetting.getPosts()));
+        following.setText(String.valueOf(userAccountSetting.getFollowing()));
+        followers.setText(String.valueOf(userAccountSetting.getFollowers()));
         posts.setText(String.valueOf(userAccountSetting.getPosts()));
         following.setText(String.valueOf(userAccountSetting.getFollowing()));
         followers.setText(String.valueOf(userAccountSetting.getFollowers()));
@@ -293,7 +307,78 @@ public class ProfileActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d(TAG,"onCancelled");
             }
-        });
+        });}
+
+
+
+
+        private void getFollowersNumber(){
+            followers_number = 0;
+            Query query = databaseReference.child(getString( R.string.dbname_followers))
+                    .child(uid);
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
+                        Log.d(TAG, "onDataChange: followers number:" + singleSnapshot.getValue(User.class).toString());
+                        followers_number = followers_number +1;
+                    }
+                    followers.setText(String.valueOf(followers_number));
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+
+        private void getFollowingNumber(){
+            following_number = 0;
+
+            Query query = databaseReference.child(getString( R.string.dbname_following))
+                    .child(uid);
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
+                        Log.d(TAG, "onDataChange: following number:" + singleSnapshot.getValue(User.class).toString());
+                        following_number = following_number +1;
+                    }
+                    following.setText(String.valueOf(following_number));
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+
+        private void getPostsNumber(){
+            posts_number = 0;
+
+            Query query = databaseReference.child(getString( R.string.dbname_user_photos))
+                    .child(uid);
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
+                        Log.d(TAG, "onDataChange: posts number:" + singleSnapshot.getValue(User.class).toString());
+                        posts_number = posts_number +1;
+                    }
+                    posts.setText(String.valueOf(posts_number));
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
 
 //        query.addListenerForSingleValueEvent(new ValueEventListener() {
 //            @Override

@@ -3,7 +3,6 @@ package au.edu.unimelb.student.group55.my_ins.Discovery;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -12,7 +11,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -51,6 +49,7 @@ public class DiscoverActivity extends AppCompatActivity {
     private UserAdapter mAdapter;
 
     private TextView suggestText;
+//    private String currentUID;
 
 
     @Override
@@ -59,6 +58,9 @@ public class DiscoverActivity extends AppCompatActivity {
 
         Log.d("INFO","onCreate started!");
         setContentView(R.layout.activity_discovery);
+
+//        currentUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         mSearchParam = (EditText) findViewById(R.id.search);
         mListView = (ListView) findViewById(R.id.listView);
         suggestText = (TextView)findViewById(R.id.textView);
@@ -66,6 +68,8 @@ public class DiscoverActivity extends AppCompatActivity {
 
         setBottom();
         initTextListener();
+
+
     }
 
     private void initTextListener(){
@@ -111,7 +115,9 @@ public class DiscoverActivity extends AppCompatActivity {
         mUserList.clear();
         //update the users list view
         if(keyword.length() ==0){
+
             suggestText.setVisibility(View.VISIBLE);
+
 //            suggest friends
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
             Query query = reference.child("users");
@@ -119,13 +125,16 @@ public class DiscoverActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
-//                        Log.d(TAG, "suggest friends:" + singleSnapshot.getValue(User.class).toString());
-                        mUserList.add(singleSnapshot.getValue(User.class));
-                        //update the users list view
 
+//                        dont' suggest the user himself
+                        User user = singleSnapshot.getValue(User.class);
+//                        if(!user.getUser_id().equals(currentUID)){
+                        mUserList.add(user);
+//                        }
 
 
                     }
+                    //update the users list view
                     updateUsersList();
                 }
 
@@ -135,7 +144,9 @@ public class DiscoverActivity extends AppCompatActivity {
                 }
             });
         }else{
+
             suggestText.setVisibility(View.GONE);
+
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
             Query query = reference.child("users")
                     .orderByChild("username").equalTo(keyword);
@@ -146,9 +157,9 @@ public class DiscoverActivity extends AppCompatActivity {
                         Log.d(TAG, "onDataChange: found user:" + singleSnapshot.getValue(User.class).toString());
 
                         mUserList.add(singleSnapshot.getValue(User.class));
-                        //update the users list view
-                        updateUsersList();
                     }
+                    //update the users list view
+                    updateUsersList();
                 }
 
                 @Override

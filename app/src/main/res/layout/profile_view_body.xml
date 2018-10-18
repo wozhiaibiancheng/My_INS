@@ -11,7 +11,7 @@
      android:layout_width="match_parent"
      android:layout_height="50dp"
      android:id="@+id/profile_top">
-     <include layout="@layout/profile_top"></include>
+     <include layout="@layout/profile_view_top"></include>
  </RelativeLayout>
 
 

@@ -86,8 +86,8 @@ public class UserAdapter extends ArrayAdapter<User>{
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot singleSnapshot: dataSnapshot.getChildren()){
-                    Log.d(TAG, "onDataChange: found user: " +
-                            singleSnapshot.getValue(UserAccountSetting.class).toString());
+//                    Log.d(TAG, "onDataChange: found user: " +
+//                            singleSnapshot.getValue(UserAccountSetting.class).toString());
 
                     ImageLoader imageLoader = ImageLoader.getInstance();
 
