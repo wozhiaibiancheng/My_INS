@@ -5,7 +5,7 @@ android {
     buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "au.edu.unimelb.student.group55.my_ins"
-        minSdkVersion 24
+        minSdkVersion 22
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
@@ -48,7 +48,10 @@ dependencies {
 
     implementation 'com.github.iamutkarshtiwari:Ananas:v1.0.0'
 
-    implementation 'com.android.support:percent:27.0.0'
+    // The location service API
+    implementation 'com.github.delight-im:Android-SimpleLocation:v1.0.1'
+
+
 
 }
 

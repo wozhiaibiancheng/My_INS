@@ -17,7 +17,6 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import au.edu.unimelb.student.group55.my_ins.Home.CameraFragment;
-import au.edu.unimelb.student.group55.my_ins.Home.HomeFragment;
 import au.edu.unimelb.student.group55.my_ins.Home.PlaceHolder;
 import au.edu.unimelb.student.group55.my_ins.Home.SectionAdapter;
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
@@ -68,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private void setPager(){
         SectionAdapter sectionAdapter = new SectionAdapter(getSupportFragmentManager());
         sectionAdapter.addFragment(new CameraFragment());
-        sectionAdapter.addFragment(new HomeFragment());
+//        sectionAdapter.addFragment(new HomeFragment());
         sectionAdapter.addFragment(new PlaceHolder());
 
         ViewPager viewPager = (ViewPager)findViewById(R.id.body);
