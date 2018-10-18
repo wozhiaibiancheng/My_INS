@@ -67,19 +67,19 @@ public class ProfilePicActivity extends AppCompatActivity {
         });
 
         TextView nextScreen = (TextView) findViewById(R.id.gallery_next);
-        nextScreen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                    Intent intent = new Intent( context, EditProfileActivity.class );
-                    intent.putExtra( "profilePicPath", imagePath );;
-                    startActivity(intent);
-                    finish();
-
-                }
-
-
-
-        });
+//        nextScreen.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                    Intent intent = new Intent( context, EditProfileActivity.class );
+//                    intent.putExtra( "profilePicPath", imagePath );;
+//                    startActivity(intent);
+//                    finish();
+//
+//                }
+//
+//
+//
+//        });
 
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
