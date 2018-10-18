@@ -3,18 +3,15 @@ package au.edu.unimelb.student.group55.my_ins.Profile;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -37,16 +34,12 @@ import java.util.ArrayList;
 import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
 import au.edu.unimelb.student.group55.my_ins.Firebase.User;
 import au.edu.unimelb.student.group55.my_ins.Firebase.UserAccountSetting;
-import au.edu.unimelb.student.group55.my_ins.Firebase.UserRetrieving;
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.SupportFunctions.BottomNavTool;
 import au.edu.unimelb.student.group55.my_ins.SupportFunctions.ImageAdapter;
 import au.edu.unimelb.student.group55.my_ins.SupportFunctions.UniversalImageLoader;
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import android.support.v4.app.Fragment;
-import android.widget.Toast;
 
 public class ViewProfileActivity extends AppCompatActivity {
     private static final String TAG = "viewProfile Activity";
@@ -63,7 +56,7 @@ public class ViewProfileActivity extends AppCompatActivity {
     private UserAccountSetting userAccountSetting;
 
     //widgets
-    private TextView posts, followers, following, displayName, username, description, follow, unfollow, editProfile;
+    private TextView posts, followers, following, displayName, username, description, follow, unfollow;
     private CircleImageView profile_pic;
     private GridView gridView;
     private Toolbar toolbar;
@@ -106,11 +99,10 @@ public class ViewProfileActivity extends AppCompatActivity {
 //        progressBar = (ProgressBar) findViewById(R.id.profileProgressBar);
         follow = (TextView) findViewById( R.id.text_follow);
         unfollow = (TextView) findViewById( R.id.text_unfollow);
-        editProfile = (TextView) findViewById( R.id.edit_profile);
 
         gridView = (GridView) findViewById( R.id.image_grid);
         toolbar = (Toolbar) findViewById( R.id.profileToolBar);
-//        profileMenu = (ImageView) findViewById( R.id.profile_menu);
+
 
         left_icon = (ImageView) findViewById(R.id.left_icon);
 
@@ -125,17 +117,10 @@ public class ViewProfileActivity extends AppCompatActivity {
         mUser = getUser();
 
 
-//        try{
-//            mUser = getUserFromBundle();
-//            init();
-//        }catch (NullPointerException e){
-//            Log.e(TAG, "onCreateView: NullPointerException: "  + e.getMessage() );
-//            Toast.makeText(context, "something went wrong", Toast.LENGTH_SHORT).show();
-//            getActivity().getSupportFragmentManager().popBackStack();
-//        }
-
 
         init();
+        follow.setVisibility(View.GONE);
+        unfollow.setVisibility(View.GONE);
 
         //This need to be changed later
         temGridSetup();
@@ -145,10 +130,12 @@ public class ViewProfileActivity extends AppCompatActivity {
 //        setupActivityWidgets();
         FirebaseAuth();
 
-        followed();
+        checkFollowing();
         getFollowersNumber();
         getFollowingNumber();
         getPostsNumber();
+
+
 //        setUpGrid();
 
         follow.setOnClickListener(new View.OnClickListener() {
@@ -204,12 +191,6 @@ public class ViewProfileActivity extends AppCompatActivity {
             }
         });
 
-//        editProfile.setOnClickListener(new View.OnClickListener(){@Override
-//        public void onClick(View view) {
-//
-//        }
-//
-//        });
 
     }
 
@@ -285,21 +266,21 @@ public class ViewProfileActivity extends AppCompatActivity {
     private void setFollow() {
         follow.setVisibility(View.GONE);
         unfollow.setVisibility(View.VISIBLE);
-        editProfile.setVisibility(View.GONE);
     }
 
     private void setUnFollow() {
         follow.setVisibility(View.VISIBLE);
         unfollow.setVisibility(View.GONE);
-        editProfile.setVisibility(View.GONE);
     }
 
-    private void followed() {
+    private void checkFollowing() {
         setUnFollow();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+//        check current user is following if target user
         Query query = reference.child(getString( R.string.dbname_following))
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .orderByChild("user_id").equalTo(mUser.getUser_id());
+// if following
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -319,6 +300,8 @@ public class ViewProfileActivity extends AppCompatActivity {
 
 
     private void init() {
+
+
         DatabaseReference _reference = FirebaseDatabase.getInstance().getReference();
         Query _query = _reference.child("user_account_settings")
                 .orderByChild("user_id").equalTo(mUser.getUser_id());
@@ -326,12 +309,11 @@ public class ViewProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot ds :  dataSnapshot.getChildren()){
+
                     Log.d(TAG, "onDataChange: found user:" + ds.getValue(UserAccountSetting.class).toString());
                     UserAccountSetting userAccountSetting = ds.getValue(UserAccountSetting.class);
-//                    UserRetrieving set = new UserRetrieving();
-//                    set.setUser(mUser);
-//                    set.setSettings(singleSnapshot.getValue(UserAccountSetting.class));
                     setProfile(userAccountSetting);
+
                 }
             }
 
@@ -352,12 +334,6 @@ public class ViewProfileActivity extends AppCompatActivity {
         MenuItem menuItem = menu.getItem(4);
         menuItem.setChecked(true);
     }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate( R.menu.profile_menu, menu);
-//        return true;
-//    }
 
 
     private void setProfile(UserAccountSetting userAccountSetting) {
@@ -497,16 +473,6 @@ public class ViewProfileActivity extends AppCompatActivity {
         }
     }
 
-//    private User getUserFromBundle(){
-//        Log.d(TAG, "getUserFromBundle: arguments: " + getArguments());
-//
-//        Bundle bundle = this.getArguments();
-//        if(bundle != null){
-//            return bundle.getParcelable("intent_user");
-//        }else{
-//            return null;
-//        }
-//    }
 }
 
 

@@ -48,6 +48,8 @@ dependencies {
 
     implementation 'com.github.iamutkarshtiwari:Ananas:v1.0.0'
 
+    implementation 'com.android.support:percent:27.0.0'
+
 }
 
 apply plugin: 'com.google.gms.google-services'

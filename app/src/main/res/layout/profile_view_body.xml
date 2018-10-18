@@ -78,7 +78,8 @@ android:layout_below="@+id/profile_top">
             android:layout_height="wrap_content"
             android:text=""
             android:textSize="15sp"
-            android:paddingLeft="30dp"
+            android:paddingLeft="20dp"
+            android:paddingBottom="3dp"
             android:textColor="@color/black"
             android:textStyle="bold" />
 
@@ -88,7 +89,7 @@ android:layout_below="@+id/profile_top">
             android:layout_height="wrap_content"
             android:layout_below="@+id/display_name"
             android:text=""
-            android:paddingLeft="30dp" />
+            android:paddingLeft="20dp" />
 
     </RelativeLayout>
 
