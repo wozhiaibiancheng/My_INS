@@ -4,8 +4,6 @@ import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,20 +29,19 @@ import au.edu.unimelb.student.group55.my_ins.Firebase.User;
 public class UserAdapter extends ArrayAdapter<User>{
 
     private static final String TAG = "UserAdapter";
-
-
-    private LayoutInflater mInflater;
-    private List<User> mUsers = null;
+    private LayoutInflater myInflater;
+    private List<User> currentUsers = null;
     private int layoutResource;
-    private Context mContext;
+    private Context myContext;
 
     public UserAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<User> objects) {
         super(context, resource, objects);
-        mContext = context;
-        mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        myContext = context;
+        myInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         layoutResource = resource;
-        this.mUsers = objects;
+        this.currentUsers = objects;
     }
+
 
     private static class ViewHolder{
         TextView username, email;
@@ -55,12 +52,10 @@ public class UserAdapter extends ArrayAdapter<User>{
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-
-
         final ViewHolder holder;
 
         if(convertView == null){
-            convertView = mInflater.inflate(layoutResource, parent, false);
+            convertView = myInflater.inflate(layoutResource, parent, false);
             holder = new ViewHolder();
 
             holder.username = (TextView) convertView.findViewById(R.id.username);
@@ -86,15 +81,10 @@ public class UserAdapter extends ArrayAdapter<User>{
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot singleSnapshot: dataSnapshot.getChildren()){
-                    Log.d(TAG, "onDataChange: found user: " +
-                            singleSnapshot.getValue(UserAccountSetting.class).toString());
-
                     ImageLoader imageLoader = ImageLoader.getInstance();
 
                     imageLoader.displayImage(singleSnapshot.getValue(UserAccountSetting.class).getProfile_pic(),
                             holder.profileImage);
-
-                    System.out.println("99999999999999" + singleSnapshot.getValue(UserAccountSetting.class).getProfile_pic());
                 }
             }
 

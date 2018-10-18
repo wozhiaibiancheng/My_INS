@@ -36,7 +36,7 @@ public class HomeActivity extends AppCompatActivity {
     private void setPager(){
         SectionAdapter sectionAdapter = new SectionAdapter(getSupportFragmentManager());
         sectionAdapter.addFragment(new CameraFragment());
-        sectionAdapter.addFragment(new HomeFragment());
+//        sectionAdapter.addFragment(new HomeFragment());
         ViewPager viewPager = (ViewPager)findViewById(R.id.body);
         viewPager.setAdapter(sectionAdapter);
 

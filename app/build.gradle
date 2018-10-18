@@ -48,6 +48,8 @@ dependencies {
 
     implementation 'com.github.iamutkarshtiwari:Ananas:v1.0.0'
 
+
+
 }
 
 apply plugin: 'com.google.gms.google-services'

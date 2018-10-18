@@ -81,8 +81,6 @@ public class PhotoUploadService extends Service {
         longitude = "longitude not available";
         latitude = "latitude not available";
 
-//        currentLocation = "Location not available";
-
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
     }
