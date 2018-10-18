@@ -48,6 +48,13 @@
         </ListView>
 
     </RelativeLayout>
+    <ProgressBar
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/profileProgressBar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="200dp"
+        android:theme="@style/greyAccent"/>
 
     <include layout="@layout/layout_bottom"/>
 

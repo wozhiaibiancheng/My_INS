@@ -74,9 +74,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     private UserAccountSetting userAccountSettings;
 
-    private int followers_number = 0;
-    private int following_number = 0;
-    private int posts_number = 0;
+//    private int followers_number = 0;
+//    private int following_number = 0;
+//    private int posts_number = 0;
 
 
     private Task<Uri> downloadUri;
@@ -95,7 +95,7 @@ public class ProfileActivity extends AppCompatActivity {
         posts = (TextView) findViewById(R.id.posts);
         followers = (TextView) findViewById(R.id.followers);
         following = (TextView) findViewById(R.id.following);
-//        progressBar = (ProgressBar) findViewById(R.id.profileProgressBar);
+        progressBar = (ProgressBar) findViewById(R.id.profileProgressBar);
         gridView = (GridView) findViewById(R.id.image_grid);
         toolbar = (Toolbar) findViewById(R.id.profileToolBar);
         profileMenu = (ImageView) findViewById(R.id.profile_menu);
@@ -114,13 +114,10 @@ public class ProfileActivity extends AppCompatActivity {
         setUpToolbar();
         setBottom();
         setUpEditProfile();
-        setupActivityWidgets();
-//        setProfile();
-//        setProfilePic();
+//        setupActivityWidgets();
+//        progressBar = (ProgressBar)findViewById(R.id.profileProgressBar);
+//        progressBar.setVisibility(View.GONE);
         gridSetup();
-        getFollowersNumber();
-        getFollowingNumber();
-        getPostsNumber();
     }
 
 
@@ -174,6 +171,7 @@ public class ProfileActivity extends AppCompatActivity {
         posts.setText(String.valueOf(userAccountSetting.getPosts()));
         following.setText(String.valueOf(userAccountSetting.getFollowing()));
         followers.setText(String.valueOf(userAccountSetting.getFollowers()));
+        progressBar.setVisibility(View.GONE);
 
     }
 
@@ -255,8 +253,7 @@ public class ProfileActivity extends AppCompatActivity {
 
 
     private void setupActivityWidgets() {
-//        progressBar = (ProgressBar)findViewById(R.id.profileProgressBar);
-//        progressBar.setVisibility(View.GONE);
+
         profile_pic = (CircleImageView) findViewById(R.id.profile_pic);
     }
 
@@ -277,11 +274,6 @@ public class ProfileActivity extends AppCompatActivity {
     private void gridSetup(){
         Log.d(TAG, "setupGridView: Setting up image grid.");
 
-//        GridView imgGrid = (GridView) findViewById(R.id.image_grid);
-//
-//        int screenWidth = getResources().getDisplayMetrics().widthPixels;
-//        int imgWidth = screenWidth / numColumns;
-//        imgGrid.setColumnWidth(imgWidth);
         final ArrayList<String> imgURLs = new ArrayList<>();
 
         final ArrayList<PhotoInformation> photos = new ArrayList<>();
@@ -312,71 +304,27 @@ public class ProfileActivity extends AppCompatActivity {
 
 
 
-        private void getFollowersNumber(){
-            followers_number = 0;
-            Query query = databaseReference.child(getString( R.string.dbname_followers))
-                    .child(uid);
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
-                        Log.d(TAG, "onDataChange: followers number:" + singleSnapshot.getValue(User.class).toString());
-                        followers_number = followers_number +1;
-                    }
-                    followers.setText(String.valueOf(followers_number));
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-        }
-
-        private void getFollowingNumber(){
-            following_number = 0;
-
-            Query query = databaseReference.child(getString( R.string.dbname_following))
-                    .child(uid);
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
-                        Log.d(TAG, "onDataChange: following number:" + singleSnapshot.getValue(User.class).toString());
-                        following_number = following_number +1;
-                    }
-                    following.setText(String.valueOf(following_number));
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-        }
-
-        private void getPostsNumber(){
-            posts_number = 0;
-
-            Query query = databaseReference.child(getString( R.string.dbname_user_photos))
-                    .child(uid);
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
-                        Log.d(TAG, "onDataChange: posts number:" + singleSnapshot.getValue(User.class).toString());
-                        posts_number = posts_number +1;
-                    }
-                    posts.setText(String.valueOf(posts_number));
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
+//
+//        private void getPostsNumber(){
+//            posts_number = 0;
+//
+//            Query query = databaseReference.child(getString( R.string.dbname_user_photos))
+//                    .child(uid);
+//            query.addListenerForSingleValueEvent(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
+//                        Log.d(TAG, "onDataChange: posts number:" + singleSnapshot.getValue(User.class).toString());
+//                        posts_number = posts_number +1;
+//                    }
+//                    posts.setText(String.valueOf(posts_number));
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//
+//                }
+//            });
 
 
 
@@ -429,7 +377,7 @@ public class ProfileActivity extends AppCompatActivity {
 //
 //};});
     }
-}
+
 
 
 

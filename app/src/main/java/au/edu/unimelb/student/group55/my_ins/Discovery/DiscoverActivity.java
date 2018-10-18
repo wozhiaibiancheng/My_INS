@@ -14,8 +14,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,6 +52,7 @@ public class DiscoverActivity extends AppCompatActivity {
 
     private TextView suggestText;
 //    private String currentUID;
+private ProgressBar progressBar;
 
 
     @Override
@@ -65,9 +68,11 @@ public class DiscoverActivity extends AppCompatActivity {
         mListView = (ListView) findViewById(R.id.listView);
         suggestText = (TextView)findViewById(R.id.textView);
         suggestText.setVisibility(View.GONE);
+        progressBar = (ProgressBar) findViewById(R.id.profileProgressBar);
 
         setBottom();
         initTextListener();
+        progressBar.setVisibility(View.GONE);
 
 
     }
@@ -113,6 +118,7 @@ public class DiscoverActivity extends AppCompatActivity {
     private void searchForMatch(String keyword){
         Log.d(TAG, "searchForMatch: searching for a match: " + keyword);
         mUserList.clear();
+        progressBar.setVisibility(View.VISIBLE);
         //update the users list view
         if(keyword.length() ==0){
 
@@ -136,6 +142,7 @@ public class DiscoverActivity extends AppCompatActivity {
                     }
                     //update the users list view
                     updateUsersList();
+                    progressBar.setVisibility(View.GONE);
                 }
 
                 @Override
@@ -182,12 +189,22 @@ public class DiscoverActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(TAG, "onItemClick: selected user: " + mUserList.get(position).toString());
 
-                //navigate to profile activity
-                Intent intent =  new Intent(mContext, ViewProfileActivity.class);
-                intent.putExtra("calling_activity", "discover_activity");
-                intent.putExtra("intent_user", mUserList.get(position) );
-                Log.d(TAG, mUserList.get(position).getUsername());
-                startActivity(intent);
+
+//                click the user himself
+                if(mUserList.get(position).getUser_id().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                    Intent intent =  new Intent(mContext, ProfileActivity.class);
+                    Log.d(TAG, mUserList.get(position).getUsername());
+                    startActivity(intent);
+                }
+
+                else {
+                    //navigate to profile activity
+                    Intent intent = new Intent(mContext, ViewProfileActivity.class);
+                    intent.putExtra("calling_activity", "discover_activity");
+                    intent.putExtra("intent_user", mUserList.get(position));
+                    Log.d(TAG, mUserList.get(position).getUsername());
+                    startActivity(intent);
+                }
             }
         });
     }

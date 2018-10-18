@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.Task;
@@ -46,7 +47,6 @@ public class ViewProfileActivity extends AppCompatActivity {
 
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
-    private FirebaseMethods firebaseMethods;
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
 
@@ -62,19 +62,18 @@ public class ViewProfileActivity extends AppCompatActivity {
     private BottomNavigationViewEx bottomNavigationViewEx;
 
     private StorageReference storageReference;
-    //  private FirebaseUser user;
 
     private Task<Uri> downloadUri;
     private String downloadLink;
 
     private ImageView left_icon;
     private GridView imgGrid;
+    private ProgressBar progressBar;
 
 //target user
     private UserAccountSetting tUserAccountSettings;
     private User tUser;
     private long tFollowerNum;
-    private long tPostNum = 0;
 
 //    current user
     private FirebaseUser cUser;
@@ -99,7 +98,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         posts = (TextView)findViewById( R.id.posts);
         followers = (TextView) findViewById( R.id.followers);
         following = (TextView) findViewById( R.id.following);
-//        progressBar = (ProgressBar) findViewById(R.id.profileProgressBar);
+        progressBar = (ProgressBar) findViewById(R.id.profileProgressBar);
         follow = (TextView) findViewById( R.id.text_follow);
         unfollow = (TextView) findViewById( R.id.text_unfollow);
 
@@ -243,6 +242,8 @@ public class ViewProfileActivity extends AppCompatActivity {
 
             }
         });
+
+
         init();
 
 
@@ -260,7 +261,8 @@ public class ViewProfileActivity extends AppCompatActivity {
     }
 
     private void checkFollowing() {
-        setUnFollow();
+        boolean isFollowing = false;
+//        setUnFollow();
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 //        check current user is following if target user
         Query query = reference.child(getString( R.string.dbname_following))
@@ -270,9 +272,11 @@ public class ViewProfileActivity extends AppCompatActivity {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
-//                    Log.d(TAG, "onDataChange: found user:" + singleSnapshot.getValue(User.class).toString());
+                if(dataSnapshot.exists()) {
                     setFollow();
+                }
+                else {
+                    setUnFollow();
                 }
             }
 
@@ -281,7 +285,6 @@ public class ViewProfileActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
 
@@ -399,7 +402,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         BottomNavTool.setBottomNav(bottomNavigationViewEx);
         BottomNavTool.enableNav(context, this, bottomNavigationViewEx);
         Menu menu = bottomNavigationViewEx.getMenu();
-        MenuItem menuItem = menu.getItem(4);
+        MenuItem menuItem = menu.getItem(1);
         menuItem.setChecked(true);
     }
 
@@ -413,6 +416,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         posts.setText(String.valueOf(userAccountSetting.getPosts()));
         following.setText(String.valueOf(userAccountSetting.getFollowing()));
         followers.setText(String.valueOf(userAccountSetting.getFollowers()));
+        progressBar.setVisibility(View.GONE);
 
         left_icon.setOnClickListener(new View.OnClickListener() {
             @Override

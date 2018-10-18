@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,6 +71,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private TextView cancel;
     private  TextView done;
 
+    private ProgressBar progressBar;
+
 
     private UserAccountSetting userAccountSetting;
 
@@ -109,6 +112,7 @@ public class EditProfileActivity extends AppCompatActivity {
         firebaseMethods = new FirebaseMethods(context);
         baos = new ByteArrayOutputStream();
         storage = FirebaseStorage.getInstance();
+        progressBar = (ProgressBar) findViewById(R.id.profileProgressBar);
 
 //        setBottom();
 
@@ -154,6 +158,7 @@ public class EditProfileActivity extends AppCompatActivity {
         phoneNum.setText(String.valueOf(userAccountSetting.getPhone_number()));
         System.out.println(String.valueOf(userAccountSetting.getPhone_number()));
         this.userAccountSetting = userAccountSetting;
+        progressBar.setVisibility(View.GONE);
 
         changeProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -333,68 +338,8 @@ public class EditProfileActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-//        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//            @Override
-//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                    @Override
-//                    public void onSuccess(Uri uri) {
-//                        // Got the download URL for 'users/me/profile.png'
-//                        Uri downloadUri = taskSnapshot.getMetadata().getDownloadUrl();
-//                        generatedFilePath = downloadUri.toString(); /// The string(file link) that you need
-//                    }
-//                }).addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception exception) {
-//                        // Handle any errors
-//                    }
-//                });
-//                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener() {
-//                    @override
-//                    public void onSuccess(Uri uri) {
-//                        Uri firebaseUrl = uri;
-////Task firebaseUrl = taskSnapshot.getStorage().getDownloadUrl();
-////Toast meassage
-//                        Toast.makeText(mContext, "Photo upload successful !", Toast.LENGTH_SHORT).show();
-//                        addPhotoToDatabase(caption, firebaseUrl.toString());
-//                Uri firebaseUrl = taskSnapshot.getDownloadUrl();
-//                Uri download = taskSnapshot.getMetadata().getReference().getDownloadUrl();
-
-//                downloadLink = downloadUri.toString();
-//                Log.d(TAG,"downloadLink: " + downloadLink);
-
-//                Toast.makeText(context, "photo upload success", Toast.LENGTH_SHORT).show();
-
-        //insert into 'user_account_settings' node
-//                setProfilePhoto(downloadLink);
-//
-//                //navigate to the main feed so the user can see their photo
-//                Intent intent = new Intent(context, ProfileActivity.class);
-//                startActivity(intent);
-//
-//
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                Log.d(TAG, "onFailure: Photo upload failed.");
-//                Toast.makeText(context, "Photo upload failed ", Toast.LENGTH_SHORT).show();
-//            }
-//        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-//            @Override
-//            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-//                double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-//
-//                if(progress - 15 > mPhotoUploadProgress){
-//                    Toast.makeText(context, "photo upload progress: " + String.format("%.0f", progress) + "%", Toast.LENGTH_SHORT).show();
-//                    mPhotoUploadProgress = progress;
-//                }
-//
-//                Log.d(TAG, "onProgress: upload progress: " + progress + "% done");
     }
-        ;
+
 
 
 

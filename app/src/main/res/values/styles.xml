@@ -29,5 +29,9 @@
         <item name="android:windowExitAnimation">@anim/dialog_out</item>
     </style>
 
+    <style name="greyAccent" parent="ThemeOverlay.AppCompat.Light">
+        <item name="colorAccent">#b4b4b4</item>
+    </style>
+
 
 </resources>
