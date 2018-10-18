@@ -71,7 +71,7 @@ public class ViewProfileActivity extends AppCompatActivity {
     private BottomNavigationViewEx bottomNavigationViewEx;
 
     private StorageReference storageReference;
-  //  private FirebaseUser user;
+    //  private FirebaseUser user;
 
     private UserAccountSetting userAccountSettings;
 
@@ -91,6 +91,7 @@ public class ViewProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView( R.layout.activity_view_profile);
 
         Log.d("INFO", "onCreate started!");
 
@@ -109,7 +110,7 @@ public class ViewProfileActivity extends AppCompatActivity {
 
         gridView = (GridView) findViewById( R.id.image_grid);
         toolbar = (Toolbar) findViewById( R.id.profileToolBar);
-        profileMenu = (ImageView) findViewById( R.id.profile_menu);
+//        profileMenu = (ImageView) findViewById( R.id.profile_menu);
 
         left_icon = (ImageView) findViewById(R.id.left_icon);
 
@@ -360,6 +361,7 @@ public class ViewProfileActivity extends AppCompatActivity {
 
 
     private void setProfile(UserAccountSetting userAccountSetting) {
+        System.out.println("22222222222222222"+userAccountSetting.getProfile_pic());
         UniversalImageLoader.setImage(userAccountSetting.getProfile_pic(), profile_pic, null, "");
         displayName.setText(userAccountSetting.getDisplay_name());
         username.setText(userAccountSetting.getUsername());
@@ -372,7 +374,7 @@ public class ViewProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "onClick: navigating back");
-               finish();
+                finish();
             }
         });
 
@@ -424,9 +426,9 @@ public class ViewProfileActivity extends AppCompatActivity {
     }
 
 
-//    private void setupActivityWidgets() {
-//        profile_pic = (CircleImageView) view.findViewById( R.id.profile_pic);
-//    }
+    private void setupActivityWidgets() {
+        profile_pic = (CircleImageView)findViewById( R.id.profile_pic);
+    }
 
     private void setImageGrid(ArrayList<String> imgURLs) {
 //        GridView imgGrid = (GridView) view.findViewById( R.id.image_grid);
@@ -505,7 +507,7 @@ public class ViewProfileActivity extends AppCompatActivity {
 //            return null;
 //        }
 //    }
-    }
+}
 
 
 
