@@ -320,18 +320,18 @@ public class ViewProfileActivity extends AppCompatActivity {
 
     private void init() {
         DatabaseReference _reference = FirebaseDatabase.getInstance().getReference();
-        Query _query = _reference.child("users")
-                .orderByChild("username").equalTo(mUser.getUsername());
+        Query _query = _reference.child("user_account_settings")
+                .orderByChild("user_id").equalTo(mUser.getUser_id());
         _query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
-                    Log.d(TAG, "onDataChange: found user:" + singleSnapshot.getValue(User.class).toString());
-
-                    UserRetrieving set = new UserRetrieving();
-                    set.setUser(mUser);
-                    set.setSettings(singleSnapshot.getValue(UserAccountSetting.class));
-                    setProfile(set.getSettings());
+                for(DataSnapshot ds :  dataSnapshot.getChildren()){
+                    Log.d(TAG, "onDataChange: found user:" + ds.getValue(UserAccountSetting.class).toString());
+                    UserAccountSetting userAccountSetting = ds.getValue(UserAccountSetting.class);
+//                    UserRetrieving set = new UserRetrieving();
+//                    set.setUser(mUser);
+//                    set.setSettings(singleSnapshot.getValue(UserAccountSetting.class));
+                    setProfile(userAccountSetting);
                 }
             }
 
@@ -361,7 +361,7 @@ public class ViewProfileActivity extends AppCompatActivity {
 
 
     private void setProfile(UserAccountSetting userAccountSetting) {
-        System.out.println("22222222222222222"+userAccountSetting.getProfile_pic());
+
         UniversalImageLoader.setImage(userAccountSetting.getProfile_pic(), profile_pic, null, "");
         displayName.setText(userAccountSetting.getDisplay_name());
         username.setText(userAccountSetting.getUsername());
