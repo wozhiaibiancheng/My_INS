@@ -28,6 +28,8 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
@@ -112,7 +114,9 @@ public class PhotoUploadService extends Service {
         resultImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         imageData = baos.toByteArray();
 
-        final String currentDate1 = DateFormat.getDateTimeInstance().format(new Date());
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss");
+        final String currentDate1 = String.valueOf( simpleDateFormat.format( calendar.getTime() ) );
 
         final StorageReference imagesRef = storage.getReference().child( uid ).child(currentDate1 + ".jpg");
 
@@ -148,7 +152,12 @@ public class PhotoUploadService extends Service {
                     //Once the image is uploaded successfully, show the message and get its download URL
                     Uri downloadUri = task.getResult();
                     downloadLink = downloadUri.toString();
-                    String currentDate2 = DateFormat.getDateTimeInstance().format(new Date());
+
+                    Calendar calendar = Calendar.getInstance();
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss");
+                    String currentDate2 = String.valueOf( simpleDateFormat.format( calendar.getTime() ) );
+
+//                    String currentDate2 = DateFormat.getDateTimeInstance().format(new Date());
                     String photoID = myRef.child( "posts" ).child( uid ).push().getKey();
 
                     PhotoInformation photoInformation = new PhotoInformation(  );
