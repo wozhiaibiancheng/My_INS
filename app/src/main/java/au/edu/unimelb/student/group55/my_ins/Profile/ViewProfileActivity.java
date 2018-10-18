@@ -33,6 +33,7 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import java.util.ArrayList;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
+import au.edu.unimelb.student.group55.my_ins.Firebase.PhotoInformation;
 import au.edu.unimelb.student.group55.my_ins.Firebase.User;
 import au.edu.unimelb.student.group55.my_ins.Firebase.UserAccountSetting;
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
@@ -120,8 +121,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         checkFollowing();
 
 
-        //This need to be changed later
-        temGridSetup();
+        gridSetup();
 
 //        setUpToolbar();
         setBottom();
@@ -479,29 +479,49 @@ public class ViewProfileActivity extends AppCompatActivity {
         profile_pic = (CircleImageView)findViewById( R.id.profile_pic);
     }
 
+    private void gridSetup(){
+        Log.d(TAG, "setupGridView: Setting up image grid.");
+
+        final ArrayList<String> imgURLs = new ArrayList<>();
+
+        final ArrayList<PhotoInformation> photos = new ArrayList<>();
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        Query query = reference
+                .child("posts")
+                .child(tUser.getUser_id());
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds:dataSnapshot.getChildren()){
+                    photos.add(ds.getValue(PhotoInformation.class));
+                }
+
+                for(int i = 0; i < photos.size();i++){
+                    imgURLs.add(photos.get(i).getImageUrl());
+                }
+                setImageGrid(imgURLs);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d(TAG,"onCancelled");
+            }
+        });}
+
     private void setImageGrid(ArrayList<String> imgURLs) {
+        GridView imgGrid = (GridView) findViewById(R.id.image_grid);
 
         int screenWidth = getResources().getDisplayMetrics().widthPixels;
         int imgWidth = screenWidth / numColumns;
         imgGrid.setColumnWidth(imgWidth);
 
+
         ImageAdapter imageAdapter = new ImageAdapter(context, R.layout.image_grid, "", imgURLs);
         imgGrid.setAdapter(imageAdapter);
+
     }
 
-
-    private void temGridSetup() {
-        ArrayList<String> imgURLs = new ArrayList<>();
-
-        imgURLs.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz1WudxjK_akg8ZwryyxpzLzDNodquERTqGmPFqFNRcu5pNA-EVw");
-        imgURLs.add("https://frontiersinblog.files.wordpress.com/2018/02/psychology-influence-behavior-with-images.jpg?w=940");
-        imgURLs.add("https://secure.i.telegraph.co.uk/multimedia/archive/03290/kitten_potd_3290498k.jpg");
-        imgURLs.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz1WudxjK_akg8ZwryyxpzLzDNodquERTqGmPFqFNRcu5pNA-EVw");
-        imgURLs.add("https://vignette.wikia.nocookie.net/parody/images/e/ef/Alice-PNG-alice-in-wonderland-33923432-585-800.png/revision/latest?cb=20141029225915");
-        imgURLs.add("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSz1WudxjK_akg8ZwryyxpzLzDNodquERTqGmPFqFNRcu5pNA-EVw");
-
-        setImageGrid(imgURLs);
-    }
 
 
     private User getUser(){
