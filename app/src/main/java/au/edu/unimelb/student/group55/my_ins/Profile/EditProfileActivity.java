@@ -274,7 +274,7 @@ public class EditProfileActivity extends AppCompatActivity {
 //        FilePaths filePaths = new FilePaths();
         String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
         storageReference = storage.getReference().
-                child(uid + "/"+ currentDate + ".jpg");
+                child(uid + "/"+ "profile_pic.jpg");
 
         //convert image url to bitmap
         if(bm == null){
