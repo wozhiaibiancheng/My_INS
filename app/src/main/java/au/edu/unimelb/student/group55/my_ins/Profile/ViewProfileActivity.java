@@ -318,10 +318,10 @@ public class ViewProfileActivity extends AppCompatActivity {
 
 
     private void init() {
-//        DatabaseReference _reference = FirebaseDatabase.getInstance().getReference();
-        Query query = databaseReference.child("users")
+        DatabaseReference _reference = FirebaseDatabase.getInstance().getReference();
+        Query _query = _reference.child("users")
                 .orderByChild("username").equalTo(mUser.getUsername());
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+        _query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
@@ -338,30 +338,7 @@ public class ViewProfileActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
-
-    }
-
-
-    //    set up toolbar
-//    private void setUpToolbar() {
-//        Toolbar toolbar = (Toolbar) findViewById( R.id.profile_toolbar);
-//        setSupportActionBar(toolbar);
-//        FirebaseAuth();
-//        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//                Log.d(TAG, "clicked menu icon" + item);
-//                switch (item.getItemId()) {
-//                    case R.id.profile_menu:
-//                        Log.d(TAG, "on menuItem click");
-//                        auth.signOut();
-//                        finish();
-//                }
-//                return false;
-//            }
-//        });
-//    }
+        });}
 
 
     //    set up bottom view
