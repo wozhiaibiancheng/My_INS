@@ -20,9 +20,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import au.edu.unimelb.student.group55.my_ins.Home.HomeActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.MainActivity;
-import au.edu.unimelb.student.group55.my_ins.Home.HomeActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
