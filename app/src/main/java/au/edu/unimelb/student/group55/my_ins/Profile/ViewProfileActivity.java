@@ -64,9 +64,6 @@ public class ViewProfileActivity extends AppCompatActivity {
 
     private StorageReference storageReference;
 
-    private Task<Uri> downloadUri;
-    private String downloadLink;
-
     private ImageView left_icon;
     private GridView imgGrid;
     private ProgressBar progressBar;
@@ -78,7 +75,7 @@ public class ViewProfileActivity extends AppCompatActivity {
 
 //    current user
     private FirebaseUser cUser;
-    private String cUID;
+//    private String cUID;
     private long cFollowingNum;
     private UserAccountSetting cUserAccountSettings;
 
@@ -127,20 +124,10 @@ public class ViewProfileActivity extends AppCompatActivity {
         setBottom();
 
 
-
-
-
-//        setUpGrid();
-
         follow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                tFollowerNum  = getTfollowerNum();
-                System.out.println("before click follow, followers: " + tFollowerNum);
 
-//                cFollowingNum = getCfollowingNum();
-
-                System.out.println("following before er/ing: " + tFollowerNum + "; " + cFollowingNum);
 
                 cFollowingNum += 1;
 
@@ -151,9 +138,10 @@ public class ViewProfileActivity extends AppCompatActivity {
                 System.out.println("following mid er/ing: " + tFollowerNum + "; " + cFollowingNum);
 
                 //             update followers and following table
+
                 FirebaseDatabase.getInstance().getReference()
                         .child("following")
-                        .child(cUID)
+                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                         .child(tUser.getUser_id())
                         .child("user_id")
                         .setValue(tUser.getUser_id());
@@ -162,7 +150,7 @@ public class ViewProfileActivity extends AppCompatActivity {
                 FirebaseDatabase.getInstance().getReference()
                         .child("followers")
                         .child(tUser.getUser_id())
-                        .child(cUID)
+                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                         .child("user_id")
                         .setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
@@ -177,7 +165,7 @@ public class ViewProfileActivity extends AppCompatActivity {
 
                 FirebaseDatabase.getInstance().getReference()
                         .child("user_account_settings")
-                        .child(cUID)
+                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                         .child("following")
                         .setValue(cFollowingNum);
 
@@ -188,23 +176,20 @@ public class ViewProfileActivity extends AppCompatActivity {
                 setFollow();
                 tFollowerNum  = getTfollowerNum();
                 cFollowingNum = getCfollowingNum();
+
+//                add inner followers/following for friends suggestion
+                addTuserfollowing();
+                addTuserfollowers();
             }
         });
 
         unfollow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                tFollowerNum  = getTfollowerNum();
-                System.out.println("before click Unfollow, followers: " + tFollowerNum);
 
-//                cFollowingNum = getCfollowingNum();
-
-                System.out.println("unfolow before er/ing: " + tFollowerNum + "; " + cFollowingNum);
                 cFollowingNum -= 1;
-
-
                 tFollowerNum -= 1;
-                System.out.println("unfollow mid er/ing: " + tFollowerNum + "; " + cFollowingNum);
+
                 followers.setText(Long.toString(tFollowerNum));
 
 //                update followers and following table
@@ -232,10 +217,10 @@ public class ViewProfileActivity extends AppCompatActivity {
 
                 FirebaseDatabase.getInstance().getReference()
                         .child("user_account_settings")
-                        .child(cUID)
+                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                         .child("following")
                         .setValue(cFollowingNum);
-                System.out.println("unfollow after er/ing: " + tFollowerNum + "; " + cFollowingNum);
+//                System.out.println("unfollow after er/ing: " + tFollowerNum + "; " + cFollowingNum);
                 setUnFollow();
                 tFollowerNum  = getTfollowerNum();
                 cFollowingNum = getCfollowingNum();
@@ -261,11 +246,11 @@ public class ViewProfileActivity extends AppCompatActivity {
     }
 
     private void checkFollowing() {
-        boolean isFollowing = false;
-//        setUnFollow();
+
+
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 //        check current user is following if target user
-        Query query = reference.child(getString( R.string.dbname_following))
+        Query query = reference.child("following")
                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .orderByChild("user_id").equalTo(tUser.getUser_id());
 // if following
@@ -301,7 +286,7 @@ public class ViewProfileActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot ds :  dataSnapshot.getChildren()){
 
-                    Log.d(TAG, "onDataChange: found user:" + ds.getValue(UserAccountSetting.class).toString());
+//                    Log.d(TAG, "onDataChange: found user:" + ds.getValue(UserAccountSetting.class).toString());
                     tUserAccountSettings = ds.getValue(UserAccountSetting.class);
                     setProfile(tUserAccountSettings);
                     tFollowerNum  = getTfollowerNum();
@@ -374,7 +359,7 @@ public class ViewProfileActivity extends AppCompatActivity {
 
         DatabaseReference _reference = FirebaseDatabase.getInstance().getReference();
         Query query = _reference.child("user_account_settings")
-                .orderByChild("user_id").equalTo(cUID);
+                .orderByChild("user_id").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -392,6 +377,70 @@ public class ViewProfileActivity extends AppCompatActivity {
         });
         return cFollowingNum;
     }
+
+
+
+//add users who are followed by the one the current user is following
+//    for friend suggestion algo.
+    private void addTuserfollowing() {
+
+//find target user
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        Query query = reference.child("following").child(tUser.getUser_id());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot ds :  dataSnapshot.getChildren()){
+
+                    FirebaseDatabase.getInstance().getReference()
+                            .child("following")
+                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            .child(tUser.getUser_id())
+                            .child("innterFollowing")
+                            .push()
+                            .setValue(ds.child("user_id").getValue());
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+        });
+    }
+
+
+    //add common friends
+//    for friend suggestion algo.
+    private void addTuserfollowers() {
+
+//find target user
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        Query query = reference.child("followers").child(tUser.getUser_id());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot ds :  dataSnapshot.getChildren()){
+
+                    FirebaseDatabase.getInstance().getReference()
+                            .child("following")
+                            .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                            .child(tUser.getUser_id())
+                            .child("innterFollowers")
+                            .push()
+                            .setValue(ds.child("user_id").getValue());
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+        });
+    }
+
 
 
 
@@ -444,7 +493,7 @@ public class ViewProfileActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 cUser = firebaseAuth.getCurrentUser();
-                cUID = cUser.getUid();
+//                cUID = cUser.getUid();
 
                 if (cUser != null) {
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + cUser.getUid());
