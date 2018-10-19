@@ -2,6 +2,7 @@ package au.edu.unimelb.student.group55.my_ins.Home;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -67,12 +68,21 @@ public class CommentFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate( R.layout.comment_fragment, container, false);
-        myBackArrow = (ImageView) view.findViewById(R.id.backArrow);
+        myBackArrow = (ImageView) view.findViewById(R.id.left_icon);
         myCheckMark = (ImageView) view.findViewById(R.id.ivPostComment);
         myComment = (EditText) view.findViewById(R.id.comment);
         myListView = (ListView) view.findViewById(R.id.listView);
         myComments = new ArrayList<>();
         myContext = getActivity();
+
+        myBackArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: navigating back");
+                Intent intent = new Intent(getActivity(), HomeActivity.class);
+                startActivity(intent);
+            }
+        });
 
 
         try{

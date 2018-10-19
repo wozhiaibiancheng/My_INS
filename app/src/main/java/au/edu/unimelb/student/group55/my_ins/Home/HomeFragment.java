@@ -70,7 +70,7 @@ public class HomeFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
                     Log.d(TAG, "onDataChange: found user: " +
-                    singleSnapshot.child(getString(R.string.field_user_id)).getValue());
+                            singleSnapshot.child(getString(R.string.field_user_id)).getValue());
 
                     myFollowing.add(singleSnapshot.child(getString(R.string.field_user_id)).getValue().toString());
                 }
@@ -79,7 +79,7 @@ public class HomeFragment extends Fragment {
                 Log.d(TAG, "onDataChange: found user: " +
                         myFollowing);
                 //get the photos
-                getPhotos();
+                getPhotos(myFollowing);
             }
 
             @Override
@@ -89,45 +89,56 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void getPhotos(){
+    private void getPhotos(ArrayList<String> myFollowing){
         Log.d(TAG, "getPhotos: getting photos");
+
+        final ArrayList<String > following = myFollowing;
+
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        for(int i = 0; i < myFollowing.size(); i++){
+
+        for(int i = 0; i < following.size(); i++){
             final int count = i;
             Query query = reference
                     .child("posts")
-                    .child(myFollowing.get(i))
-                    .orderByChild("post_id")
-                    .equalTo( myFollowing.get(i));
+                    .child(following.get(i));
+
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
                         System.out.println("Invoked here successfully");
 
-                        PhotoInformation photoInformation = new PhotoInformation();
-                        Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
+//                        for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                            //                                        Log.d(TAG, "onDataChange: found user:" + singleSnapshot.getValue(User.class).toString());
 
-                        photoInformation.setPostMessage(objectMap.get(getString(R.string.post_message)).toString());
-                        photoInformation.setPhotoID(objectMap.get(getString(R.string.field_photo_id)).toString());
-                        photoInformation.setUserID(objectMap.get(getString(R.string.field_user_id)).toString());
-                        photoInformation.setDateCreated(objectMap.get(getString(R.string.field_date_created)).toString());
-                        photoInformation.setImageUrl(objectMap.get(getString(R.string.field_image_path)).toString());
+//                            mUserList.add(singleSnapshot.getValue(User.class));
+//                        }
 
-                        ArrayList<Comment> comments = new ArrayList<Comment>();
-                        for (DataSnapshot dSnapshot : singleSnapshot
-                                .child("comments").getChildren()){
-                            Comment comment = new Comment();
-                            comment.setUser_id(dSnapshot.getValue(Comment.class).getUser_id());
-                            comment.setComment(dSnapshot.getValue(Comment.class).getComment());
-                            comment.setDate_created(dSnapshot.getValue(Comment.class).getDate_created());
-                            comments.add(comment);
-                        }
 
-                        photoInformation.setComments(comments);
-                        myPhotoInformations.add(photoInformation);
+
+//                        PhotoInformation photoInformation = new PhotoInformation();
+//                        Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
+//
+//                        photoInformation.setPostMessage(objectMap.get(getString(R.string.post_message)).toString());
+//                        photoInformation.setPhotoID(objectMap.get(getString(R.string.field_photo_id)).toString());
+//                        photoInformation.setUserID(objectMap.get(getString(R.string.field_user_id)).toString());
+//                        photoInformation.setDateCreated(objectMap.get(getString(R.string.field_date_created)).toString());
+//                        photoInformation.setImageUrl(objectMap.get(getString(R.string.field_image_path)).toString());
+
+//                        ArrayList<Comment> comments = new ArrayList<Comment>();
+//                        for (DataSnapshot dSnapshot : singleSnapshot
+//                                .child("comments").getChildren()){
+//                            Comment comment = new Comment();
+//                            comment.setUser_id(dSnapshot.getValue(Comment.class).getUser_id());
+//                            comment.setComment(dSnapshot.getValue(Comment.class).getComment());
+//                            comment.setDate_created(dSnapshot.getValue(Comment.class).getDate_created());
+//                            comments.add(comment);
+//                        }
+
+//                        photoInformation.setComments(comments);
+                        myPhotoInformations.add(singleSnapshot.getValue(PhotoInformation.class));
                     }
-                    if(count >= myFollowing.size() - 1){
+                    if(count >= following.size() - 1){
                         //display our photos
                         displayPhotos();
                     }

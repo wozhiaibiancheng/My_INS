@@ -239,7 +239,9 @@ public class DiscoverActivity extends AppCompatActivity {
 //                                });
 //                            }
 
-
+                        //update the users list view
+                        updateUsersList();
+                        progressBar.setVisibility(View.GONE);
 
 
 

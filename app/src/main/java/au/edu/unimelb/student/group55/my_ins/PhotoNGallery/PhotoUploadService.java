@@ -31,8 +31,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
+import au.edu.unimelb.student.group55.my_ins.Firebase.Comment;
 import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
+import au.edu.unimelb.student.group55.my_ins.Firebase.Like;
 import au.edu.unimelb.student.group55.my_ins.Firebase.PhotoInformation;
 import im.delight.android.location.SimpleLocation;
 
@@ -67,12 +70,17 @@ public class PhotoUploadService extends Service {
     private String altitude;
     private String longitude;
 
+    private List<Like> like;
+    private List<Comment> comment;
+
     @Override
     public void onCreate(){
         super.onCreate();
 
         mFirebaseMethods = new FirebaseMethods(PhotoUploadService.this);
         setupFirebaseAuth();
+
+
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -168,6 +176,7 @@ public class PhotoUploadService extends Service {
                     photoInformation.setLongitude( longitude );
                     photoInformation.setPhotoID( photoID );
                     photoInformation.setPostMessage( postMessage );
+
 
                     mDatabase.child( "posts" ).child( uid ).child( photoID ).setValue( photoInformation );
 
