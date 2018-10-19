@@ -56,11 +56,10 @@
                 android:background="@color/white">
 
                 <RelativeLayout
-                    android:layout_width="45dp"
+                    android:layout_width="60dp"
                     android:layout_height="match_parent"
                     android:id="@+id/heartLayout"
                     android:layout_marginLeft="5dp"
-                    android:src="@drawable/ic_heart_red"
                     android:background="@color/white">
 
                     <ImageView
@@ -68,12 +67,13 @@
                         android:layout_height="35dp"
                         android:id="@+id/image_heart_red"
                         android:layout_centerInParent="true"
+                        android:src="@drawable/ic_heart_red"
                         android:layout_marginLeft="20dp"
 
                         android:visibility="invisible"/>
 
                     <ImageView
-                        android:layout_width="35dp"
+                        android:layout_width="45dp"
                         android:layout_height="35dp"
                         android:id="@+id/image_heart"
                         android:layout_centerInParent="true"
