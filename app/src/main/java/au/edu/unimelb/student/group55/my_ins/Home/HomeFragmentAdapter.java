@@ -282,7 +282,7 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
         }
 
         @Override
-        public boolean onDoubleTap(MotionEvent e) {
+        public boolean onSingleTapUp(MotionEvent e) {
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
             Query query = reference
                     .child( "posts")

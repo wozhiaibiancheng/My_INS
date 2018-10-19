@@ -22,10 +22,9 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.PhotoInformation;
-import au.edu.unimelb.student.group55.my_ins.Home.CameraFragment;
 import au.edu.unimelb.student.group55.my_ins.Home.CommentFragment;
 import au.edu.unimelb.student.group55.my_ins.Home.HomeFragment;
-import au.edu.unimelb.student.group55.my_ins.Home.PlaceHolder;
+//import au.edu.unimelb.student.group55.my_ins.Home.PlaceHolder;
 import au.edu.unimelb.student.group55.my_ins.Home.SectionAdapter;
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
 import au.edu.unimelb.student.group55.my_ins.SupportFunctions.UniversalImageLoader;
@@ -83,16 +82,16 @@ public class MainActivity extends AppCompatActivity {
     //    add camera and home tab in nav bar
     private void setPager(){
         SectionAdapter sectionAdapter = new SectionAdapter(getSupportFragmentManager());
-        sectionAdapter.addFragment(new CameraFragment());
+
         sectionAdapter.addFragment(new HomeFragment());
-        sectionAdapter.addFragment(new PlaceHolder());
+
 
         ViewPager viewPager = (ViewPager)findViewById(R.id.body);
         viewPager.setAdapter(sectionAdapter);
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_camera);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_home);
+
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_home);
     }
 
     private void initImageLoader(){

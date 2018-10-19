@@ -117,10 +117,9 @@ public class HomeActivity extends AppCompatActivity implements
         ImageLoader.getInstance().init(universalImageLoader.getConfig());
     }
 
-    //    add camera and home tab in nav bar
+    //   home tab in nav bar
     private void setPager(){
         SectionAdapter sectionAdapter = new SectionAdapter(getSupportFragmentManager());
-        sectionAdapter.addFragment(new CameraFragment());
         sectionAdapter.addFragment(new HomeFragment());
         ViewPager viewPager = (ViewPager)findViewById(R.id.body);
         viewPager.setAdapter(sectionAdapter);
@@ -128,8 +127,8 @@ public class HomeActivity extends AppCompatActivity implements
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_camera);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_home);
+
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_home);
     }
 
     //    set up bottom view

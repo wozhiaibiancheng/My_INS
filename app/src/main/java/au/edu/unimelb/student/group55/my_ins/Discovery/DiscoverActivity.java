@@ -80,7 +80,7 @@ public class DiscoverActivity extends AppCompatActivity {
     private void initTextListener() {
         Log.d(TAG, "initTextListener: initializing");
 
-         mUserList = new ArrayList<>();
+        mUserList = new ArrayList<>();
 
         mSearchParam.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -182,7 +182,45 @@ public class DiscoverActivity extends AppCompatActivity {
                                             mUserList.add(singleSnapshot.getValue(User.class));
                                         }
 
+                                        if(mUserList.size()>0){
+                                            System.out.println("111111");
+                                            //update the users list view
+                                            updateUsersList();
+                                            progressBar.setVisibility(View.GONE);
+                                        }else{
+                                            System.out.println("222222");
+                                            //if no friends suggests after filtered
 
+                                            Query _query = reference.child("users");
+                                            _query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(DataSnapshot dataSnapshot) {
+//                                at most suggest 6 users
+                                                    int userCt = 0;
+                                                    for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                                                        //   don't suggest himself
+                                                        //   don't suggest whoever already followed
+                                                        if(!singleSnapshot.child("user_id").getValue().equals(currentUID)
+                                                                && !followingID.contains(singleSnapshot.child("user_id").getValue())) {
+                                                            Log.d(TAG, "onDataChange: found user:" + singleSnapshot.getValue(User.class).toString());
+                                                            userCt += 1;
+                                                            mUserList.add(singleSnapshot.getValue(User.class));
+                                                        }
+                                                        if (userCt >= 6) {
+                                                            break;
+                                                        }
+                                                    }
+                                                    //update the users list view
+                                                    updateUsersList();
+                                                    progressBar.setVisibility(View.GONE);
+                                                }
+
+                                                @Override
+                                                public void onCancelled(DatabaseError databaseError) {
+
+                                                }
+                                            });
+                                        }
 
 
 
@@ -239,16 +277,14 @@ public class DiscoverActivity extends AppCompatActivity {
 //                                });
 //                            }
 
-                        //update the users list view
-                        updateUsersList();
-                        progressBar.setVisibility(View.GONE);
 
 
 
 
-                        }
 
-                     else {
+                    }
+
+                    else {
                         System.out.println("not following anyone!");
 
 
