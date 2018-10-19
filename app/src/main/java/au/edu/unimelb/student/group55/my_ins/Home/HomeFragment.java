@@ -74,7 +74,10 @@ public class HomeFragment extends Fragment {
 
                     myFollowing.add(singleSnapshot.child(getString(R.string.field_user_id)).getValue().toString());
                 }
+                // Return list of user ID to myFollowing list
                 myFollowing.add(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                Log.d(TAG, "onDataChange: found user: " +
+                        myFollowing);
                 //get the photos
                 getPhotos();
             }
@@ -93,13 +96,14 @@ public class HomeFragment extends Fragment {
             final int count = i;
             Query query = reference
                     .child("posts")
-                    .child( myFollowing.get(i))
-                    .orderByChild(getString(R.string.field_user_id))
-                    .equalTo( myFollowing.get(i));
+                    .child(myFollowing.get(i));
+//                    .orderByChild("post_id")
+//                    .equalTo( myFollowing.get(i));
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
+                        System.out.println("Invoked here successfully");
 
                         PhotoInformation photoInformation = new PhotoInformation();
                         Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();

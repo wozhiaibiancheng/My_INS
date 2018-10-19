@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_camera);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ins);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_home);
     }
 
     private void initImageLoader(){
