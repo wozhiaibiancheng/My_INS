@@ -68,48 +68,47 @@ public class ViewProfileActivity extends AppCompatActivity {
     private GridView imgGrid;
     private ProgressBar progressBar;
 
-//target user
+    //target user
     private UserAccountSetting tUserAccountSettings;
     private User tUser;
     private long tFollowerNum;
 
-//    current user
+    //    current user
     private FirebaseUser cUser;
-//    private String cUID;
+    //    private String cUID;
     private long cFollowingNum;
     private UserAccountSetting cUserAccountSettings;
-
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView( R.layout.activity_view_profile);
+        setContentView(R.layout.activity_view_profile);
 
         Log.d("INFO", "onCreate started!");
 
 
-        displayName = (TextView) findViewById( R.id.display_name);
-        username = (TextView) findViewById( R.id.username);
-        description = (TextView) findViewById( R.id.description);
-        profile_pic = (CircleImageView) findViewById( R.id.profile_pic);
-        posts = (TextView)findViewById( R.id.posts);
-        followers = (TextView) findViewById( R.id.followers);
-        following = (TextView) findViewById( R.id.following);
+        displayName = (TextView) findViewById(R.id.display_name);
+        username = (TextView) findViewById(R.id.username);
+        description = (TextView) findViewById(R.id.description);
+        profile_pic = (CircleImageView) findViewById(R.id.profile_pic);
+        posts = (TextView) findViewById(R.id.posts);
+        followers = (TextView) findViewById(R.id.followers);
+        following = (TextView) findViewById(R.id.following);
         progressBar = (ProgressBar) findViewById(R.id.profileProgressBar);
-        follow = (TextView) findViewById( R.id.text_follow);
-        unfollow = (TextView) findViewById( R.id.text_unfollow);
+        follow = (TextView) findViewById(R.id.text_follow);
+        unfollow = (TextView) findViewById(R.id.text_unfollow);
 
-        gridView = (GridView) findViewById( R.id.image_grid);
-        toolbar = (Toolbar) findViewById( R.id.profileToolBar);
+        gridView = (GridView) findViewById(R.id.image_grid);
+        toolbar = (Toolbar) findViewById(R.id.profileToolBar);
 
 
         left_icon = (ImageView) findViewById(R.id.left_icon);
 
-        profile_pic = (CircleImageView)findViewById( R.id.profile_pic);
+        profile_pic = (CircleImageView) findViewById(R.id.profile_pic);
 
-        imgGrid = (GridView)findViewById( R.id.image_grid);
-        bottomNavigationViewEx = (BottomNavigationViewEx) findViewById( R.id.bottom);
+        imgGrid = (GridView) findViewById(R.id.image_grid);
+        bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom);
 
         storageReference = FirebaseStorage.getInstance().getReference();
 
@@ -131,7 +130,7 @@ public class ViewProfileActivity extends AppCompatActivity {
 
                 cFollowingNum += 1;
 
-                tFollowerNum  += 1;
+                tFollowerNum += 1;
 
                 followers.setText(Long.toString(tFollowerNum));
 
@@ -155,7 +154,6 @@ public class ViewProfileActivity extends AppCompatActivity {
                         .setValue(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
 
-
                 //update follower and following number in user_account_settings
                 FirebaseDatabase.getInstance().getReference()
                         .child("user_account_settings")
@@ -170,11 +168,10 @@ public class ViewProfileActivity extends AppCompatActivity {
                         .setValue(cFollowingNum);
 
 
-
                 System.out.println("following after er/ing: " + tFollowerNum + "; " + cFollowingNum);
 
                 setFollow();
-                tFollowerNum  = getTfollowerNum();
+                tFollowerNum = getTfollowerNum();
                 cFollowingNum = getCfollowingNum();
 
 //                add inner followers/following for friends suggestion
@@ -207,7 +204,6 @@ public class ViewProfileActivity extends AppCompatActivity {
                         .removeValue();
 
 
-
 //update follower and following number in user_account_settings
                 FirebaseDatabase.getInstance().getReference()
                         .child("user_account_settings")
@@ -222,7 +218,7 @@ public class ViewProfileActivity extends AppCompatActivity {
                         .setValue(cFollowingNum);
 //                System.out.println("unfollow after er/ing: " + tFollowerNum + "; " + cFollowingNum);
                 setUnFollow();
-                tFollowerNum  = getTfollowerNum();
+                tFollowerNum = getTfollowerNum();
                 cFollowingNum = getCfollowingNum();
 
             }
@@ -257,10 +253,9 @@ public class ViewProfileActivity extends AppCompatActivity {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()) {
+                if (dataSnapshot.exists()) {
                     setFollow();
-                }
-                else {
+                } else {
                     setUnFollow();
                 }
             }
@@ -273,8 +268,6 @@ public class ViewProfileActivity extends AppCompatActivity {
     }
 
 
-
-
     private void init() {
 
 //find target user
@@ -284,15 +277,16 @@ public class ViewProfileActivity extends AppCompatActivity {
         _query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds :  dataSnapshot.getChildren()){
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
 //                    Log.d(TAG, "onDataChange: found user:" + ds.getValue(UserAccountSetting.class).toString());
                     tUserAccountSettings = ds.getValue(UserAccountSetting.class);
                     setProfile(tUserAccountSettings);
-                    tFollowerNum  = getTfollowerNum();
+                    tFollowerNum = getTfollowerNum();
 
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -304,14 +298,15 @@ public class ViewProfileActivity extends AppCompatActivity {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds :  dataSnapshot.getChildren()){
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
                     Log.d(TAG, "onDataChange: found user:" + ds.getValue(UserAccountSetting.class).toString());
                     cUserAccountSettings = ds.getValue(UserAccountSetting.class);
-                    cFollowingNum  = cUserAccountSettings.getFollowing();
+                    cFollowingNum = cUserAccountSettings.getFollowing();
 
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -319,10 +314,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         });
 
 
-
     }
-
-
 
 
     private long getTfollowerNum() {
@@ -334,27 +326,25 @@ public class ViewProfileActivity extends AppCompatActivity {
         _query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds :  dataSnapshot.getChildren()){
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
                     Log.d(TAG, "onDataChange: found user:" + ds.getValue(UserAccountSetting.class).toString());
-                    tUserAccountSettings= ds.getValue(UserAccountSetting.class);
-                    tFollowerNum  = tUserAccountSettings.getFollowers();
+                    tUserAccountSettings = ds.getValue(UserAccountSetting.class);
+                    tFollowerNum = tUserAccountSettings.getFollowers();
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
 
         });
-    return tFollowerNum;
+        return tFollowerNum;
     }
 
 
-
-
-
-//    get following number of the current user
+    //    get following number of the current user
     private long getCfollowingNum() {
 
         DatabaseReference _reference = FirebaseDatabase.getInstance().getReference();
@@ -363,13 +353,14 @@ public class ViewProfileActivity extends AppCompatActivity {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds :  dataSnapshot.getChildren()){
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
                     Log.d(TAG, "onDataChange: found user:" + ds.getValue(UserAccountSetting.class).toString());
                     cUserAccountSettings = ds.getValue(UserAccountSetting.class);
-                    cFollowingNum  = cUserAccountSettings.getFollowing();
+                    cFollowingNum = cUserAccountSettings.getFollowing();
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -379,8 +370,7 @@ public class ViewProfileActivity extends AppCompatActivity {
     }
 
 
-
-//add users who are followed by the one the current user is following
+    //add users who are followed by the one the current user is following
 //    for friend suggestion algo.
     private void addTuserfollowing() {
 
@@ -391,17 +381,18 @@ public class ViewProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                for(DataSnapshot ds :  dataSnapshot.getChildren()){
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
                     FirebaseDatabase.getInstance().getReference()
                             .child("following")
                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                             .child(tUser.getUser_id())
-                            .child("innterFollowing")
+                            .child("innerFollowing")
                             .push()
                             .setValue(ds.child("user_id").getValue());
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -422,17 +413,18 @@ public class ViewProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                for(DataSnapshot ds :  dataSnapshot.getChildren()){
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
 
                     FirebaseDatabase.getInstance().getReference()
                             .child("following")
                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                             .child(tUser.getUser_id())
-                            .child("innterFollowers")
+                            .child("innerFollowers")
                             .push()
                             .setValue(ds.child("user_id").getValue());
                 }
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
@@ -440,8 +432,6 @@ public class ViewProfileActivity extends AppCompatActivity {
 
         });
     }
-
-
 
 
     //    set up bottom view
@@ -478,7 +468,6 @@ public class ViewProfileActivity extends AppCompatActivity {
     }
 
 
-
     /**
      * Setup the firebase auth object
      */
@@ -499,7 +488,7 @@ public class ViewProfileActivity extends AppCompatActivity {
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + cUser.getUid());
                 } else {
                     Log.d(TAG, "onAuthStateChanged:signed_out");
-                    Intent intent = new Intent(context,LoginActivity.class);
+                    Intent intent = new Intent(context, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 }
@@ -525,10 +514,10 @@ public class ViewProfileActivity extends AppCompatActivity {
 
 
     private void setupActivityWidgets() {
-        profile_pic = (CircleImageView)findViewById( R.id.profile_pic);
+        profile_pic = (CircleImageView) findViewById(R.id.profile_pic);
     }
 
-    private void gridSetup(){
+    private void gridSetup() {
         Log.d(TAG, "setupGridView: Setting up image grid.");
 
         final ArrayList<String> imgURLs = new ArrayList<>();
@@ -542,11 +531,11 @@ public class ViewProfileActivity extends AppCompatActivity {
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for(DataSnapshot ds:dataSnapshot.getChildren()){
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     photos.add(ds.getValue(PhotoInformation.class));
                 }
 
-                for(int i = 0; i < photos.size();i++){
+                for (int i = 0; i < photos.size(); i++) {
                     imgURLs.add(photos.get(i).getImageUrl());
                 }
                 setImageGrid(imgURLs);
@@ -554,9 +543,10 @@ public class ViewProfileActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d(TAG,"onCancelled");
+                Log.d(TAG, "onCancelled");
             }
-        });}
+        });
+    }
 
     private void setImageGrid(ArrayList<String> imgURLs) {
         GridView imgGrid = (GridView) findViewById(R.id.image_grid);
@@ -572,16 +562,12 @@ public class ViewProfileActivity extends AppCompatActivity {
     }
 
 
-
-    private User getUser(){
+    private User getUser() {
         Intent intent = getIntent();
-        if (intent!= null)
-        {
-            Log.d("View profile get user","found user： ");
-            return intent.getExtras().getParcelable(  "intent_user");
-        }
-        else
-        {
+        if (intent != null) {
+            Log.d("View profile get user", "found user： ");
+            return intent.getExtras().getParcelable("intent_user");
+        } else {
             return null;
         }
     }

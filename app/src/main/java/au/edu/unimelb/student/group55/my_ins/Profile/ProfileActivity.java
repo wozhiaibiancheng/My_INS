@@ -74,10 +74,6 @@ public class ProfileActivity extends AppCompatActivity {
 
     private UserAccountSetting userAccountSettings;
 
-//    private int followers_number = 0;
-//    private int following_number = 0;
-//    private int posts_number = 0;
-
 
     private Task<Uri> downloadUri;
     private String downloadLink;
@@ -114,9 +110,6 @@ public class ProfileActivity extends AppCompatActivity {
         setUpToolbar();
         setBottom();
         setUpEditProfile();
-//        setupActivityWidgets();
-//        progressBar = (ProgressBar)findViewById(R.id.profileProgressBar);
-//        progressBar.setVisibility(View.GONE);
         gridSetup();
     }
 

@@ -42,7 +42,6 @@ public class ProfilePicActivity extends AppCompatActivity {
     public static final String WORKING_DIRECTORY = "MyINS/test.jpg";
     private String imagePath;
 
-//    private TextView userInputEditText;
     private String postMessage;
 
     public String cropPath;
@@ -193,12 +192,12 @@ public class ProfilePicActivity extends AppCompatActivity {
                 selectedImage = BitmapFactory.decodeFile(newFilePath, options);
                 imagePath = newFilePath;
             }
-            writePosts( selectedImage );
+            changeProfilePic( selectedImage );
         }
 
     }
 
-    public void writePosts(Bitmap selectedImage){
+    public void changeProfilePic(Bitmap selectedImage){
 //        setContentView( R.layout. );
 //        imageView = (ImageView) findViewById(R.id.imageView);
 //        // show the image in the corresponding image View
