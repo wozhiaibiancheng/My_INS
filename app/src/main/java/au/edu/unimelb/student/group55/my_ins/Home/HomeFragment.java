@@ -115,28 +115,30 @@ public class HomeFragment extends Fragment {
 //                        }
 
 
+                        PhotoInformation photoInformation = new PhotoInformation();
+                        Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
 
-//                        PhotoInformation photoInformation = new PhotoInformation();
-//                        Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
-//
-//                        photoInformation.setPostMessage(objectMap.get(getString(R.string.post_message)).toString());
-//                        photoInformation.setPhotoID(objectMap.get(getString(R.string.field_photo_id)).toString());
-//                        photoInformation.setUserID(objectMap.get(getString(R.string.field_user_id)).toString());
-//                        photoInformation.setDateCreated(objectMap.get(getString(R.string.field_date_created)).toString());
-//                        photoInformation.setImageUrl(objectMap.get(getString(R.string.field_image_path)).toString());
+                        photoInformation.setPostMessage(objectMap.get("postMessage").toString());
+                        photoInformation.setPhotoID(objectMap.get("photoID").toString());
+                        photoInformation.setUserID(objectMap.get("userID").toString());
+                        photoInformation.setDateCreated(objectMap.get("dateCreated").toString());
+                        photoInformation.setImageUrl(objectMap.get("imageUrl").toString());
 
-//                        ArrayList<Comment> comments = new ArrayList<Comment>();
-//                        for (DataSnapshot dSnapshot : singleSnapshot
-//                                .child("comments").getChildren()){
-//                            Comment comment = new Comment();
-//                            comment.setUser_id(dSnapshot.getValue(Comment.class).getUser_id());
-//                            comment.setComment(dSnapshot.getValue(Comment.class).getComment());
-//                            comment.setDate_created(dSnapshot.getValue(Comment.class).getDate_created());
-//                            comments.add(comment);
-//                        }
+                        ArrayList<Comment> comments = new ArrayList<Comment>();
+                        for (DataSnapshot dSnapshot : singleSnapshot
+                                .child("comments").getChildren()){
+                            Comment comment = new Comment();
+                            comment.setUser_id(dSnapshot.getValue(Comment.class).getUser_id());
+                            comment.setComment(dSnapshot.getValue(Comment.class).getComment());
+                            comment.setDate_created(dSnapshot.getValue(Comment.class).getDate_created());
+                            comments.add(comment);
+                        }
+
+                        photoInformation.setComments(comments);
+                        myPhotoInformations.add(photoInformation);
 
 //                        photoInformation.setComments(comments);
-                        myPhotoInformations.add(singleSnapshot.getValue(PhotoInformation.class));
+//                        myPhotoInformations.add(singleSnapshot.getValue(PhotoInformation.class));
                     }
                     if(count >= following.size() - 1){
                         //display our photos
