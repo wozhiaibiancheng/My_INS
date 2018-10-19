@@ -96,9 +96,9 @@ public class HomeFragment extends Fragment {
             final int count = i;
             Query query = reference
                     .child("posts")
-                    .child(myFollowing.get(i));
-//                    .orderByChild("post_id")
-//                    .equalTo( myFollowing.get(i));
+                    .child(myFollowing.get(i))
+                    .orderByChild("post_id")
+                    .equalTo( myFollowing.get(i));
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
