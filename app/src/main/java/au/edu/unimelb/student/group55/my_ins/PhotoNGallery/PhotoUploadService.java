@@ -162,6 +162,7 @@ public class PhotoUploadService extends Service {
 
                     PhotoInformation photoInformation = new PhotoInformation(  );
                     photoInformation.setDateCreated( currentDate2 );
+                    photoInformation.setUserID( uid );
                     photoInformation.setImageUrl( downloadLink );
                     photoInformation.setLatitude( altitude );
                     photoInformation.setLongitude( longitude );

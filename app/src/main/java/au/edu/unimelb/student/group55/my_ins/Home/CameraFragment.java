@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import au.edu.unimelb.student.group55.my_ins.R;
 
 public class CameraFragment extends Fragment {
-    private static final String TAG = "HomeFragment Activity";
+    private static final String TAG = "CameraFragment Activity";
 
     @Nullable
     @Override
