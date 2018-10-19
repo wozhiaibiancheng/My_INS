@@ -28,7 +28,7 @@
         <activity android:name=".LoginNRegister.RegisterActivity"></activity>
         <activity android:name=".Discovery.DiscoverActivity"
             android:windowSoftInputMode="adjustNothing"></activity>
-        <activity android:name=".Feed.FeedActivity"></activity>
+        <activity android:name=".ActivityFeed.FeedActivity"></activity>
         <activity android:name=".Profile.ProfileActivity"></activity>
         <activity android:name=".Upload.UploadActivity"></activity>
         <activity android:name=".Home.HomeActivity" android:exported="true"></activity>

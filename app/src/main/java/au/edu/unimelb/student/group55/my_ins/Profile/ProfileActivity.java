@@ -106,7 +106,7 @@ public class ProfileActivity extends AppCompatActivity {
             uid = user.getUid();
         }
 
-
+        FirebaseAuth();
         setUpToolbar();
         setBottom();
         setUpEditProfile();
@@ -118,7 +118,6 @@ public class ProfileActivity extends AppCompatActivity {
     private void setUpToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.profile_toolbar);
         setSupportActionBar(toolbar);
-        FirebaseAuth();
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -294,81 +293,6 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });}
 
-
-
-
-//
-//        private void getPostsNumber(){
-//            posts_number = 0;
-//
-//            Query query = databaseReference.child(getString( R.string.dbname_user_photos))
-//                    .child(uid);
-//            query.addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    for(DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
-//                        Log.d(TAG, "onDataChange: posts number:" + singleSnapshot.getValue(User.class).toString());
-//                        posts_number = posts_number +1;
-//                    }
-//                    posts.setText(String.valueOf(posts_number));
-//                }
-//
-//                @Override
-//                public void onCancelled(DatabaseError databaseError) {
-//
-//                }
-//            });
-
-
-
-//        query.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                for ( DataSnapshot singleSnapshot :  dataSnapshot.getChildren()){
-//
-//                    PhotoInformation photo = new PhotoInformation();
-//                    Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
-//
-//                    try {
-//                        photo.setCaption(objectMap.get(getString(R.string.field_caption)).toString());
-//                        photo.setTags(objectMap.get(getString(R.string.field_tags)).toString());
-//                        photo.setPhoto_id(objectMap.get(getString(R.string.field_photo_id)).toString());
-//                        photo.setUser_id(objectMap.get(getString(R.string.field_user_id)).toString());
-//                        photo.setDate_created(objectMap.get(getString(R.string.field_date_created)).toString());
-//                        photo.setImage_path(objectMap.get(getString(R.string.field_image_path)).toString());
-//
-//                        ArrayList<Comment> comments = new ArrayList<Comment>();
-//                        for (DataSnapshot dSnapshot : singleSnapshot
-//                                .child(getString(R.string.field_comments)).getChildren()) {
-//                            Comment comment = new Comment();
-//                            comment.setUser_id(dSnapshot.getValue(Comment.class).getUser_id());
-//                            comment.setComment(dSnapshot.getValue(Comment.class).getComment());
-//                            comment.setDate_created(dSnapshot.getValue(Comment.class).getDate_created());
-//                            comments.add(comment);
-//                        }
-//
-//                        photo.setComments(comments);
-//
-//                        List<Like> likesList = new ArrayList<Like>();
-//                        for (DataSnapshot dSnapshot : singleSnapshot
-//                                .child(getString(R.string.field_likes)).getChildren()) {
-//                            Like like = new Like();
-//                            like.setUser_id(dSnapshot.getValue(Like.class).getUser_id());
-//                            likesList.add(like);
-//                        }
-//                        photo.setLikes(likesList);
-//                        photos.add(photo);
-//                    }catch(NullPointerException e){
-//                        Log.e(TAG, "onDataChange: NullPointerException: " + e.getMessage() );
-//                    }
-//                }
-//
-//
-//
-//
-//
-//
-//};});
     }
 
 
