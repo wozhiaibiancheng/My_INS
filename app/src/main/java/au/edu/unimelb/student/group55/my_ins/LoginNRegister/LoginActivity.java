@@ -22,7 +22,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 import au.edu.unimelb.student.group55.my_ins.Home.HomeActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
-import au.edu.unimelb.student.group55.my_ins.MainActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -94,9 +93,9 @@ public class LoginActivity extends AppCompatActivity {
 //                                        prefs.edit().putBoolean( "firststart", false );
 
 
-                                        prefs = getSharedPreferences(MainActivity.MySharedPrefs, Context.MODE_PRIVATE);
-                                        prefs.edit().putBoolean( "firststart", false );
-                                        prefs.edit().commit();
+//                                        prefs = getSharedPreferences(MainActivity.MySharedPrefs, Context.MODE_PRIVATE);
+//                                        prefs.edit().putBoolean( "firststart", false );
+//                                        prefs.edit().commit();
 
                                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -72,7 +72,7 @@ public class HomeActivity extends AppCompatActivity implements
 
         initImageLoader();
         setBottom();
-        setPager();
+
 
     }
 
@@ -169,6 +169,7 @@ public class HomeActivity extends AppCompatActivity implements
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                     myViewPager.setCurrentItem(HOME_FRAGMENT);
                     checkCurrentUser(myAuth.getCurrentUser());
+                    setPager();
                 } else {
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                     Intent intent = new Intent(mContext, LoginActivity.class);

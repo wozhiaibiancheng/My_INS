@@ -31,12 +31,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
-import java.util.TimeZone;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.PhotoInformation;
-import au.edu.unimelb.student.group55.my_ins.MainActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.Firebase.Comment;
 
@@ -128,7 +125,7 @@ public class CommentFragment extends Fragment {
 //                    }
                 }catch (Exception e){
                     getActivity().getSupportFragmentManager().popBackStack();
-                    ((MainActivity) getActivity()).showLayout();
+
                 }
 
             }

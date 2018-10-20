@@ -30,12 +30,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import au.edu.unimelb.student.group55.my_ins.Firebase.Comment;
 import au.edu.unimelb.student.group55.my_ins.Firebase.Like;
 import au.edu.unimelb.student.group55.my_ins.Firebase.PhotoInformation;
 import au.edu.unimelb.student.group55.my_ins.Firebase.User;
 import au.edu.unimelb.student.group55.my_ins.Firebase.UserAccountSetting;
-import au.edu.unimelb.student.group55.my_ins.MainActivity;
 import au.edu.unimelb.student.group55.my_ins.Profile.ProfileActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.SupportFunctions.Heart;
@@ -204,11 +202,7 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
                                 //another thing?
                                 ((HomeActivity) myContext).hideLayout();
                             }catch (Exception e){
-                                ((MainActivity) myContext).onCommentThreadSelected(getItem(position),
-                                        "Main Activity");
-
-                                //another thing?
-                                ((MainActivity) myContext).hideLayout();
+                               Log.d(TAG,e.getMessage());
                             }
                         }
                     });
