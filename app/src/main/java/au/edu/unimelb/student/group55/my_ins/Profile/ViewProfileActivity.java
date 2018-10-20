@@ -31,9 +31,12 @@ import com.google.firebase.storage.StorageReference;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
+import au.edu.unimelb.student.group55.my_ins.Firebase.ActivityFollowing;
 import au.edu.unimelb.student.group55.my_ins.Firebase.Comment;
 import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
 import au.edu.unimelb.student.group55.my_ins.Firebase.PhotoInformation;
@@ -170,6 +173,22 @@ public class ViewProfileActivity extends AppCompatActivity {
                         .child("following")
                         .setValue(cFollowingNum);
 
+                Calendar calendar = Calendar.getInstance();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss");
+                String currentDate = String.valueOf( simpleDateFormat.format( calendar.getTime() ) );
+
+                ActivityFollowing activityFollowing = new ActivityFollowing(  );
+                activityFollowing.setFollowID( FirebaseAuth.getInstance().getCurrentUser().getUid() );
+                activityFollowing.setFollowerID( tUser.getUser_id() );
+                activityFollowing.setDateToFollow( currentDate );
+
+                FirebaseDatabase.getInstance().getReference()
+                        .child( "activity" )
+                        .child( "following" )
+                        .child( FirebaseAuth.getInstance().getCurrentUser().getUid() )
+                        .child( tUser.getUser_id() )
+                        .setValue( activityFollowing );
+
 
                 System.out.println("following after er/ing: " + tFollowerNum + "; " + cFollowingNum);
 
@@ -219,6 +238,14 @@ public class ViewProfileActivity extends AppCompatActivity {
                         .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                         .child("following")
                         .setValue(cFollowingNum);
+
+                FirebaseDatabase.getInstance().getReference()
+                        .child( "activity" )
+                        .child( "following" )
+                        .child( FirebaseAuth.getInstance().getCurrentUser().getUid() )
+                        .child( tUser.getUser_id() )
+                        .removeValue();
+
 //                System.out.println("unfollow after er/ing: " + tFollowerNum + "; " + cFollowingNum);
                 setUnFollow();
                 tFollowerNum = getTfollowerNum();
