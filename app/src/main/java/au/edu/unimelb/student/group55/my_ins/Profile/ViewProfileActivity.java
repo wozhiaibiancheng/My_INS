@@ -412,7 +412,7 @@ public class ViewProfileActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-
+//add inner Following to suggest
                     FirebaseDatabase.getInstance().getReference()
                             .child("following")
                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
@@ -444,7 +444,7 @@ public class ViewProfileActivity extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-
+//add innerFollowers to suggest
                     FirebaseDatabase.getInstance().getReference()
                             .child("following")
                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
@@ -498,53 +498,9 @@ public class ViewProfileActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * Setup the firebase auth object
-     */
-    private void FirebaseAuth() {
-        Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
-
-        auth = FirebaseAuth.getInstance();
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference();
-
-        authListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                cUser = firebaseAuth.getCurrentUser();
-//                cUID = cUser.getUid();
-
-                if (cUser != null) {
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + cUser.getUid());
-                } else {
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                    Intent intent = new Intent(context, LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                }
-                // ...
-            }
-        };
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        auth.addAuthStateListener(authListener);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (authListener != null) {
-            auth.removeAuthStateListener(authListener);
-        }
-    }
-
 
     private void setupActivityWidgets() {
-        profile_pic = (CircleImageView) findViewById(R.id.profile_pic);
+        profile_pic = findViewById(R.id.profile_pic);
     }
 
     private void gridSetup() {
@@ -562,7 +518,7 @@ public class ViewProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-//                    photos.add(ds.getValue(PhotoInformation.class));
+
                     PhotoInformation photoInformation = new PhotoInformation();
                     Map<String, Object> objectMap = (HashMap<String, Object>) ds.getValue();
 
@@ -622,6 +578,52 @@ public class ViewProfileActivity extends AppCompatActivity {
             return null;
         }
     }
+
+
+    /**
+     * Setup the firebase auth object
+     */
+    private void FirebaseAuth() {
+        Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
+
+        auth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
+
+        authListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                cUser = firebaseAuth.getCurrentUser();
+//                cUID = cUser.getUid();
+
+                if (cUser != null) {
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + cUser.getUid());
+                } else {
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                    Intent intent = new Intent(context, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }
+            }
+        };
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        auth.addAuthStateListener(authListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (authListener != null) {
+            auth.removeAuthStateListener(authListener);
+        }
+    }
+
+
 
 }
 

@@ -28,13 +28,13 @@ import au.edu.unimelb.student.group55.my_ins.Firebase.UserAccountSetting;
 import au.edu.unimelb.student.group55.my_ins.Firebase.User;
 
 
-public class UserAdapter extends ArrayAdapter<User>{
+public class UserAdapter extends ArrayAdapter<User> {
 
     private static final String TAG = "UserAdapter";
 
 
     private LayoutInflater mInflater;
-    private List<User> mUsers = null;
+//    private List<User> mUsers = null;
     private int layoutResource;
     private Context mContext;
 
@@ -43,10 +43,10 @@ public class UserAdapter extends ArrayAdapter<User>{
         mContext = context;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         layoutResource = resource;
-        this.mUsers = objects;
+//        this.mUsers = objects;
     }
 
-    private static class ViewHolder{
+    private static class ViewHolder {
         TextView username, email;
         CircleImageView profileImage;
     }
@@ -59,7 +59,7 @@ public class UserAdapter extends ArrayAdapter<User>{
 
         final ViewHolder holder;
 
-        if(convertView == null){
+        if (convertView == null) {
             convertView = mInflater.inflate(layoutResource, parent, false);
             holder = new ViewHolder();
 
@@ -68,7 +68,7 @@ public class UserAdapter extends ArrayAdapter<User>{
             holder.profileImage = (CircleImageView) convertView.findViewById(R.id.profile_image);
 
             convertView.setTag(holder);
-        }else{
+        } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
@@ -85,16 +85,17 @@ public class UserAdapter extends ArrayAdapter<User>{
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot singleSnapshot: dataSnapshot.getChildren()){
+                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
 
-                    try{
-                    ImageLoader imageLoader = ImageLoader.getInstance();
-                    imageLoader.displayImage(singleSnapshot.getValue(UserAccountSetting.class).getProfile_pic(),
-                            holder.profileImage);
+                    try {
+                        ImageLoader imageLoader = ImageLoader.getInstance();
+                        imageLoader.displayImage(singleSnapshot.getValue(UserAccountSetting.class).getProfile_pic(),
+                                holder.profileImage);
 
-                }catch(Exception e){
+                    } catch (Exception e) {
                         System.out.println("error: " + e.getMessage());
-                }}
+                    }
+                }
             }
 
             @Override

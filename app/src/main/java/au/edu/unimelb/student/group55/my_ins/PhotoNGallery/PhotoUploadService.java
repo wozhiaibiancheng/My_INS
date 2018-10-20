@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
@@ -21,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -38,49 +40,44 @@ import au.edu.unimelb.student.group55.my_ins.Firebase.Comment;
 import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
 import au.edu.unimelb.student.group55.my_ins.Firebase.Like;
 import au.edu.unimelb.student.group55.my_ins.Firebase.PhotoInformation;
+import au.edu.unimelb.student.group55.my_ins.Firebase.UserAccountSetting;
 import im.delight.android.location.SimpleLocation;
 
 public class PhotoUploadService extends Service {
     @Nullable
+
+
     private FirebaseUser user;
     private FirebaseStorage storage;
     private DatabaseReference mDatabase;
-
+    private UserAccountSetting userAccountSetting;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference myRef;
     private FirebaseMethods mFirebaseMethods;
 
-    private int imageNumber = 0;
 
+    private int imageNumber = 0;
+    private long postNum;
     private String uid;
     private byte[] imageData;
     private String downloadLink;
     private String IMAGE_PATH;
-
     private Bitmap resultImageBitmap;
     private ByteArrayOutputStream baos;
-
-    private String currentLocation;
     private String postMessage;
-    private String likeUrl;
-    private String commentUrl;
-
     private SimpleLocation location;
     private String altitude;
     private String longitude;
 
-    private List<Like> like;
-    private List<Comment> comment;
 
     @Override
-    public void onCreate(){
+    public void onCreate() {
         super.onCreate();
 
         mFirebaseMethods = new FirebaseMethods(PhotoUploadService.this);
         setupFirebaseAuth();
-
 
 
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -88,6 +85,7 @@ public class PhotoUploadService extends Service {
             uid = user.getUid();
         }
         storage = FirebaseStorage.getInstance();
+        postNum = getPostNum();
 
         baos = new ByteArrayOutputStream();
 
@@ -102,32 +100,29 @@ public class PhotoUploadService extends Service {
             SimpleLocation.openSettings(this);
         }
 
-        longitude = String.valueOf( location.getLatitude() );
-        altitude = String.valueOf( location.getAltitude() );
-
-//        longitude = "longitude not available";
-//        altitude = "altitude not available";
+        longitude = String.valueOf(location.getLatitude());
+        altitude = String.valueOf(location.getAltitude());
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
-        super.onStartCommand( intent, flags, startId );
+        super.onStartCommand(intent, flags, startId);
 
-        IMAGE_PATH = intent.getStringExtra( "file path" );
-        resultImageBitmap = readImage( IMAGE_PATH );
+        IMAGE_PATH = intent.getStringExtra("file path");
+        resultImageBitmap = readImage(IMAGE_PATH);
 
-        postMessage = intent.getStringExtra( "post message" );
+        postMessage = intent.getStringExtra("post message");
 
         resultImageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         imageData = baos.toByteArray();
 
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss");
-        final String currentDate1 = String.valueOf( simpleDateFormat.format( calendar.getTime() ) );
+        final String currentDate1 = String.valueOf(simpleDateFormat.format(calendar.getTime()));
 
-        final StorageReference imagesRef = storage.getReference().child( uid ).child(currentDate1 + ".jpg");
+        final StorageReference imagesRef = storage.getReference().child(uid).child(currentDate1 + ".jpg");
 
         UploadTask uploadTask = imagesRef.putBytes(imageData);
         uploadTask.addOnFailureListener(new OnFailureListener() {
@@ -164,31 +159,40 @@ public class PhotoUploadService extends Service {
 
                     Calendar calendar = Calendar.getInstance();
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss");
-                    String currentDate2 = String.valueOf( simpleDateFormat.format( calendar.getTime() ) );
+                    String currentDate2 = String.valueOf(simpleDateFormat.format(calendar.getTime()));
 
 //                    String currentDate2 = DateFormat.getDateTimeInstance().format(new Date());
-                    String photoID = myRef.child( "posts" ).child( uid ).push().getKey();
+                    String photoID = myRef.child("posts").child(uid).push().getKey();
 
-                    PhotoInformation photoInformation = new PhotoInformation(  );
-                    photoInformation.setDateCreated( currentDate2 );
-                    photoInformation.setUserID( uid );
-                    photoInformation.setImageUrl( downloadLink );
-                    photoInformation.setLatitude( altitude );
-                    photoInformation.setLongitude( longitude );
-                    photoInformation.setPhotoID( photoID );
-                    photoInformation.setPostMessage( postMessage );
+                    PhotoInformation photoInformation = new PhotoInformation();
+                    photoInformation.setDateCreated(currentDate2);
+                    photoInformation.setUserID(uid);
+                    photoInformation.setImageUrl(downloadLink);
+                    photoInformation.setLatitude(altitude);
+                    photoInformation.setLongitude(longitude);
+                    photoInformation.setPhotoID(photoID);
+                    photoInformation.setPostMessage(postMessage);
 
-                    mDatabase.child( "posts" ).child( uid ).child( photoID ).setValue( photoInformation );
+                    mDatabase.child("posts").child(uid).child(photoID).setValue(photoInformation);
 
 
-                    String activityPhotoID = myRef.child( "activity" ).child( "posts" ).child(uid).push().getKey();
+                    String activityPhotoID = myRef.child("activity").child("posts").child(uid).push().getKey();
 
-                    ActivityPosts activityPosts = new ActivityPosts(  );
-                    activityPosts.setUserID( uid );
-                    activityPosts.setDateCreated( currentDate2 );
-                    activityPosts.setImageUrl( downloadLink );
+                    ActivityPosts activityPosts = new ActivityPosts();
+                    activityPosts.setUserID(uid);
+                    activityPosts.setDateCreated(currentDate2);
+                    activityPosts.setImageUrl(downloadLink);
 
-                    mDatabase.child( "activity" ).child( "posts" ).child( uid ).child( activityPhotoID ).setValue( activityPosts );
+                    mDatabase.child("activity").child("posts").child(uid).child(activityPhotoID).setValue(activityPosts);
+
+                    postNum += 1;
+
+                    //update post number in user_account_settings
+                    FirebaseDatabase.getInstance().getReference()
+                            .child("user_account_settings")
+                            .child(user.getUid())
+                            .child("posts")
+                            .setValue(postNum);
 
                     Toast.makeText(PhotoUploadService.this,
                             "Set Upload message record successfully", Toast.LENGTH_SHORT).show();
@@ -210,7 +214,39 @@ public class PhotoUploadService extends Service {
 
     }
 
-    public Bitmap readImage(String imagePath){
+
+
+
+
+    private long getPostNum() {
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+        Query query = reference.child("user_account_settings")
+                .orderByChild("user_id").equalTo(user.getUid());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    userAccountSetting = ds.getValue(UserAccountSetting.class);
+                    postNum = userAccountSetting.getPosts();
+                    System.out.println("getPostNum： " + postNum);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+        });
+
+        return postNum;
+    }
+
+
+
+
+    public Bitmap readImage(String imagePath) {
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inPreferredConfig = Bitmap.Config.ARGB_8888;
         Bitmap bitmap = BitmapFactory.decodeFile(imagePath, options);
@@ -226,7 +262,7 @@ public class PhotoUploadService extends Service {
     /**
      * Setup the firebase auth object
      */
-    private void setupFirebaseAuth(){
+    private void setupFirebaseAuth() {
         mAuth = FirebaseAuth.getInstance();
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         myRef = mFirebaseDatabase.getReference();
@@ -243,6 +279,19 @@ public class PhotoUploadService extends Service {
             }
         };
 
+//        myRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+
+
         mAuth.addAuthStateListener(mAuthListener);
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -257,7 +306,7 @@ public class PhotoUploadService extends Service {
         });
     }
 
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);

@@ -160,7 +160,7 @@ public class DiscoverActivity extends AppCompatActivity {
                         System.out.println("suggest size!!: " + suggestID.size());
 
 
-                        if (suggestID.size() > 0){
+                        if (suggestID.size() > 0) {
 
                             for (String id : suggestID) {
 
@@ -236,7 +236,7 @@ public class DiscoverActivity extends AppCompatActivity {
 
                                 }
                             }
-                    } else {
+                        } else {
                             System.out.println("not following anyone!");
 
 
@@ -249,7 +249,7 @@ public class DiscoverActivity extends AppCompatActivity {
                                     for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
 //                                    don't suggest himself
 //                                    don't suggest whoever already followed
-                                        if(!singleSnapshot.child("user_id").getValue().equals(currentUID)
+                                        if (!singleSnapshot.child("user_id").getValue().equals(currentUID)
                                                 && !followingID.contains(singleSnapshot.child("user_id").getValue())) {
                                             Log.d(TAG, "onDataChange: found user:" + singleSnapshot.getValue(User.class).toString());
                                             userCt += 1;
@@ -271,9 +271,7 @@ public class DiscoverActivity extends AppCompatActivity {
                             });
                         }
 
-                    }
-
-                    else {
+                    } else {
                         System.out.println("not following anyone!");
 
 
@@ -286,7 +284,7 @@ public class DiscoverActivity extends AppCompatActivity {
                                 for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
 //                                    don't suggest himself
 //                                    don't suggest whoever already followed
-                                    if(!singleSnapshot.child("user_id").getValue().equals(currentUID)
+                                    if (!singleSnapshot.child("user_id").getValue().equals(currentUID)
                                             && !followingID.contains(singleSnapshot.child("user_id").getValue())) {
                                         Log.d(TAG, "onDataChange: found user:" + singleSnapshot.getValue(User.class).toString());
                                         userCt += 1;
@@ -370,7 +368,6 @@ public class DiscoverActivity extends AppCompatActivity {
                     Intent intent = new Intent(mContext, ViewProfileActivity.class);
                     intent.putExtra("calling_activity", "discover_activity");
                     intent.putExtra("intent_user", mUserList.get(position));
-                    Log.d(TAG, mUserList.get(position).getUsername());
                     startActivity(intent);
                 }
             }
