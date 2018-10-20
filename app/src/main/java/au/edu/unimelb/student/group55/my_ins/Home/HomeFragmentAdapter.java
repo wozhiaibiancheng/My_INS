@@ -29,7 +29,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.Like;
 import au.edu.unimelb.student.group55.my_ins.Firebase.Comment;
@@ -293,18 +295,11 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
                         String keyID = singleSnapshot.getKey();
                         System.out.println("like by Current user?? " + mHolder.likeByCurrentUser);
                         //case1: Then user already liked the photo
-                        if(mHolder.likeByCurrentUser &&
-                                singleSnapshot.getValue(Like.class).getUser_id()
-                                        .equals( FirebaseAuth.getInstance().getCurrentUser().getUid())){
+                        if(mHolder.likeByCurrentUser){
 
-//                            myReference.child("activity")
-//                                    .child(mHolder.photo.getUserID())
-//                                    .child( "likes")
-//                                    .child(keyID)
-//                                    .removeValue();
-///
+
                             myReference.child("posts")
-                                    .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                    .child(mHolder.photo.getUserID())
                                     .child(mHolder.photo.getPhotoID())
                                     .child( "likes")
                                     .child(keyID)
@@ -386,7 +381,7 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    final ArrayList<String> users = new ArrayList<>();
+                    final Set<String> likedUsers = new HashSet();
 
                     viewHolder.users = new StringBuilder();
                     for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
@@ -403,16 +398,17 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
                                     Log.d(TAG, "onDataChange: found like: " +
                                             singleSnapshot.getValue(User.class).getUsername());
 
-                                            users.add(singleSnapshot.getValue(User.class).getUsername());
+                                            likedUsers.add(singleSnapshot.getValue(User.class).getUsername());
 
                                     viewHolder.users.append(singleSnapshot.getValue(User.class).getUsername());
                                     viewHolder.users.append(",");
                                 }
 
+
                                 String[] splitUsers = viewHolder.users.toString().split(",");
 
-//                                if(users.contains(currentUsername)){
-                                if(viewHolder.users.toString().contains(viewHolder.user.getUsername() + ",")){
+                                if(likedUsers.contains(currentUsername)){
+//                                if(viewHolder.users.toString().contains(viewHolder.user.getUsername() + ",")){
                                     viewHolder.likeByCurrentUser = true;
                                 }else{
                                     viewHolder.likeByCurrentUser = false;

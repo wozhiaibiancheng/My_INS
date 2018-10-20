@@ -49,17 +49,17 @@ public class Heart {
             animationSet.playTogether(scaleDownY, scaleDownX);
         }
 
-        else if(heartRed.getVisibility() == View.GONE){
+        else{
             Log.d(TAG, "toggleLike: toggling red heart on.");
             heartRed.setScaleX(0.1f);
             heartRed.setScaleY(0.1f);
 
             ObjectAnimator scaleDownY = ObjectAnimator.ofFloat(heartRed, "scaleY", 0.1f, 1f);
-            scaleDownY.setDuration(300);
+            scaleDownY.setDuration(100);
             scaleDownY.setInterpolator(DECCELERATE_INTERPOLATOR);
 
             ObjectAnimator scaleDownX = ObjectAnimator.ofFloat(heartRed, "scaleX", 0.1f, 1f);
-            scaleDownX.setDuration(300);
+            scaleDownX.setDuration(100);
             scaleDownX.setInterpolator(DECCELERATE_INTERPOLATOR);
 
             heartRed.setVisibility(View.VISIBLE);
