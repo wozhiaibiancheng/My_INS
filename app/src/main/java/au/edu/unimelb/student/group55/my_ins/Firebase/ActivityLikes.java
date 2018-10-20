@@ -4,16 +4,16 @@ public class ActivityLikes {
 
     private String dateLiked;
     private String likerID;
-    private String posterID;
+    private String postID;
     private String imageUrl;
 
     public ActivityLikes() {
     }
 
-    public ActivityLikes(String dateLiked, String likerID, String posterID, String imageUrl) {
+    public ActivityLikes(String dateLiked, String likerID, String postID, String imageUrl) {
         this.dateLiked = dateLiked;
         this.likerID = likerID;
-        this.posterID = posterID;
+        this.postID = postID;
         this.imageUrl = imageUrl;
     }
 
@@ -33,12 +33,12 @@ public class ActivityLikes {
         this.likerID = likerID;
     }
 
-    public String getPosterID() {
-        return posterID;
+    public String getPostID() {
+        return postID;
     }
 
-    public void setPosterID(String posterID) {
-        this.posterID = posterID;
+    public void setPostID(String posterID) {
+        this.postID = posterID;
     }
 
     public String getImageUrl() {
@@ -54,7 +54,7 @@ public class ActivityLikes {
         return "ActivityLikes{" +
                 "dateLiked='" + dateLiked + '\'' +
                 ", likerID='" + likerID + '\'' +
-                ", posterID=" + posterID + '\'' +
+                ", posterID=" + postID + '\'' +
                 ", imageUrl=" + imageUrl + '\'' +
                 '}';
     }
