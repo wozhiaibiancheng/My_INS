@@ -25,6 +25,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -74,6 +76,8 @@ public class HomeFragment extends Fragment {
     private void getFollowing(){
         Log.d(TAG, "getFollowing: searching for following");
 
+        clearAll();
+
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
         Query query = reference
                 .child("following")
@@ -102,6 +106,27 @@ public class HomeFragment extends Fragment {
         });
     }
 
+    private void clearAll(){
+        if(myFollowing != null){
+            myFollowing.clear();
+        }
+        if(myPhotoInformations != null){
+            myPhotoInformations.clear();
+            if(myAdapter != null){
+                myAdapter.clear();
+                myAdapter.notifyDataSetChanged();
+            }
+        }
+
+        if(myPaginatedPhotos != null){
+            myPaginatedPhotos.clear();
+        }
+
+        myFollowing = new ArrayList<>();
+        myPhotoInformations = new ArrayList<>();
+        myPaginatedPhotos = new ArrayList<>();
+    }
+
     private void getPhotos(ArrayList<String> myFollowing){
         Log.d(TAG, "getPhotos: getting photos");
 
@@ -120,13 +145,6 @@ public class HomeFragment extends Fragment {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
                         System.out.println("Invoked here successfully");
-
-//                        for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-                            //                                        Log.d(TAG, "onDataChange: found user:" + singleSnapshot.getValue(User.class).toString());
-
-//                            mUserList.add(singleSnapshot.getValue(User.class));
-//                        }
-
 
                         PhotoInformation photoInformation = new PhotoInformation();
                         Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
