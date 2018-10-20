@@ -132,16 +132,19 @@ public class FeedActivityLikes extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                         System.out.println( "Invoked here successfully" );
+                        try {
+                            ActivityLikes activityLikes = new ActivityLikes();
+                            Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
 
-                        ActivityLikes activityLikes = new ActivityLikes(  );
-                        Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
+                            activityLikes.setDateLiked(objectMap.get("dateLiked").toString());
+                            activityLikes.setLikerID(objectMap.get("likerID").toString());
+                            activityLikes.setPosterID(objectMap.get("posterID").toString());
+                            activityLikes.setImageUrl(objectMap.get("imageUrl").toString());
 
-                        activityLikes.setDateLiked( objectMap.get( "dateLiked" ).toString() );
-                        activityLikes.setLikerID( objectMap.get( "likerID" ).toString() );
-                        activityLikes.setPostID( objectMap.get( "posterID" ).toString() );
-                        activityLikes.setImageUrl( objectMap.get( "imageUrl" ).toString() );
-
-                        activityLikesList.add( activityLikes );
+                            activityLikesList.add(activityLikes);
+                        }catch (Exception e){
+                            System.out.println("error：" + e.getMessage());
+                        }
 
                     }
                     if (count >= myFollowingList.size() - 1) {

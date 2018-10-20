@@ -185,6 +185,7 @@ public class DiscoverActivity extends AppCompatActivity {
 
                                             if (mUserList.size() > 0) {
                                                 System.out.println("111111");
+                                                System.out.println("188 update");
                                                 //update the users list view
                                                 updateUsersList();
                                                 progressBar.setVisibility(View.GONE);
@@ -211,6 +212,7 @@ public class DiscoverActivity extends AppCompatActivity {
                                                                 break;
                                                             }
                                                         }
+                                                        System.out.println("215 update");
                                                         //update the users list view
                                                         updateUsersList();
                                                         progressBar.setVisibility(View.GONE);
@@ -236,7 +238,7 @@ public class DiscoverActivity extends AppCompatActivity {
                                 }
                             }
                         } else {
-                            System.out.println("not following anyone!");
+                            System.out.println("don't have any suggestion!");
 
 
                             Query _query = reference.child("users");
@@ -258,6 +260,8 @@ public class DiscoverActivity extends AppCompatActivity {
                                             break;
                                         }
                                     }
+
+                                    System.out.println("262 update");
                                     //update the users list view
                                     updateUsersList();
                                     progressBar.setVisibility(View.GONE);
@@ -293,6 +297,7 @@ public class DiscoverActivity extends AppCompatActivity {
                                         break;
                                     }
                                 }
+                                System.out.println("298 update");
                                 //update the users list view
                                 updateUsersList();
                                 progressBar.setVisibility(View.GONE);
@@ -331,6 +336,7 @@ public class DiscoverActivity extends AppCompatActivity {
 
                         mUserList.add(singleSnapshot.getValue(User.class));
                     }
+                    System.out.println("337 update");
                     //update the users list view
                     updateUsersList();
                     progressBar.setVisibility(View.GONE);

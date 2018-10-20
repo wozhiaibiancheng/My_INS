@@ -89,7 +89,7 @@ public class HomeFragment extends Fragment {
                     Log.d(TAG, "onDataChange: found user: " +
                             singleSnapshot.child("user_id").getValue());
 
-                    myFollowing.add(singleSnapshot.child(getString(R.string.field_user_id)).getValue().toString());
+                    myFollowing.add(singleSnapshot.child("user_id").getValue().toString());
                 }
                 // Return list of user ID to myFollowing list
                 myFollowing.add(FirebaseAuth.getInstance().getCurrentUser().getUid());

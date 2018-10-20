@@ -307,11 +307,15 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
                                     .child(keyID)
                                     .removeValue();
 
-                            myReference.child( "activity" )
-                                    .child( "likes" )
-                                    .child( FirebaseAuth.getInstance().getCurrentUser().getUid() )
-                                    .child( likeID )
-                                    .removeValue();
+                            try {
+                                myReference.child("activity")
+                                        .child("likes")
+                                        .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                        .child(likeID)
+                                        .removeValue();
+                            }catch (Exception e){
+                                System.out.println("error: " + e.getMessage());
+                            }
 
                             mHolder.heart.toggleLike();
                             getLikesString(mHolder);
