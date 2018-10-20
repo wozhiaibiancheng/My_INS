@@ -33,6 +33,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import au.edu.unimelb.student.group55.my_ins.Firebase.ActivityPosts;
 import au.edu.unimelb.student.group55.my_ins.Firebase.Comment;
 import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
 import au.edu.unimelb.student.group55.my_ins.Firebase.Like;
@@ -177,8 +178,17 @@ public class PhotoUploadService extends Service {
                     photoInformation.setPhotoID( photoID );
                     photoInformation.setPostMessage( postMessage );
 
-
                     mDatabase.child( "posts" ).child( uid ).child( photoID ).setValue( photoInformation );
+
+
+                    String activityPhotoID = myRef.child( "activity" ).child( "posts" ).child(uid).push().getKey();
+
+                    ActivityPosts activityPosts = new ActivityPosts(  );
+                    activityPosts.setUserID( uid );
+                    activityPosts.setDateCreated( currentDate2 );
+                    activityPosts.setImageUrl( downloadLink );
+
+                    mDatabase.child( "activity" ).child( "posts" ).child( uid ).child( activityPhotoID ).setValue( activityPosts );
 
                     Toast.makeText(PhotoUploadService.this,
                             "Set Upload message record successfully", Toast.LENGTH_SHORT).show();

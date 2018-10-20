@@ -3,7 +3,7 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:background="@drawable/white_grey_border_bottom"
         >
 
@@ -17,9 +17,11 @@
            <TextView
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:text="Activity Feed"
-               android:gravity="center"
+               android:text="Posts Activity Feed"
+               android:gravity="left"
+               android:layout_marginLeft="30dp"
                android:textColor="@color/black"
+               android:id="@+id/feed_posts_item"
                />
 
         </android.support.v7.widget.Toolbar>

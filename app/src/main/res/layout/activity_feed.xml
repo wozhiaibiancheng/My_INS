@@ -8,32 +8,45 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp">
+        android:layout_marginBottom="60dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/relLayout1">
 
-            <include layout="@layout/feed_top"/>
+            <include layout="@layout/activity_feed_top"/>
         </RelativeLayout>
 
-        <ListView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/listView"
+            android:layout_height="wrap_content"
+            android:id="@+id/relLayout2"
             android:layout_below="@+id/relLayout1">
-        </ListView>
+
+            <include layout="@layout/activity_feed_following_item"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/relLayout3"
+            android:layout_below="@+id/relLayout2">
+
+            <include layout="@layout/activity_feed_likes_item"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/relLayout4"
+            android:layout_below="@+id/relLayout3">
+
+            <include layout="@layout/activity_feed_posts_item"/>
+        </RelativeLayout>
+
 
     </RelativeLayout>
-
-    <ProgressBar
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:id="@+id/profileProgressBar"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="200dp"
-        android:theme="@style/greyAccent"/>
 
     <include layout="@layout/layout_bottom"/>
 
