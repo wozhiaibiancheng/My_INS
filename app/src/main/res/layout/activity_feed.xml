@@ -16,21 +16,17 @@
             android:id="@+id/relLayout1">
 
             <include layout="@layout/feed_top"/>
-
-
         </RelativeLayout>
 
-
         <ListView
-
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/listView"
             android:layout_below="@+id/relLayout1">
-
         </ListView>
 
     </RelativeLayout>
+
     <ProgressBar
         android:layout_width="50dp"
         android:layout_height="50dp"
