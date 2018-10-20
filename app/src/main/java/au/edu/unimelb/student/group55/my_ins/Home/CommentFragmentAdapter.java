@@ -70,7 +70,7 @@ public class CommentFragmentAdapter extends ArrayAdapter<Comment> {
             holder.username = (TextView) convertView.findViewById(R.id.comment_username);
             holder.timestamp = (TextView) convertView.findViewById(R.id.comment_time_posted);
             holder.reply = (TextView) convertView.findViewById(R.id.comment_reply);
-            holder.like = (ImageView) convertView.findViewById(R.id.comment_like);
+//            holder.like = (ImageView) convertView.findViewById(R.id.comment_like);
             holder.likes = (TextView) convertView.findViewById(R.id.comment_likes);
             holder.profileImage = (CircleImageView) convertView.findViewById(R.id.comment_profile_image);
 

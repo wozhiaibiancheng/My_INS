@@ -24,6 +24,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 //import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.PhotoInformation;
+import au.edu.unimelb.student.group55.my_ins.Firebase.UserAccountSetting;
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
 import au.edu.unimelb.student.group55.my_ins.Profile.ProfileActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
@@ -76,12 +77,12 @@ public class HomeActivity extends AppCompatActivity implements
 
     }
 
-    public void onCommentThreadSelected(PhotoInformation photoInformation, String callingActivity){
+    public void onCommentThreadSelected(PhotoInformation photoInformation){
 
         CommentFragment fragment  = new CommentFragment();
         Bundle args = new Bundle();
-        args.putParcelable("photo information", photoInformation);
-        args.putString("home activity", TAG);
+        args.putParcelable("photo", photoInformation);
+//        args.putString("home activity", TAG);
         fragment.setArguments(args);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -90,6 +91,21 @@ public class HomeActivity extends AppCompatActivity implements
         transaction.commit();
 
     }
+
+//    public void onCommentThreadSelected(PhotoInformation photoInformation, String callingActivity){
+//
+//        CommentFragment fragment  = new CommentFragment();
+//        Bundle args = new Bundle();
+//        args.putParcelable("photo information", photoInformation);
+//        args.putString("home activity", TAG);
+//        fragment.setArguments(args);
+//
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        transaction.replace(R.id.container, fragment);
+//        transaction.addToBackStack("View Comments");
+//        transaction.commit();
+//
+//    }
 
     public void hideLayout(){
         Log.d(TAG, "hideLayout: hiding layout");
@@ -122,11 +138,11 @@ public class HomeActivity extends AppCompatActivity implements
     private void setPager(){
         SectionAdapter sectionAdapter = new SectionAdapter(getSupportFragmentManager());
         sectionAdapter.addFragment(new HomeFragment());
-        ViewPager viewPager = (ViewPager)findViewById(R.id.body);
-        viewPager.setAdapter(sectionAdapter);
+
+        myViewPager.setAdapter(sectionAdapter);
 
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tabs);
-        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setupWithViewPager(myViewPager);
 
 
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_home);
@@ -143,14 +159,14 @@ public class HomeActivity extends AppCompatActivity implements
         menuItem.setChecked(true);
     }
 
-    private void checkCurrentUser(FirebaseUser user){
-        Log.d(TAG, "checkCurrentUser: checking if user is logged in.");
-
-        if(user == null){
-            Intent intent = new Intent(mContext, LoginActivity.class);
-            startActivity(intent);
-        }
-    }
+//    private void checkCurrentUser(FirebaseUser user){
+//        Log.d(TAG, "checkCurrentUser: checking if user is logged in.");
+//
+//        if(user == null){
+//            Intent intent = new Intent(mContext, LoginActivity.class);
+//            startActivity(intent);
+//        }
+//    }
 
     private void setupFirebaseAuth(){
 
@@ -162,14 +178,15 @@ public class HomeActivity extends AppCompatActivity implements
                 FirebaseUser user = firebaseAuth.getCurrentUser();
 
                 //check if the user is logged in
-                checkCurrentUser(user);
+//                checkCurrentUser(user);
 
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                     myViewPager.setCurrentItem(HOME_FRAGMENT);
-                    checkCurrentUser(myAuth.getCurrentUser());
+//                    checkCurrentUser(myAuth.getCurrentUser());
                     setPager();
+
                 } else {
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                     Intent intent = new Intent(mContext, LoginActivity.class);

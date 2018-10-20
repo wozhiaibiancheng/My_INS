@@ -26,15 +26,18 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.Like;
+import au.edu.unimelb.student.group55.my_ins.Firebase.Comment;
 import au.edu.unimelb.student.group55.my_ins.Firebase.PhotoInformation;
 import au.edu.unimelb.student.group55.my_ins.Firebase.User;
 import au.edu.unimelb.student.group55.my_ins.Firebase.UserAccountSetting;
 import au.edu.unimelb.student.group55.my_ins.Profile.ProfileActivity;
+import au.edu.unimelb.student.group55.my_ins.Profile.ViewProfileActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.SupportFunctions.Heart;
 import  au.edu.unimelb.student.group55.my_ins.SupportFunctions.SquareImageView;
@@ -85,6 +88,7 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         final ViewHolder holder;
+        int ct = 0;
 
         if(convertView == null){
             convertView = myInflater.inflate( myLayoutResource, parent, false);
@@ -100,16 +104,17 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
             holder.postMessage = (TextView) convertView.findViewById(R.id.image_caption);
             holder.time = (TextView) convertView.findViewById(R.id.image_time_posted);
             holder.myProfileImage = (CircleImageView) convertView.findViewById(R.id.profile_photo);
-            holder.heart = new Heart(holder.heartWhite, holder.heartRed);
-            holder.photo = getItem(position);
-            holder.detector = new GestureDetector( myContext, new GestureListener(holder));
-            holder.users = new StringBuilder();
 
             convertView.setTag(holder);
 
         }else{
             holder = (ViewHolder) convertView.getTag();
         }
+
+        holder.photo = getItem(position);
+        holder.detector = new GestureDetector( myContext, new GestureListener(holder));
+        holder.users = new StringBuilder();
+        holder.heart = new Heart(holder.heartWhite, holder.heartRed);
 
         //get the current users username (need for checking likes string)
         getCurrentUsername();
@@ -121,19 +126,18 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
         holder.postMessage.setText(getItem(position).getPostMessage());
 
         //set the comment
-//        List<Comment> comments = getItem(position).getComments();
-//        holder.comments.setText("View all " + comments.size() + " comments");
-//        holder.comments.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                ((HomeActivity) myContext).onCommentThreadSelected(getItem(position),
-//                        "Home Activity");
-//
-//                //going to need to do something else?
-//                ((HomeActivity) myContext).hideLayout();
-//
-//            }
-//        });
+        List<Comment> comments = getItem(position).getComments();
+        holder.comments.setText("View all " + comments.size() + " comments");
+        holder.comments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((HomeActivity) myContext).onCommentThreadSelected(getItem(position));
+
+                //going to need to do something else?
+                ((HomeActivity) myContext).hideLayout();
+
+            }
+        });
 
         //set the time it was posted
         String timestampDifference = getTimestampDifference(getItem(position));
@@ -159,34 +163,32 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
 
-                    // currentUsername = singleSnapshot.getValue(UserAccountSettings.class).getUsername();
-
                     //The event if user name is being clicked
                     holder.username.setText(singleSnapshot.getValue(UserAccountSetting.class).getUsername());
-                    holder.username.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent( myContext, ProfileActivity.class);
-                            intent.putExtra( "calling activity",
-                                    "Home Activity");
-                            intent.putExtra( "intent user", holder.user);
-                            myContext.startActivity(intent);
-                        }
-                    });
+//                    holder.username.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            Intent intent = new Intent( myContext, ViewProfileActivity.class);
+//                            intent.putExtra( "calling activity",
+//                                    "Home Activity");
+//                            intent.putExtra( "intent user", holder.user);
+//                            myContext.startActivity(intent);
+//                        }
+//                    });
 
                     //The event when the user profile image is clicked
                     imageLoader.displayImage(singleSnapshot.getValue(UserAccountSetting.class).getProfile_pic(),
                             holder.myProfileImage );
-                    holder.myProfileImage.setOnClickListener( new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent( myContext, ProfileActivity.class);
-                            intent.putExtra( "calling activity",
-                                    "Home Activity");
-                            intent.putExtra( "intent user", holder.user);
-                            myContext.startActivity(intent);
-                        }
-                    });
+//                    holder.myProfileImage.setOnClickListener( new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            Intent intent = new Intent( myContext, ViewProfileActivity.class);
+//                            intent.putExtra( "calling activity",
+//                                    "Home Activity");
+//                            intent.putExtra( "intent user", holder.user);
+//                            myContext.startActivity(intent);
+//                        }
+//                    });
 
 
 
@@ -196,8 +198,8 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
                         public void onClick(View v) {
 
                             try {
-                                ((HomeActivity) myContext).onCommentThreadSelected(getItem(position),
-                                        "Home Activity");
+                                ((HomeActivity) myContext).onCommentThreadSelected(getItem(position));
+//                                        "Home Activity");
 
                                 //another thing?
                                 ((HomeActivity) myContext).hideLayout();
@@ -289,7 +291,7 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
                     for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
 
                         String keyID = singleSnapshot.getKey();
-
+                        System.out.println("like by Current user?? " + mHolder.likeByCurrentUser);
                         //case1: Then user already liked the photo
                         if(mHolder.likeByCurrentUser &&
                                 singleSnapshot.getValue(Like.class).getUser_id()
@@ -383,12 +385,15 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    final ArrayList<String> users = new ArrayList<>();
+
                     viewHolder.users = new StringBuilder();
                     for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
 
                         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
                         Query query = reference
-                                .child( myContext.getString(R.string.dbname_users))
+                                .child( "users")
                                 .orderByChild( "user_id")
                                 .equalTo(singleSnapshot.getValue(Like.class).getUser_id());
                         query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -398,13 +403,16 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
                                     Log.d(TAG, "onDataChange: found like: " +
                                             singleSnapshot.getValue(User.class).getUsername());
 
+                                            users.add(singleSnapshot.getValue(User.class).getUsername());
+
                                     viewHolder.users.append(singleSnapshot.getValue(User.class).getUsername());
                                     viewHolder.users.append(",");
                                 }
 
                                 String[] splitUsers = viewHolder.users.toString().split(",");
 
-                                if(viewHolder.users.toString().contains(currentUsername + ",")){//mitch, mitchell.tabian
+//                                if(users.contains(currentUsername)){
+                                if(viewHolder.users.toString().contains(viewHolder.user.getUsername() + ",")){
                                     viewHolder.likeByCurrentUser = true;
                                 }else{
                                     viewHolder.likeByCurrentUser = false;
@@ -472,6 +480,7 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
     private void setupLikesString(final ViewHolder viewHolder, String likesString){
         //If myself liked this post
         if(viewHolder.likeByCurrentUser){
+
             viewHolder.heartWhite.setVisibility( View.GONE);
             viewHolder.heartRed.setVisibility(View.VISIBLE);
             viewHolder.heartRed.setOnTouchListener(new View.OnTouchListener() {

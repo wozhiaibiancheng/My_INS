@@ -83,7 +83,7 @@ public class HomeFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
                     Log.d(TAG, "onDataChange: found user: " +
-                            singleSnapshot.child(getString(R.string.field_user_id)).getValue());
+                            singleSnapshot.child("user_id").getValue());
 
                     myFollowing.add(singleSnapshot.child(getString(R.string.field_user_id)).getValue().toString());
                 }
@@ -149,9 +149,6 @@ public class HomeFragment extends Fragment {
 
                         photoInformation.setComments(comments);
                         myPhotoInformations.add(photoInformation);
-
-//                        photoInformation.setComments(comments);
-//                        myPhotoInformations.add(singleSnapshot.getValue(PhotoInformation.class));
                     }
                     if(count >= following.size() - 1){
                         //display our photos
@@ -230,6 +227,9 @@ public class HomeFragment extends Fragment {
             Log.e(TAG, "displayPhotos: IndexOutOfBoundsException: " + e.getMessage() );
         }
     }
+
+
+
 
 
 

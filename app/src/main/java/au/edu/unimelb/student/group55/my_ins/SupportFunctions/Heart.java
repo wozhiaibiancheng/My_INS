@@ -1,11 +1,12 @@
 package au.edu.unimelb.student.group55.my_ins.SupportFunctions;
 
-
+import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
+import android.view.animation.AnimationSet;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 
@@ -54,11 +55,11 @@ public class Heart {
             heartRed.setScaleY(0.1f);
 
             ObjectAnimator scaleDownY = ObjectAnimator.ofFloat(heartRed, "scaleY", 0.1f, 1f);
-            scaleDownY.setDuration(100);
+            scaleDownY.setDuration(300);
             scaleDownY.setInterpolator(DECCELERATE_INTERPOLATOR);
 
             ObjectAnimator scaleDownX = ObjectAnimator.ofFloat(heartRed, "scaleX", 0.1f, 1f);
-            scaleDownX.setDuration(100);
+            scaleDownX.setDuration(300);
             scaleDownX.setInterpolator(DECCELERATE_INTERPOLATOR);
 
             heartRed.setVisibility(View.VISIBLE);

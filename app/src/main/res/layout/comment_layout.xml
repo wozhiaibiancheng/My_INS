@@ -2,16 +2,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:background="@color/white">
+                xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:id="@+id/comment_profile_image"
         android:layout_marginTop="15dp"
-        android:layout_marginLeft="20dp"
-        android:src="@drawable/ic_android"
+        android:layout_marginLeft="10dp"
         app:civ_border_color="@color/black"
         app:civ_border_width="0.5dp"/>
 
@@ -20,33 +18,31 @@
         android:layout_height="wrap_content"
         android:id="@+id/relLayout1"
         android:layout_toRightOf="@+id/comment_profile_image"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/grey_border">
+        android:layout_marginTop="15dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginRight="60dp"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="10dp">
 
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Luc"
+                android:text=""
                 android:id="@+id/comment_username"
                 android:layout_marginLeft="15dp"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:textStyle="bold"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="The comment body message"
-                android:layout_marginLeft="5dp"
+                android:text=""
+                android:layout_marginLeft="10dp"
                 android:textColor="@color/black"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:layout_toRightOf="@+id/comment_username"
                 android:id="@+id/comment"/>
 
@@ -54,7 +50,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="today"
+                android:text=""
                 android:textColor="@color/grey"
                 android:textSize="14sp"
                 android:id="@+id/comment_time_posted"
@@ -65,7 +61,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1 like"
+                android:text=""
                 android:textStyle="bold"
                 android:textColor="@color/grey"
                 android:textSize="14sp"
@@ -78,7 +74,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Reply"
+                android:text=""
                 android:textStyle="bold"
                 android:textColor="@color/grey"
                 android:textSize="14sp"
@@ -91,14 +87,14 @@
 
         </RelativeLayout>
 
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:id="@+id/comment_like"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="20dp"
-            android:src="@drawable/ic_heart_white"
-            android:layout_centerVertical="true"/>
+        <!--<ImageView-->
+            <!--android:layout_width="20dp"-->
+            <!--android:layout_height="20dp"-->
+            <!--android:id="@+id/comment_like"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_marginRight="20dp"-->
+            <!--android:src="@drawable/ic_heart_white"-->
+            <!--android:layout_centerVertical="true"/>-->
 
 
     </RelativeLayout>

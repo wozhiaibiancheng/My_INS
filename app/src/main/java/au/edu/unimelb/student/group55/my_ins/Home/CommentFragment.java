@@ -83,10 +83,10 @@ public class CommentFragment extends Fragment {
         });
 
 
-        try{
+//        try{
             photoInformation = getPhotoFromBundle();
             setupFirebaseAuth();
-        }catch (NullPointerException e){ }
+//        }catch (NullPointerException e){ }
 
         return view;
     }
@@ -125,7 +125,7 @@ public class CommentFragment extends Fragment {
 //                    }
                 }catch (Exception e){
                     getActivity().getSupportFragmentManager().popBackStack();
-
+//                    ((MainActivity) getActivity()).showLayout();
                 }
 
             }
@@ -173,7 +173,8 @@ public class CommentFragment extends Fragment {
 
         Bundle bundle = this.getArguments();
         if(bundle != null) {
-            return bundle.getString("Home Activity");
+            System.out.println("11111111111");
+            return bundle.getString("photo");
         }else{
             return null;
         }
@@ -188,7 +189,7 @@ public class CommentFragment extends Fragment {
 
         Bundle bundle = this.getArguments();
         if(bundle != null) {
-            return bundle.getParcelable("photo information");
+            return bundle.getParcelable("photo");
         }else{
             return null;
         }
@@ -225,7 +226,7 @@ public class CommentFragment extends Fragment {
             }
         };
 
-        if(photoInformation.getComments().size() == 0){
+//        if(photoInformation.getComments().size() == 0){
             myComments.clear();
             Comment firstComment = new Comment();
             firstComment.setComment( photoInformation.getPostMessage());
@@ -234,9 +235,9 @@ public class CommentFragment extends Fragment {
             myComments.add(firstComment);
             photoInformation.setComments( myComments );
             setupWidgets();
-        }
+//        }
 
-
+//
         myRef.child( "posts")
                 .child( photoInformation.getUserID() )
                 .child( photoInformation.getPhotoID())
@@ -245,7 +246,7 @@ public class CommentFragment extends Fragment {
                     @Override
                     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                         Log.d(TAG, "onChildAdded: child added.");
-
+                        System.out.println("photoid: " + photoInformation.getPhotoID());
                         Query query = myRef
                                 .child( "posts")
                                 .child( photoInformation.getUserID() )
@@ -259,11 +260,11 @@ public class CommentFragment extends Fragment {
                                     PhotoInformation photoInformation = new PhotoInformation();
                                     Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
 
-                                    photoInformation.setPostMessage(objectMap.get( myContext.getString(R.string.post_message)).toString());
-                                    photoInformation.setPhotoID(objectMap.get( myContext.getString(R.string.field_photo_id)).toString());
-                                    photoInformation.setUserID(objectMap.get( myContext.getString(R.string.field_user_id)).toString());
-                                    photoInformation.setDateCreated(objectMap.get( myContext.getString(R.string.field_date_created)).toString());
-                                    photoInformation.setImageUrl(objectMap.get( myContext.getString(R.string.field_image_path)).toString());
+                                    photoInformation.setPostMessage(objectMap.get("postMessage").toString());
+                                    photoInformation.setPhotoID(objectMap.get("photoID").toString());
+                                    photoInformation.setUserID(objectMap.get("userID").toString());
+                                    photoInformation.setDateCreated(objectMap.get("dateCreated").toString());
+                                    photoInformation.setImageUrl(objectMap.get( "imageUrl").toString());
 
 
                                     myComments.clear();
