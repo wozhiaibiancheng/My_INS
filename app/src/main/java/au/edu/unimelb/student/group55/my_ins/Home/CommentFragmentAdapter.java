@@ -31,10 +31,6 @@ import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.Firebase.Comment;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-/**
- * Created by User on 8/22/2017.
- */
-
 public class CommentFragmentAdapter extends ArrayAdapter<Comment> {
     private static final String TAG = "CommentFragmentAdapter";
 
@@ -117,16 +113,6 @@ public class CommentFragmentAdapter extends ArrayAdapter<Comment> {
                 Log.d(TAG, "onCancelled: query cancelled.");
             }
         });
-
-        try{
-            if(position == 0){
-                holder.like.setVisibility( View.GONE);
-                holder.likes.setVisibility( View.GONE);
-                holder.reply.setVisibility( View.GONE);
-            }
-        }catch (NullPointerException e){
-            Log.e(TAG, "getView: NullPointerException: " + e.getMessage() );
-        }
 
 
         return convertView;
