@@ -139,7 +139,7 @@ public class FeedActivityLikes extends AppCompatActivity {
                         activityLikes.setDateLiked( objectMap.get( "dateLiked" ).toString() );
                         activityLikes.setLikerID( objectMap.get( "likerID" ).toString() );
                         activityLikes.setPosterID( objectMap.get( "posterID" ).toString() );
-                        activityLikes.setPostID( objectMap.get( "postID" ).toString() );
+                        activityLikes.setImageUrl( objectMap.get( "imageUrl" ).toString() );
 
                         activityLikesList.add( activityLikes );
 

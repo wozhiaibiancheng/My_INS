@@ -159,7 +159,6 @@ public class DiscoverActivity extends AppCompatActivity {
 
                         System.out.println("suggest size!!: " + suggestID.size());
 
-
                         if (suggestID.size() > 0) {
 
                             for (String id : suggestID) {

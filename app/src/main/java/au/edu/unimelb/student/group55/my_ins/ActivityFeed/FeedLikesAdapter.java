@@ -77,11 +77,12 @@ public class FeedLikesAdapter extends ArrayAdapter<ActivityLikes> {
 
         final String likerID = getItem( position ).getLikerID();
         final String posterID = getItem( position ).getPosterID();
-        final String postID = getItem( position ).getPostID();
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
 
         holder.time.setText( getItem( position ).getDateLiked() );
+        imageLoader.displayImage( getItem( position ).getImageUrl(),
+                holder.post_image );
 
         Query query = reference
                 .child( "user_account_settings")
@@ -153,49 +154,9 @@ public class FeedLikesAdapter extends ArrayAdapter<ActivityLikes> {
 
                     //The event if user name is being clicked
                     holder.liked.setText( "liked a post of " + singleSnapshot.getValue( UserAccountSetting.class ).getUsername() );
-                    holder.liked.setOnClickListener( new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (likerID.equals( currentUID )){
-                                Intent myProfileIntent = new Intent(myContext, ProfileActivity.class);
-                                myContext.startActivity( myProfileIntent );
-                            }else{
-//                                Intent intent = new Intent( myContext, ViewProfileActivity.class);
-//                                intent.putExtra( "calling activity",
-//                                        "FeedActivityFollowing");
-//                                intent.putExtra( "intent user", followedUser);
-//                                myContext.startActivity(intent);
-                            }
-
-                        }
-                    } );
-
-                }
-
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        Query query3 = reference
-                .child( "posts")
-                .child(posterID)
-                .orderByChild( "photoID")
-                .equalTo(postID);
-
-        query2.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-
-                    //The event if user name is being clicked
-                    imageLoader.displayImage( singleSnapshot.getValue( PhotoInformation.class ).getImageUrl(),
-                            holder.post_image );
-                    holder.post_image.setOnClickListener( new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+//                    holder.liked.setOnClickListener( new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
 //                            if (likerID.equals( currentUID )){
 //                                Intent myProfileIntent = new Intent(myContext, ProfileActivity.class);
 //                                myContext.startActivity( myProfileIntent );
@@ -206,9 +167,9 @@ public class FeedLikesAdapter extends ArrayAdapter<ActivityLikes> {
 //                                intent.putExtra( "intent user", followedUser);
 //                                myContext.startActivity(intent);
 //                            }
-
-                        }
-                    } );
+//
+//                        }
+//                    } );
 
                 }
 

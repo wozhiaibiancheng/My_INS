@@ -33,6 +33,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import au.edu.unimelb.student.group55.my_ins.Firebase.ActivityLikes;
 import au.edu.unimelb.student.group55.my_ins.Firebase.Like;
 import au.edu.unimelb.student.group55.my_ins.Firebase.Comment;
 import au.edu.unimelb.student.group55.my_ins.Firebase.PhotoInformation;
@@ -59,6 +60,7 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
     private Context myContext;
     private DatabaseReference myReference;
     private String currentUsername = "";
+    private String likeID;
 
     public HomeFragmentAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<PhotoInformation> objects) {
         super(context, resource, objects);
@@ -305,6 +307,12 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
                                     .child(keyID)
                                     .removeValue();
 
+                            myReference.child( "activity" )
+                                    .child( "likes" )
+                                    .child( FirebaseAuth.getInstance().getCurrentUser().getUid() )
+                                    .child( likeID )
+                                    .removeValue();
+
                             mHolder.heart.toggleLike();
                             getLikesString(mHolder);
                         }
@@ -343,6 +351,26 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
                 .child( "likes")
                 .child(newLikeID)
                 .setValue(like);
+
+        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss");
+        String currentDate = String.valueOf( simpleDateFormat.format( calendar.getTime() ) );
+
+        likeID = myReference.child( "activity" ).child( "likes" ).child(uid).push().getKey();
+
+        ActivityLikes activityLikes = new ActivityLikes(  );
+        activityLikes.setImageUrl( holder.photo.getImageUrl() );
+        activityLikes.setPosterID( holder.photo.getUserID() );
+        activityLikes.setLikerID( uid );
+        activityLikes.setDateLiked( currentDate );
+
+        myReference.child( "activity" )
+                .child( "likes" )
+                .child( uid )
+                .child( likeID )
+                .setValue( activityLikes );
 
         holder.heart.toggleLike();
         getLikesString(holder);
