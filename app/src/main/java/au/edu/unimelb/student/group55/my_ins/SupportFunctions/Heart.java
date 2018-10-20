@@ -35,11 +35,11 @@ public class Heart {
             heartRed.setScaleY(0.1f);
 
             ObjectAnimator scaleDownY = ObjectAnimator.ofFloat(heartRed, "scaleY", 1f, 0f);
-            scaleDownY.setDuration(300);
+            scaleDownY.setDuration(100);
             scaleDownY.setInterpolator(ACCELERATE_INTERPOLATOR);
 
             ObjectAnimator scaleDownX = ObjectAnimator.ofFloat(heartRed, "scaleX", 1f, 0f);
-            scaleDownX.setDuration(300);
+            scaleDownX.setDuration(100);
             scaleDownX.setInterpolator(ACCELERATE_INTERPOLATOR);
 
             heartRed.setVisibility(View.GONE);
@@ -54,11 +54,11 @@ public class Heart {
             heartRed.setScaleY(0.1f);
 
             ObjectAnimator scaleDownY = ObjectAnimator.ofFloat(heartRed, "scaleY", 0.1f, 1f);
-            scaleDownY.setDuration(300);
+            scaleDownY.setDuration(100);
             scaleDownY.setInterpolator(DECCELERATE_INTERPOLATOR);
 
             ObjectAnimator scaleDownX = ObjectAnimator.ofFloat(heartRed, "scaleX", 0.1f, 1f);
-            scaleDownX.setDuration(300);
+            scaleDownX.setDuration(100);
             scaleDownX.setInterpolator(DECCELERATE_INTERPOLATOR);
 
             heartRed.setVisibility(View.VISIBLE);

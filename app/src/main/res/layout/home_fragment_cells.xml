@@ -23,7 +23,7 @@
                     android:layout_marginTop="20dp"
                     app:civ_border_color="@color/black"
                     app:civ_border_width="0.5dp"
-                    android:layout_marginLeft="25dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_centerVertical="true"/>
 
 
@@ -50,20 +50,20 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="35dp"
                 android:id="@+id/relLayout2"
                 android:layout_below="@+id/post_image"
                 android:background="@color/white">
 
                 <RelativeLayout
-                    android:layout_width="60dp"
+                    android:layout_width="70dp"
                     android:layout_height="match_parent"
                     android:id="@+id/heartLayout"
                     android:layout_marginLeft="5dp"
                     android:background="@color/white">
 
                     <ImageView
-                        android:layout_width="45dp"
+                        android:layout_width="65dp"
                         android:layout_height="35dp"
                         android:id="@+id/image_heart_red"
                         android:layout_centerInParent="true"
@@ -73,7 +73,7 @@
                         android:visibility="invisible"/>
 
                     <ImageView
-                        android:layout_width="45dp"
+                        android:layout_width="65dp"
                         android:layout_height="35dp"
                         android:id="@+id/image_heart"
                         android:layout_centerInParent="true"
@@ -88,7 +88,6 @@
                     android:layout_height="35dp"
                     android:id="@+id/speech_bubble"
                     android:layout_toRightOf="@+id/heartLayout"
-                    android:layout_marginLeft="7dp"
                     android:src="@drawable/ic_speech_bubble"
                     android:visibility="visible"
                     android:layout_centerVertical="true"/>

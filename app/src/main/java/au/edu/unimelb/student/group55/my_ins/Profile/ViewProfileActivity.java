@@ -31,7 +31,10 @@ import com.google.firebase.storage.StorageReference;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
+import au.edu.unimelb.student.group55.my_ins.Firebase.Comment;
 import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
 import au.edu.unimelb.student.group55.my_ins.Firebase.PhotoInformation;
 import au.edu.unimelb.student.group55.my_ins.Firebase.User;
@@ -532,7 +535,28 @@ public class ViewProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    photos.add(ds.getValue(PhotoInformation.class));
+//                    photos.add(ds.getValue(PhotoInformation.class));
+                    PhotoInformation photoInformation = new PhotoInformation();
+                    Map<String, Object> objectMap = (HashMap<String, Object>) ds.getValue();
+
+                    photoInformation.setPostMessage(objectMap.get("postMessage").toString());
+                    photoInformation.setPhotoID(objectMap.get("photoID").toString());
+                    photoInformation.setUserID(objectMap.get("userID").toString());
+                    photoInformation.setDateCreated(objectMap.get("dateCreated").toString());
+                    photoInformation.setImageUrl(objectMap.get("imageUrl").toString());
+
+                    ArrayList<Comment> comments = new ArrayList<Comment>();
+                    for (DataSnapshot dSnapshot : ds
+                            .child("comments").getChildren()){
+                        Comment comment = new Comment();
+                        comment.setUser_id(dSnapshot.getValue(Comment.class).getUser_id());
+                        comment.setComment(dSnapshot.getValue(Comment.class).getComment());
+                        comment.setDate_created(dSnapshot.getValue(Comment.class).getDate_created());
+                        comments.add(comment);
+                    }
+
+                    photoInformation.setComments(comments);
+                    photos.add(photoInformation);
                 }
 
                 for (int i = 0; i < photos.size(); i++) {

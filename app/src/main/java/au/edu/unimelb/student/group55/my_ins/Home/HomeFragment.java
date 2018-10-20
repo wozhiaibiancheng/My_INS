@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,6 +44,7 @@ public class HomeFragment extends Fragment {
     private ArrayList<String> myFollowing;
     private ListView myListView;
     private HomeFragmentAdapter myAdapter;
+    private ProgressBar progressBar;
     private int myResults;
 
     @Nullable
@@ -52,6 +54,7 @@ public class HomeFragment extends Fragment {
         myListView = (ListView) view.findViewById(R.id.listView);
         myFollowing = new ArrayList<>();
         myPhotoInformations = new ArrayList<>();
+        progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
 
         getFollowing();
 
@@ -143,6 +146,7 @@ public class HomeFragment extends Fragment {
                     if(count >= following.size() - 1){
                         //display our photos
                         displayPhotos();
+                        progressBar.setVisibility(View.GONE);
                     }
                 }
 

@@ -36,6 +36,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.PhotoInformation;
+import au.edu.unimelb.student.group55.my_ins.MainActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.Firebase.Comment;
 
@@ -118,11 +119,16 @@ public class CommentFragment extends Fragment {
         myBackArrow.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(getCallingActivityFromBundle().equals("Home Activity")){
+                try {
+//                    if (getCallingActivityFromBundle().equals("Home Activity")) {
+                        getActivity().getSupportFragmentManager().popBackStack();
+                        ((HomeActivity) getActivity()).showLayout();
+//                    } else {
+//                        getActivity().getSupportFragmentManager().popBackStack();
+//                    }
+                }catch (Exception e){
                     getActivity().getSupportFragmentManager().popBackStack();
-                    ((HomeActivity)getActivity()).showLayout();
-                }else{
-                    getActivity().getSupportFragmentManager().popBackStack();
+                    ((MainActivity) getActivity()).showLayout();
                 }
 
             }

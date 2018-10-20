@@ -9,6 +9,14 @@
         android:id="@+id/listView"
         android:layout_marginBottom="50dp"></ListView>
 
+    <ProgressBar
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/progressBar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="200dp"
+        android:theme="@style/greyAccent"/>
+
     <include layout="@layout/layout_bottom"></include>
 
 </RelativeLayout>

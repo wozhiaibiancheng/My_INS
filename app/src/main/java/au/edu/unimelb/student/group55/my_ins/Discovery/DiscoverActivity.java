@@ -160,127 +160,116 @@ public class DiscoverActivity extends AppCompatActivity {
                         System.out.println("suggest size!!: " + suggestID.size());
 
 
-                        for (String id : suggestID) {
+                        if (suggestID.size() > 0){
 
-                            System.out.println("followed user: " + followingID);
+                            for (String id : suggestID) {
 
-                            //    dont't suggest himself
-                            //    don't suggest anyone has been followed by the current user
-                            if (!id.equals(currentUID) && !followingID.contains(id)) {
-                                System.out.println("id: " + id);
+                                System.out.println("followed user: " + followingID);
 
-                                Query queryUser = reference.child("users")
-                                        .orderByChild("user_id").equalTo(id);
+                                //    dont't suggest himself
+                                //    don't suggest anyone has been followed by the current user
+                                if (!id.equals(currentUID) && !followingID.contains(id)) {
+                                    System.out.println("id: " + id);
 
-                                queryUser.addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Query queryUser = reference.child("users")
+                                            .orderByChild("user_id").equalTo(id);
 
-                                        for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-                                            //                                        Log.d(TAG, "onDataChange: found user:" + singleSnapshot.getValue(User.class).toString());
+                                    queryUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(DataSnapshot dataSnapshot) {
 
+                                            for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                                                //                                        Log.d(TAG, "onDataChange: found user:" + singleSnapshot.getValue(User.class).toString());
+
+                                                mUserList.add(singleSnapshot.getValue(User.class));
+                                            }
+
+                                            if (mUserList.size() > 0) {
+                                                System.out.println("111111");
+                                                //update the users list view
+                                                updateUsersList();
+                                                progressBar.setVisibility(View.GONE);
+                                            } else {
+                                                System.out.println("222222");
+                                                //if no friends suggests after filtered
+
+                                                Query _query = reference.child("users");
+                                                _query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                                at most suggest 6 users
+                                                        int userCt = 0;
+                                                        for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                                                            //   don't suggest himself
+                                                            //   don't suggest whoever already followed
+                                                            if (!singleSnapshot.child("user_id").getValue().equals(currentUID)
+                                                                    && !followingID.contains(singleSnapshot.child("user_id").getValue())) {
+                                                                Log.d(TAG, "onDataChange: found user:" + singleSnapshot.getValue(User.class).toString());
+                                                                userCt += 1;
+                                                                mUserList.add(singleSnapshot.getValue(User.class));
+                                                            }
+                                                            if (userCt >= 6) {
+                                                                break;
+                                                            }
+                                                        }
+                                                        //update the users list view
+                                                        updateUsersList();
+                                                        progressBar.setVisibility(View.GONE);
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(DatabaseError databaseError) {
+
+                                                    }
+                                                });
+                                            }
+
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(DatabaseError databaseError) {
+
+                                        }
+                                    });
+
+
+                                }
+                            }
+                    } else {
+                            System.out.println("not following anyone!");
+
+
+                            Query _query = reference.child("users");
+                            _query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+//                                at most suggest 6 users
+                                    int userCt = 0;
+                                    for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+//                                    don't suggest himself
+//                                    don't suggest whoever already followed
+                                        if(!singleSnapshot.child("user_id").getValue().equals(currentUID)
+                                                && !followingID.contains(singleSnapshot.child("user_id").getValue())) {
+                                            Log.d(TAG, "onDataChange: found user:" + singleSnapshot.getValue(User.class).toString());
+                                            userCt += 1;
                                             mUserList.add(singleSnapshot.getValue(User.class));
                                         }
-
-                                        if(mUserList.size()>0){
-                                            System.out.println("111111");
-                                            //update the users list view
-                                            updateUsersList();
-                                            progressBar.setVisibility(View.GONE);
-                                        }else{
-                                            System.out.println("222222");
-                                            //if no friends suggests after filtered
-
-                                            Query _query = reference.child("users");
-                                            _query.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                @Override
-                                                public void onDataChange(DataSnapshot dataSnapshot) {
-//                                at most suggest 6 users
-                                                    int userCt = 0;
-                                                    for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-                                                        //   don't suggest himself
-                                                        //   don't suggest whoever already followed
-                                                        if(!singleSnapshot.child("user_id").getValue().equals(currentUID)
-                                                                && !followingID.contains(singleSnapshot.child("user_id").getValue())) {
-                                                            Log.d(TAG, "onDataChange: found user:" + singleSnapshot.getValue(User.class).toString());
-                                                            userCt += 1;
-                                                            mUserList.add(singleSnapshot.getValue(User.class));
-                                                        }
-                                                        if (userCt >= 6) {
-                                                            break;
-                                                        }
-                                                    }
-                                                    //update the users list view
-                                                    updateUsersList();
-                                                    progressBar.setVisibility(View.GONE);
-                                                }
-
-                                                @Override
-                                                public void onCancelled(DatabaseError databaseError) {
-
-                                                }
-                                            });
+                                        if (userCt >= 6) {
+                                            break;
                                         }
-
-
-
-
                                     }
+                                    //update the users list view
+                                    updateUsersList();
+                                    progressBar.setVisibility(View.GONE);
+                                }
 
-                                    @Override
-                                    public void onCancelled(DatabaseError databaseError) {
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
 
-                                    }
-                                });
-
-
-                            }}
-
-
-//                            if(mUserList.size()>0){
-//                                System.out.println("111111");
-//                                //update the users list view
-//                                updateUsersList();
-//                                progressBar.setVisibility(View.GONE);
-//                            }else{
-//                                System.out.println("222222");
-//                                //if no friends suggests after filtered
-//
-//                                Query _query = reference.child("users");
-//                                _query.addListenerForSingleValueEvent(new ValueEventListener() {
-//                                    @Override
-//                                    public void onDataChange(DataSnapshot dataSnapshot) {
-////                                at most suggest 6 users
-//                                        int userCt = 0;
-//                                        for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-//                                            //   don't suggest himself
-//                                            //   don't suggest whoever already followed
-//                                            if(!singleSnapshot.child("user_id").getValue().equals(currentUID)
-//                                                    && !followingID.contains(singleSnapshot.child("user_id").getValue())) {
-//                                                Log.d(TAG, "onDataChange: found user:" + singleSnapshot.getValue(User.class).toString());
-//                                                userCt += 1;
-//                                                mUserList.add(singleSnapshot.getValue(User.class));
-//                                            }
-//                                            if (userCt >= 6) {
-//                                                break;
-//                                            }
-//                                        }
-//                                        //update the users list view
-//                                        updateUsersList();
-//                                        progressBar.setVisibility(View.GONE);
-//                                    }
-//
-//                                    @Override
-//                                    public void onCancelled(DatabaseError databaseError) {
-//
-//                                    }
-//                                });
-//                            }
-
-
-
-
-
+                                }
+                            });
+                        }
 
                     }
 
