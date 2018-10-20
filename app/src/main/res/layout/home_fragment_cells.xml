@@ -40,8 +40,7 @@
                     />
 
             </RelativeLayout>
-
-            <iamutkarshtiwari.github.io.ananas.picchooser.SquareImageView
+        <au.edu.unimelb.student.group55.my_ins.SupportFunctions.SquareImageView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/post_image"

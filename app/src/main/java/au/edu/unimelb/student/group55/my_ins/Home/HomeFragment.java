@@ -1,6 +1,9 @@
 package au.edu.unimelb.student.group55.my_ins.Home;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -14,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,6 +32,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.PhotoInformation;
+import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.Firebase.Comment;
 
@@ -46,11 +51,16 @@ public class HomeFragment extends Fragment {
     private HomeFragmentAdapter myAdapter;
     private ProgressBar progressBar;
     private int myResults;
+    //firebase
+    private FirebaseAuth myAuth;
+    private FirebaseAuth.AuthStateListener myAuthListener;
+
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate( R.layout.home_fragment, container, false);
+        setupFirebaseAuth();
         myListView = (ListView) view.findViewById(R.id.listView);
         myFollowing = new ArrayList<>();
         myPhotoInformations = new ArrayList<>();
@@ -220,6 +230,46 @@ public class HomeFragment extends Fragment {
             Log.e(TAG, "displayPhotos: IndexOutOfBoundsException: " + e.getMessage() );
         }
     }
+
+
+
+    private void setupFirebaseAuth(){
+
+        myAuth = FirebaseAuth.getInstance();
+
+        myAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+
+                if (user != null) {
+                    // User is signed in
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                } else {
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }
+                // ...
+            }
+        };
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        myAuth.addAuthStateListener(myAuthListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (myAuthListener != null) {
+            myAuth.removeAuthStateListener(myAuthListener);
+        }
+    }
+
 
 }
 

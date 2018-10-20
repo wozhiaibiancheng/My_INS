@@ -39,7 +39,7 @@ import au.edu.unimelb.student.group55.my_ins.MainActivity;
 import au.edu.unimelb.student.group55.my_ins.Profile.ProfileActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.SupportFunctions.Heart;
-import iamutkarshtiwari.github.io.ananas.picchooser.SquareImageView;
+import  au.edu.unimelb.student.group55.my_ins.SupportFunctions.SquareImageView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{

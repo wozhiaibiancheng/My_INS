@@ -25,6 +25,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.PhotoInformation;
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
+import au.edu.unimelb.student.group55.my_ins.Profile.ProfileActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.SupportFunctions.BottomNavTool;
 import au.edu.unimelb.student.group55.my_ins.SupportFunctions.UniversalImageLoader;
@@ -166,9 +167,14 @@ public class HomeActivity extends AppCompatActivity implements
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    myViewPager.setCurrentItem(HOME_FRAGMENT);
+                    checkCurrentUser(myAuth.getCurrentUser());
                 } else {
-                    // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
+                    Intent intent = new Intent(mContext, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
                 }
                 // ...
             }
@@ -179,8 +185,8 @@ public class HomeActivity extends AppCompatActivity implements
     public void onStart() {
         super.onStart();
         myAuth.addAuthStateListener(myAuthListener);
-        myViewPager.setCurrentItem(HOME_FRAGMENT);
-        checkCurrentUser(myAuth.getCurrentUser());
+//        myViewPager.setCurrentItem(HOME_FRAGMENT);
+//        checkCurrentUser(myAuth.getCurrentUser());
     }
 
     @Override
