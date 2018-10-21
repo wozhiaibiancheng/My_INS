@@ -47,18 +47,18 @@ public class FoundAdapter extends BaseAdapter {
         device = DatasEntity.mBluetoothDevices.get(i);
         switch (device.getType()){
             case 1:
-                holderView.imageView.setImageResource(R.mipmap.home_title_android);
+                holderView.imageView.setImageResource(R.drawable.home_title_android);
                 break;
 
             case 2:
-                holderView.imageView.setImageResource(R.mipmap.home_title_qian);
+                holderView.imageView.setImageResource(R.drawable.home_title_qian);
                 break;
 
             case 3:
-                holderView.imageView.setImageResource(R.mipmap.home_title_ios);
+                holderView.imageView.setImageResource(R.drawable.home_title_ios);
                 break;
             default:
-                holderView.imageView.setImageResource(R.mipmap.home_title_qian);
+                holderView.imageView.setImageResource(R.drawable.home_title_qian);
                 break;
         }
         if (device.getName()==null||device.getName().equals("null")){

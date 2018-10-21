@@ -26,8 +26,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -69,6 +67,7 @@ public class ApplyFilters extends AppCompatActivity {
         super.onCreate( savedInstanceState );
 
         checkGPSSettings();
+        imagePath = applicationFolder();
 
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
@@ -90,8 +89,6 @@ public class ApplyFilters extends AppCompatActivity {
 //        String workingDirectory = path + filename;
         EditImageActivity.start(this, sourcePath, destinationPath, 100, true);
     }
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -338,10 +335,7 @@ public class ApplyFilters extends AppCompatActivity {
         } else {
         }
 
-
     }
-
-
 
     private boolean isRootTask(){
         int task = getIntent().getFlags();

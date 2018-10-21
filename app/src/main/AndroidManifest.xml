@@ -59,6 +59,16 @@
             android:screenOrientation="portrait"></activity>
         <activity android:name=".ActivityFeed.FeedActivityPosts"
             android:screenOrientation="portrait"></activity>
+        <activity android:name=".BlueTooth.activity.BlueToothMainActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".BlueTooth.activity.BluetoothManngerActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".BlueTooth.activity.NameActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".ActivityFeed.Bluetooth"
+            android:screenOrientation="portrait"></activity>
+
+
 
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat"/>
