@@ -168,6 +168,7 @@ public class HomeActivity extends AppCompatActivity implements
     private void setPager(){
         SectionAdapter sectionAdapter = new SectionAdapter(getSupportFragmentManager());
         sectionAdapter.addFragment(new HomeFragment());
+        sectionAdapter.addFragment( new HomeFragmentWithLocation() );
 
         myViewPager.setAdapter(sectionAdapter);
 
@@ -176,6 +177,7 @@ public class HomeActivity extends AppCompatActivity implements
 
 
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_home);
+        tabLayout.getTabAt( 1 ).setIcon( R.drawable.ic_location);
     }
 
     //    set up bottom view

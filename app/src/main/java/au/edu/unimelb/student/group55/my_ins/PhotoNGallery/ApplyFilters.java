@@ -26,8 +26,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -338,10 +336,7 @@ public class ApplyFilters extends AppCompatActivity {
         } else {
         }
 
-
     }
-
-
 
     private boolean isRootTask(){
         int task = getIntent().getFlags();
