@@ -137,11 +137,7 @@ public class HomeFragmentWithLocation extends Fragment {
                     for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
                         System.out.println("Invoked here successfully");
 
-<<<<<<< HEAD
-                        try {
-=======
                         try{
->>>>>>> 133b8b8373564c69cdadf75a8263ea5e7940bb6c
                             PhotoInformation photoInformation = new PhotoInformation();
                             Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
 
@@ -150,21 +146,12 @@ public class HomeFragmentWithLocation extends Fragment {
                             photoInformation.setUserID(objectMap.get("userID").toString());
                             photoInformation.setDateCreated(objectMap.get("dateCreated").toString());
                             photoInformation.setImageUrl(objectMap.get("imageUrl").toString());
-<<<<<<< HEAD
-                            photoInformation.setLongitude(objectMap.get("longitude").toString());
-                            photoInformation.setLatitude(objectMap.get("latitude").toString());
-
-                            ArrayList<Comment> comments = new ArrayList<Comment>();
-                            for (DataSnapshot dSnapshot : singleSnapshot
-                                    .child("comments").getChildren()) {
-=======
                             photoInformation.setLongitude( objectMap.get( "longitude" ).toString() );
                             photoInformation.setLatitude( objectMap.get( "latitude" ).toString() );
 
                             ArrayList<Comment> comments = new ArrayList<Comment>();
                             for (DataSnapshot dSnapshot : singleSnapshot
                                     .child("comments").getChildren()){
->>>>>>> 133b8b8373564c69cdadf75a8263ea5e7940bb6c
                                 Comment comment = new Comment();
                                 comment.setUser_id(dSnapshot.getValue(Comment.class).getUser_id());
                                 comment.setComment(dSnapshot.getValue(Comment.class).getComment());
@@ -174,16 +161,10 @@ public class HomeFragmentWithLocation extends Fragment {
 
                             photoInformation.setComments(comments);
                             myPhotoInformations.add(photoInformation);
-<<<<<<< HEAD
-                        }catch (Exception e){
-                            Log.d(TAG,"data structure issue");
-                        }
-=======
                         }
                         catch (Exception e){
 
                         }
->>>>>>> 133b8b8373564c69cdadf75a8263ea5e7940bb6c
                     }
                     if(count >= following.size() - 1){
                         //display our photos
@@ -270,24 +251,5 @@ public class HomeFragmentWithLocation extends Fragment {
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
