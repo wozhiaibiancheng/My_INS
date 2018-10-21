@@ -137,29 +137,33 @@ public class HomeFragmentWithLocation extends Fragment {
                     for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
                         System.out.println("Invoked here successfully");
 
-                        PhotoInformation photoInformation = new PhotoInformation();
-                        Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
+                        try {
+                            PhotoInformation photoInformation = new PhotoInformation();
+                            Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
 
-                        photoInformation.setPostMessage(objectMap.get("postMessage").toString());
-                        photoInformation.setPhotoID(objectMap.get("photoID").toString());
-                        photoInformation.setUserID(objectMap.get("userID").toString());
-                        photoInformation.setDateCreated(objectMap.get("dateCreated").toString());
-                        photoInformation.setImageUrl(objectMap.get("imageUrl").toString());
-                        photoInformation.setLongitude( objectMap.get( "longitude" ).toString() );
-                        photoInformation.setLatitude( objectMap.get( "latitude" ).toString() );
+                            photoInformation.setPostMessage(objectMap.get("postMessage").toString());
+                            photoInformation.setPhotoID(objectMap.get("photoID").toString());
+                            photoInformation.setUserID(objectMap.get("userID").toString());
+                            photoInformation.setDateCreated(objectMap.get("dateCreated").toString());
+                            photoInformation.setImageUrl(objectMap.get("imageUrl").toString());
+                            photoInformation.setLongitude(objectMap.get("longitude").toString());
+                            photoInformation.setLatitude(objectMap.get("latitude").toString());
 
-                        ArrayList<Comment> comments = new ArrayList<Comment>();
-                        for (DataSnapshot dSnapshot : singleSnapshot
-                                .child("comments").getChildren()){
-                            Comment comment = new Comment();
-                            comment.setUser_id(dSnapshot.getValue(Comment.class).getUser_id());
-                            comment.setComment(dSnapshot.getValue(Comment.class).getComment());
-                            comment.setDate_created(dSnapshot.getValue(Comment.class).getDate_created());
-                            comments.add(comment);
+                            ArrayList<Comment> comments = new ArrayList<Comment>();
+                            for (DataSnapshot dSnapshot : singleSnapshot
+                                    .child("comments").getChildren()) {
+                                Comment comment = new Comment();
+                                comment.setUser_id(dSnapshot.getValue(Comment.class).getUser_id());
+                                comment.setComment(dSnapshot.getValue(Comment.class).getComment());
+                                comment.setDate_created(dSnapshot.getValue(Comment.class).getDate_created());
+                                comments.add(comment);
+                            }
+
+                            photoInformation.setComments(comments);
+                            myPhotoInformations.add(photoInformation);
+                        }catch (Exception e){
+                            Log.d(TAG,"data structure issue");
                         }
-
-                        photoInformation.setComments(comments);
-                        myPhotoInformations.add(photoInformation);
                     }
                     if(count >= following.size() - 1){
                         //display our photos
