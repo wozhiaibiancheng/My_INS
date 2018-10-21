@@ -32,30 +32,21 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:16.0.3'
     implementation 'com.google.firebase:firebase-database:16.0.1'
     implementation 'com.google.firebase:firebase-storage:16.0.2'
-
-//    coordinator layout
+    //    coordinator layout
     implementation 'com.android.support:appcompat-v7:27.0.2'
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.github.ittianyu:BottomNavigationViewEx:1.2.4'
-    implementation "com.android.support:design:27.0.2"
-
-//    circle imageView
+    implementation 'com.android.support:design:27.0.2'
+    //    circle imageView
     implementation 'de.hdodenhof:circleimageview:2.2.0'
-
-//    image loader
+    //    image loader
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.5.+'
-
     implementation 'com.github.iamutkarshtiwari:Ananas:v1.0.0'
-
     //Google Location API to fetch current location of the mobile service
     implementation 'com.google.android.gms:play-services-location:15.0.1'
     implementation 'com.google.android.gms:play-services-maps:15.0.1'
-
     // The API to fetch last location information
-
-
-
 }
 
 apply plugin: 'com.google.gms.google-services'

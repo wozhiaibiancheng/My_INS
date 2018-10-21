@@ -31,6 +31,8 @@ import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.Firebase.Comment;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+
+// For each comment under a post, this class display them in a list view
 public class CommentFragmentAdapter extends ArrayAdapter<Comment> {
     private static final String TAG = "CommentFragmentAdapter";
 

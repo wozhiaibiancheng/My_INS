@@ -23,6 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 import au.edu.unimelb.student.group55.my_ins.Home.HomeActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 
+// The login activity allows user to login to this app with an existing account
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
@@ -32,8 +33,6 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener myAuthListener;
     private Context myContext;
     private EditText myEmail, myPassword;
-
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,8 +57,6 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-
-
     private void initialization(){
 
         //initialize the button for logging in
@@ -82,16 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                                                 Toast.LENGTH_SHORT).show();
                                     }
                                     else{
-//                                        Toast.makeText(LoginActivity.this, getString(R.string.succ_to_auth),
-//                                                Toast.LENGTH_SHORT).show();
                                         Toast.makeText(myContext, "You have successfully Logged in", Toast.LENGTH_SHORT).show();
-//                                        SharedPreferences prefs = getSharedPreferences(MainActivity.MySharedPrefs, Context.MODE_PRIVATE);
-//                                        prefs.edit().putBoolean( "firststart", false );
-
-
-//                                        prefs = getSharedPreferences(MainActivity.MySharedPrefs, Context.MODE_PRIVATE);
-//                                        prefs.edit().putBoolean( "firststart", false );
-//                                        prefs.edit().commit();
 
                                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -116,17 +104,9 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         if(myAuth.getCurrentUser() != null){
-
-//            SharedPreferences prefs = getSharedPreferences(MainActivity.MySharedPrefs, Context.MODE_PRIVATE);
-//            prefs.edit().putBoolean( "firststart", false );
-//            //editor.putBoolean( "firststart", false );
-//            LoginActivity.this.finish();
             finish();
-//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//            startActivity(intent);
         }
     }
-
 
 //    setup firebase
     private void FirebaseAuth(){

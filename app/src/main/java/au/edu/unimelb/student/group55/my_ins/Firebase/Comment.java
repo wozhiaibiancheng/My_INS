@@ -2,6 +2,8 @@ package au.edu.unimelb.student.group55.my_ins.Firebase;
 
 import java.util.List;
 
+
+// The class for user comment event
 public class Comment {
     private String comment;
     private String user_id;

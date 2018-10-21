@@ -24,7 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
 import au.edu.unimelb.student.group55.my_ins.R;
 
-
+// The register activity allows user to register an account if they do not have one
 public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = "RegisterActivity";
     private Context myContext;

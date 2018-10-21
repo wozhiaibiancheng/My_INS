@@ -1,5 +1,7 @@
 package au.edu.unimelb.student.group55.my_ins.Firebase;
 
+
+// The following event record in Feed activity
 public class ActivityFollowing {
 
     private String followerID;

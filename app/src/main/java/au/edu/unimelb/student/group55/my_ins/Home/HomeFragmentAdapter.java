@@ -1,7 +1,6 @@
 package au.edu.unimelb.student.group55.my_ins.Home;
 
 import android.content.Context;
-import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.annotation.LayoutRes;
@@ -27,10 +26,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
@@ -44,20 +41,14 @@ import au.edu.unimelb.student.group55.my_ins.Firebase.Comment;
 import au.edu.unimelb.student.group55.my_ins.Firebase.PhotoInformation;
 import au.edu.unimelb.student.group55.my_ins.Firebase.User;
 import au.edu.unimelb.student.group55.my_ins.Firebase.UserAccountSetting;
-import au.edu.unimelb.student.group55.my_ins.PhotoNGallery.ApplyFilters;
-import au.edu.unimelb.student.group55.my_ins.Profile.ProfileActivity;
-import au.edu.unimelb.student.group55.my_ins.Profile.ViewProfileActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.SupportFunctions.Heart;
 import  au.edu.unimelb.student.group55.my_ins.SupportFunctions.SquareImageView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
 
-    public interface OnLoadMoreItemsListener{
-        void onLoadMoreItems();
-    }
-    OnLoadMoreItemsListener mOnLoadMoreItemsListener;
+// This fragment displays a list of posts ordered by time
+public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
 
     private static final String TAG = "HomeFragmentAdapter";
 
@@ -86,6 +77,7 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
         UserAccountSetting settings = new UserAccountSetting();
         User user  = new User();
         StringBuilder users;
+        String myLikesString;
         boolean likeByCurrentUser;
         Heart heart;
         GestureDetector detector;
@@ -132,8 +124,8 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
         List<Address> addresses;
         geocoder = new Geocoder(myContext, Locale.getDefault());
 
+        // Change the longitude and latitude to actual address
         try{
-//            holder.location.setText( "An address" );
             Double longitude = Double.valueOf( getItem( position ).getLongitude() );
             Double latitude = Double.valueOf( getItem( position ).getLatitude() );
             addresses = geocoder.getFromLocation(latitude, longitude, 1);
@@ -169,7 +161,7 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
         });
 
         //set the time it was posted
-        String timestampDifference = getTimestampDifference(getItem(position));
+        String timestampDifference = getTimeDifference(getItem(position));
         if(!timestampDifference.equals("0")){
             holder.time.setText(timestampDifference + " Days Ago");
         }else{
@@ -192,34 +184,11 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
 
-                    //The event if user name is being clicked
+                    // Display user name and profile image in the feed
                     holder.username.setText(singleSnapshot.getValue(UserAccountSetting.class).getUsername());
-//                    holder.username.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            Intent intent = new Intent( myContext, ViewProfileActivity.class);
-//                            intent.putExtra( "calling activity",
-//                                    "Home Activity");
-//                            intent.putExtra( "intent user", holder.user);
-//                            myContext.startActivity(intent);
-//                        }
-//                    });
 
-                    //The event when the user profile image is clicked
                     imageLoader.displayImage(singleSnapshot.getValue(UserAccountSetting.class).getProfile_pic(),
                             holder.myProfileImage );
-//                    holder.myProfileImage.setOnClickListener( new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            Intent intent = new Intent( myContext, ViewProfileActivity.class);
-//                            intent.putExtra( "calling activity",
-//                                    "Home Activity");
-//                            intent.putExtra( "intent user", holder.user);
-//                            myContext.startActivity(intent);
-//                        }
-//                    });
-
-
 
                     holder.settings = singleSnapshot.getValue(UserAccountSetting.class);
                     holder.comment.setOnClickListener(new View.OnClickListener() {
@@ -228,9 +197,6 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
 
                             try {
                                 ((HomeActivity) myContext).onCommentThreadSelected(getItem(position));
-//                                        "Home Activity");
-
-                                //another thing?
                                 ((HomeActivity) myContext).hideLayout();
                             }catch (Exception e){
                                Log.d(TAG,e.getMessage());
@@ -271,9 +237,7 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
         });
 
         if(reachedEndOfList(position)){
-
             Toast.makeText(getContext(), "No more post available ~", Toast.LENGTH_SHORT).show();
-//            loadMoreData();
         }
 
         return convertView;
@@ -283,18 +247,6 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
         return position == getCount() - 1;
     }
 
-    private void loadMoreData(){
-
-        try{
-            mOnLoadMoreItemsListener = (OnLoadMoreItemsListener) getContext();
-        }catch (ClassCastException e){
-        }
-
-        try{
-            mOnLoadMoreItemsListener.onLoadMoreItems();
-        }catch (NullPointerException e){
-        }
-    }
 
     public class GestureListener extends GestureDetector.SimpleOnGestureListener{
 
@@ -467,7 +419,6 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
                                 String[] splitUsers = viewHolder.users.toString().split(",");
 
                                 if(likedUsers.contains(currentUsername)){
-//                                if(viewHolder.users.toString().contains(viewHolder.user.getUsername() + ",")){
                                     viewHolder.likeByCurrentUser = true;
                                 }else{
                                     viewHolder.likeByCurrentUser = false;
@@ -560,11 +511,10 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
     }
 
     // Get how much time ago does this post being posted
-    private String getTimestampDifference(PhotoInformation photoInformation){
+    private String getTimeDifference(PhotoInformation photoInformation){
         String difference = "";
         Calendar c = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss");
-//        sdf.setTimeZone( TimeZone.getTimeZone("Canada/Pacific"));//google 'android list of timezones'
         Date today = c.getTime();
         sdf.format(today);
         Date timestamp;

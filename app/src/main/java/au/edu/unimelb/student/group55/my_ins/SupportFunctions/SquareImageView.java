@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
+// An class designed for displaying posts in squared image container
 public class SquareImageView extends AppCompatImageView {
 
     public SquareImageView(Context context) {

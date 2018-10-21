@@ -1,5 +1,7 @@
 package au.edu.unimelb.student.group55.my_ins.Firebase;
 
+
+// The class for like event
 public class Like {
     private String user_id;
 

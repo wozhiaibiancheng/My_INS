@@ -15,8 +15,9 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import java.util.ArrayList;
 import au.edu.unimelb.student.group55.my_ins.R;
 
-public class ImageAdapter extends ArrayAdapter<String>{
 
+// The image adapter will adapt the image view
+public class ImageAdapter extends ArrayAdapter<String>{
     private Context context;
     private LayoutInflater inflater;
     private int layoutResource;
@@ -73,10 +74,8 @@ public class ImageAdapter extends ArrayAdapter<String>{
 
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-//                System.out.println("img load completed");
                 if(viewHolder.progressBar != null){
                     viewHolder.progressBar.setVisibility(View.GONE);
-//                    System.out.println("progressBar GONE!");
                 }
             }
 

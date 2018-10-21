@@ -35,7 +35,9 @@ import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.SupportFunctions.BottomNavTool;
 import au.edu.unimelb.student.group55.my_ins.SupportFunctions.UniversalImageLoader;
 
-
+// The home activity displays user posts in a list view
+// Contains two fragments
+// The post in one fragment is ordered by time, the other is ordered by location
 public class HomeActivity extends AppCompatActivity {
 
     private static final int PERMISSIONS_REQUEST = 12;
@@ -72,6 +74,7 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    // Request user permission to access location information
     public void requestPermission() {
         if (ActivityCompat.checkSelfPermission( this, Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission( this, Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -103,7 +106,6 @@ public class HomeActivity extends AppCompatActivity {
         CommentFragment fragment  = new CommentFragment();
         Bundle args = new Bundle();
         args.putParcelable("photo", photoInformation);
-//        args.putString("home activity", TAG);
         fragment.setArguments(args);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -112,21 +114,6 @@ public class HomeActivity extends AppCompatActivity {
         transaction.commit();
 
     }
-
-//    public void onCommentThreadSelected(PhotoInformation photoInformation, String callingActivity){
-//
-//        CommentFragment fragment  = new CommentFragment();
-//        Bundle args = new Bundle();
-//        args.putParcelable("photo information", photoInformation);
-//        args.putString("home activity", TAG);
-//        fragment.setArguments(args);
-//
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        transaction.replace(R.id.container, fragment);
-//        transaction.addToBackStack("View Comments");
-//        transaction.commit();
-//
-//    }
 
     public void hideLayout(){
         Log.d(TAG, "hideLayout: hiding layout");
@@ -182,15 +169,7 @@ public class HomeActivity extends AppCompatActivity {
         menuItem.setChecked(true);
     }
 
-//    private void checkCurrentUser(FirebaseUser user){
-//        Log.d(TAG, "checkCurrentUser: checking if user is logged in.");
-//
-//        if(user == null){
-//            Intent intent = new Intent(mContext, LoginActivity.class);
-//            startActivity(intent);
-//        }
-//    }
-
+    // Check the firebase authentication
     private void setupFirebaseAuth(){
 
         myAuth = FirebaseAuth.getInstance();

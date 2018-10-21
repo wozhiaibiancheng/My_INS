@@ -51,6 +51,8 @@ import au.edu.unimelb.student.group55.my_ins.SupportFunctions.ImageManager;
 import au.edu.unimelb.student.group55.my_ins.SupportFunctions.UniversalImageLoader;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+// The edit profile activity allows user to edit their personal information
+// and store them in Firebase database
 public class EditProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "EditProfile Activity";
@@ -133,13 +135,6 @@ public class EditProfileActivity extends AppCompatActivity {
         });
 
         getIncomingIntent();
-
-
-
-    }
-
-    private void setUpSettingList() {
-        Log.d(TAG, "set up edit profile setting list");
 
     }
 
@@ -252,7 +247,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
         final String currentDate = DateFormat.getDateTimeInstance().format(new Date());
 
-//        FilePaths filePaths = new FilePaths();
         String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
         storageReference = storage.getReference().
                 child(uid + "/"+ "profile_pic.jpg");
@@ -317,9 +311,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
     }
 
-
-
-
     private void getIncomingIntent(){
         Intent intent = getIntent();
 
@@ -354,12 +345,7 @@ public class EditProfileActivity extends AppCompatActivity {
         return bitmap;
     }
 
-
-
-
-    /**
-     * Setup the firebase auth object
-     */
+    // Check the login state of the user
     private void FirebaseAuth() {
         Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
 

@@ -66,18 +66,10 @@ public class ProfileActivity extends AppCompatActivity {
     //widgets
     private TextView posts, followers, following, displayName, username, description;
     private CircleImageView profile_pic;
-//    private GridView gridView;
-//    private Toolbar toolbar;
-//    private ImageView profileMenu;
-//    private BottomNavigationViewEx bottomNavigationView;
-//
-//    private StorageReference storageReference;
     private FirebaseUser user;
     private String uid;
 
     private UserAccountSetting userAccountSettings;
-
-
     private Task<Uri> downloadUri;
     private String downloadLink;
 
@@ -95,15 +87,11 @@ public class ProfileActivity extends AppCompatActivity {
         followers = (TextView) findViewById(R.id.followers);
         following = (TextView) findViewById(R.id.following);
         progressBar = (ProgressBar) findViewById(R.id.profileProgressBar);
-//        gridView = (GridView) findViewById(R.id.image_grid);
-//        toolbar = (Toolbar) findViewById(R.id.profileToolBar);
-//        profileMenu = (ImageView) findViewById(R.id.profile_menu);
         firebaseMethods = new FirebaseMethods(context);
         posts = (TextView) findViewById( R.id.posts);
         followers = (TextView) findViewById( R.id.followers);
         following = (TextView) findViewById( R.id.following);
 
-//        storageReference = FirebaseStorage.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             uid = user.getUid();
@@ -199,7 +187,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     }
 
-
+    // Set up the image grid view
     private void gridSetup(){
         Log.d(TAG, "setupGridView: Setting up image grid.");
 
@@ -246,7 +234,7 @@ public class ProfileActivity extends AppCompatActivity {
 
 
 
-//    setup firebase auth
+//    setup firebase authentication
     private void FirebaseAuth() {
         Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
 
@@ -298,12 +286,6 @@ public class ProfileActivity extends AppCompatActivity {
             auth.removeAuthStateListener(authListener);
         }
     }
-
-
-
-
-
-
 
     }
 

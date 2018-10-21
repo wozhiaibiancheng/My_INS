@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import java.util.List;
 
+// All the information need for a post is in the photoInformation class
 public class PhotoInformation implements Parcelable {
 
     private String postMessage;

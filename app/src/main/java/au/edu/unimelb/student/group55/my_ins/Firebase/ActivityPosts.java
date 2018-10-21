@@ -1,5 +1,7 @@
 package au.edu.unimelb.student.group55.my_ins.Firebase;
 
+
+// The post event record in Feed activity
 public class ActivityPosts {
 
     private String userID;
