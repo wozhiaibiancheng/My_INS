@@ -34,6 +34,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.PhotoInformation;
+import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
+import au.edu.unimelb.student.group55.my_ins.Profile.ProfileActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.Firebase.Comment;
 
@@ -84,8 +86,8 @@ public class CommentFragment extends Fragment {
 
 
 //        try{
-            photoInformation = getPhotoFromBundle();
-            setupFirebaseAuth();
+        photoInformation = getPhotoFromBundle();
+        setupFirebaseAuth();
 //        }catch (NullPointerException e){ }
 
         return view;
@@ -104,7 +106,6 @@ public class CommentFragment extends Fragment {
                 if(!myComment.getText().toString().equals("")){
                     Log.d(TAG, "onClick: attempting to submit new comment.");
                     addNewComment( myComment.getText().toString());
-
                     myComment.setText("");
                     closeKeyboard();
                 }else{
@@ -117,15 +118,14 @@ public class CommentFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 try {
-//                    if (getCallingActivityFromBundle().equals("Home Activity")) {
-                        getActivity().getSupportFragmentManager().popBackStack();
-                        ((HomeActivity) getActivity()).showLayout();
-//                    } else {
-//                        getActivity().getSupportFragmentManager().popBackStack();
-//                    }
+                    Intent intent = new Intent();
+                    intent.setClass(getActivity(), HomeActivity.class);
+                    startActivity(intent);
+
+
                 }catch (Exception e){
                     getActivity().getSupportFragmentManager().popBackStack();
-//                    ((MainActivity) getActivity()).showLayout();
+
                 }
 
             }
@@ -227,14 +227,10 @@ public class CommentFragment extends Fragment {
         };
 
 //        if(photoInformation.getComments().size() == 0){
-            myComments.clear();
-            Comment firstComment = new Comment();
-            firstComment.setComment( photoInformation.getPostMessage());
-            firstComment.setUser_id( photoInformation.getUserID());
-            firstComment.setDate_created( photoInformation.getDateCreated());
-            myComments.add(firstComment);
-            photoInformation.setComments( myComments );
-            setupWidgets();
+        myComments.clear();
+
+        photoInformation.setComments( myComments );
+        setupWidgets();
 //        }
 
 //
@@ -268,14 +264,10 @@ public class CommentFragment extends Fragment {
 
 
                                     myComments.clear();
-                                    Comment firstComment = new Comment();
-                                    firstComment.setComment( CommentFragment.this.photoInformation.getPostMessage());
-                                    firstComment.setUser_id( CommentFragment.this.photoInformation.getUserID());
-                                    firstComment.setDate_created( CommentFragment.this.photoInformation.getDateCreated());
-                                    myComments.add(firstComment);
+
 
                                     for (DataSnapshot dSnapshot : singleSnapshot
-                                           .child( "comments").getChildren()){
+                                            .child( "comments").getChildren()){
                                         Comment comment = new Comment();
                                         comment.setUser_id(dSnapshot.getValue(Comment.class).getUser_id());
                                         comment.setComment(dSnapshot.getValue(Comment.class).getComment());
@@ -287,39 +279,39 @@ public class CommentFragment extends Fragment {
 
                                     CommentFragment.this.photoInformation = photoInformation;
 
-                                   setupWidgets();
+                                    setupWidgets();
 
-                                       }
+                                }
 
-                                   }
+                            }
 
-                                   @Override
-                                   public void onCancelled(DatabaseError databaseError) {
-                                       Log.d(TAG, "onCancelled: query cancelled.");
-                                   }
-                               });
-                           }
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                Log.d(TAG, "onCancelled: query cancelled.");
+                            }
+                        });
+                    }
 
-                           @Override
-                           public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                           }
+                    }
 
-                           @Override
-                           public void onChildRemoved(DataSnapshot dataSnapshot) {
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                           }
+                    }
 
-                           @Override
-                           public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-                           }
+                    }
 
-                           @Override
-                           public void onCancelled(DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-                           }
-                       });
+                    }
+                });
 
     }
 
