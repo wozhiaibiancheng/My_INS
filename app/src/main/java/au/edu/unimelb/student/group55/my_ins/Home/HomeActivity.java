@@ -38,16 +38,6 @@ import au.edu.unimelb.student.group55.my_ins.SupportFunctions.UniversalImageLoad
 
 public class HomeActivity extends AppCompatActivity {
 
-//    @Override
-//    public void onLoadMoreItems() {
-//        HomeFragment fragment = (HomeFragment)getSupportFragmentManager()
-//                .findFragmentByTag("android:switcher:" + R.id.viewpager_container + ":" + myViewPager.getCurrentItem());
-//        if(fragment != null){
-//            fragment.displayMorePhotos();
-//        }
-//
-//    }
-
     private static final int PERMISSIONS_REQUEST = 12;
     private static final String TAG = "Home Activity";
 

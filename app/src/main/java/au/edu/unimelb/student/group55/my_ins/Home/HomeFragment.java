@@ -195,10 +195,6 @@ public class HomeFragment extends Fragment {
 
                 int iterations = myPhotoInformations.size();
 
-//                if(iterations > 10){
-//                    iterations = 10;
-//                }
-
                 myResults = 10;
                 for(int i = 0; i < iterations; i++){
                     myPaginatedPhotos.add( myPhotoInformations.get(i));
@@ -212,36 +208,6 @@ public class HomeFragment extends Fragment {
             }catch (IndexOutOfBoundsException e){
                 Log.e(TAG, "displayPhotos: IndexOutOfBoundsException: " + e.getMessage() );
             }
-        }
-    }
-
-    public void displayMorePhotos(){
-        Log.d(TAG, "displayMorePhotos: displaying more photos");
-
-        try{
-
-            if(myPhotoInformations.size() > myResults && myPhotoInformations.size() > 0){
-
-                int iterations;
-                if(myPhotoInformations.size() > (myResults + 10)){
-                    Log.d(TAG, "displayMorePhotos: there are greater than 10 more photos");
-                    iterations = 10;
-                }else{
-                    Log.d(TAG, "displayMorePhotos: there is less than 10 more photos");
-                    iterations = myPhotoInformations.size() - myResults;
-                }
-
-                //add the new photos to the paginated results
-                for(int i = myResults; i < myResults + iterations; i++){
-                    myPaginatedPhotos.add( myPhotoInformations.get(i));
-                }
-                myResults = myResults + iterations;
-                myAdapter.notifyDataSetChanged();
-            }
-        }catch (NullPointerException e){
-            Log.e(TAG, "displayPhotos: NullPointerException: " + e.getMessage() );
-        }catch (IndexOutOfBoundsException e){
-            Log.e(TAG, "displayPhotos: IndexOutOfBoundsException: " + e.getMessage() );
         }
     }
 

@@ -54,10 +54,10 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
 
-//    public interface OnLoadMoreItemsListener{
-//        void onLoadMoreItems();
-//    }
-//    OnLoadMoreItemsListener mOnLoadMoreItemsListener;
+    public interface OnLoadMoreItemsListener{
+        void onLoadMoreItems();
+    }
+    OnLoadMoreItemsListener mOnLoadMoreItemsListener;
 
     private static final String TAG = "HomeFragmentAdapter";
 
@@ -284,18 +284,18 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
         return position == getCount() - 1;
     }
 
-//    private void loadMoreData(){
-//
-//        try{
-//            mOnLoadMoreItemsListener = (OnLoadMoreItemsListener) getContext();
-//        }catch (ClassCastException e){
-//        }
-//
-//        try{
-//            mOnLoadMoreItemsListener.onLoadMoreItems();
-//        }catch (NullPointerException e){
-//        }
-//    }
+    private void loadMoreData(){
+
+        try{
+            mOnLoadMoreItemsListener = (OnLoadMoreItemsListener) getContext();
+        }catch (ClassCastException e){
+        }
+
+        try{
+            mOnLoadMoreItemsListener.onLoadMoreItems();
+        }catch (NullPointerException e){
+        }
+    }
 
     public class GestureListener extends GestureDetector.SimpleOnGestureListener{
 
