@@ -39,6 +39,18 @@
                     android:textColor="@color/black"
                     />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="15sp"
+                    android:text=""
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/post_location"
+                    android:textColor="@color/black"
+                    />
+
             </RelativeLayout>
         <au.edu.unimelb.student.group55.my_ins.SupportFunctions.SquareImageView
                 android:layout_width="match_parent"

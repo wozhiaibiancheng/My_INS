@@ -90,8 +90,6 @@ public class ApplyFilters extends AppCompatActivity {
         EditImageActivity.start(this, sourcePath, destinationPath, 100, true);
     }
 
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

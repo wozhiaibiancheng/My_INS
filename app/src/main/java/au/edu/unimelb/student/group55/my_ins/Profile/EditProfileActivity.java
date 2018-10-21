@@ -61,7 +61,6 @@ public class EditProfileActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
 
-
     private Context context;
     private String uid;
 
@@ -89,11 +88,6 @@ public class EditProfileActivity extends AppCompatActivity {
     private Bitmap resultImageBitmap;
     private ByteArrayOutputStream baos;
     private byte[] imageData;
-
-
-
-
-
 
 
     @Override
@@ -200,24 +194,6 @@ public class EditProfileActivity extends AppCompatActivity {
             finish();
         }
 
-
-//        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                User user = new User();
-//                for(DataSnapshot ds:dataSnapshot.child("users").getChildren()){
-//                    if(ds.getKey().equals(uid)){
-//
-//                    }
-//
-//                };
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
     }
 
 
@@ -272,7 +248,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void uploadProfilePic(final String imgUrl,
                                   Bitmap bm){
-        Log.d(TAG, "uploadProfilePic: attempting to uplaod new profile pic.");
+        Log.d(TAG, "uploadProfilePic: attempting to upload new profile pic.");
 
         final String currentDate = DateFormat.getDateTimeInstance().format(new Date());
 
@@ -377,11 +353,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
         return bitmap;
     }
-
-
-
-
-
 
 
 

@@ -32,10 +32,6 @@ import au.edu.unimelb.student.group55.my_ins.Firebase.PhotoInformation;
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 
-/**
- * Created by User on 5/28/2017.
- */
-
 public class HomeFragmentWithLocation extends Fragment {
     private static final String TAG = "HomeFragmentWithLoc";
 
@@ -47,6 +43,7 @@ public class HomeFragmentWithLocation extends Fragment {
     private HomeFragmentAdapter myAdapter;
     private ProgressBar progressBar;
     private int myResults;
+
     //firebase
     private FirebaseAuth myAuth;
     private FirebaseAuth.AuthStateListener myAuthListener;
@@ -148,6 +145,8 @@ public class HomeFragmentWithLocation extends Fragment {
                         photoInformation.setUserID(objectMap.get("userID").toString());
                         photoInformation.setDateCreated(objectMap.get("dateCreated").toString());
                         photoInformation.setImageUrl(objectMap.get("imageUrl").toString());
+                        photoInformation.setLongitude( objectMap.get( "longitude" ).toString() );
+                        photoInformation.setLatitude( objectMap.get( "latitude" ).toString() );
 
                         ArrayList<Comment> comments = new ArrayList<Comment>();
                         for (DataSnapshot dSnapshot : singleSnapshot
@@ -184,18 +183,18 @@ public class HomeFragmentWithLocation extends Fragment {
                 Collections.sort( myPhotoInformations, new Comparator<PhotoInformation>() {
                     @Override
                     public int compare(PhotoInformation o1, PhotoInformation o2) {
-                        return o2.getLongitude().compareTo(o1.getLongitude());
+                        return o2.getLongitude().compareTo(o1.getLatitude());
                     }
                 });
 
                 int iterations = myPhotoInformations.size();
 
-                if(iterations > 10){
-                    iterations = 10;
-                }
+//                if(iterations > 10){
+//                    iterations = 10;
+//                }
 
                 myResults = 10;
-                for(int i = 0; i < iterations; i++){
+                for(int i = iterations - 1; i >= 0; i--){
                     myPaginatedPhotos.add( myPhotoInformations.get(i));
                 }
 

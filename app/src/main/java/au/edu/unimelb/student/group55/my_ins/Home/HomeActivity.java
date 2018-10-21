@@ -36,17 +36,18 @@ import au.edu.unimelb.student.group55.my_ins.SupportFunctions.BottomNavTool;
 import au.edu.unimelb.student.group55.my_ins.SupportFunctions.UniversalImageLoader;
 
 
-public class HomeActivity extends AppCompatActivity implements
-        HomeFragmentAdapter.OnLoadMoreItemsListener{
+public class HomeActivity extends AppCompatActivity {
 
-    @Override
-    public void onLoadMoreItems() {
-        HomeFragment fragment = (HomeFragment)getSupportFragmentManager()
-                .findFragmentByTag("android:switcher:" + R.id.viewpager_container + ":" + myViewPager.getCurrentItem());
-        if(fragment != null){
-            fragment.displayMorePhotos();
-        }
-    }
+//    @Override
+//    public void onLoadMoreItems() {
+//        HomeFragment fragment = (HomeFragment)getSupportFragmentManager()
+//                .findFragmentByTag("android:switcher:" + R.id.viewpager_container + ":" + myViewPager.getCurrentItem());
+//        if(fragment != null){
+//            fragment.displayMorePhotos();
+//        }
+//
+//    }
+
     private static final int PERMISSIONS_REQUEST = 12;
     private static final String TAG = "Home Activity";
 
