@@ -132,7 +132,6 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
             String address = addresses.get(0).getLocality();
             holder.location.setText( address );
         } catch (Exception e) {
-            e.printStackTrace();
             holder.location.setText( "Not available" );
         }
 

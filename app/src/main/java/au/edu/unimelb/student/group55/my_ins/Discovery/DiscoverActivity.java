@@ -43,7 +43,6 @@ import au.edu.unimelb.student.group55.my_ins.SupportFunctions.BottomNavTool;
 // Also user could find suggested user here
 public class DiscoverActivity extends AppCompatActivity {
     private static final String TAG = "Discover Activity";
-    private static final int ACTIVITY_NUM = 1;
 
     private Context mContext = DiscoverActivity.this;
 
