@@ -1,14 +1,20 @@
 package au.edu.unimelb.student.group55.my_ins.PhotoNGallery;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -22,14 +28,14 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import au.edu.unimelb.student.group55.my_ins.Profile.EditProfileActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 import iamutkarshtiwari.github.io.ananas.editimage.EditImageActivity;
+
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 
 // This class allows user to either select a photo from library or take a photo with camera
@@ -52,18 +58,17 @@ public class ApplyFilters extends AppCompatActivity {
     public String cropPath;
     private static final String TAG = "Photo Activity";
 
-    private FusedLocationProviderClient mFusedLocationClient;
+    private LocationManager lm;
+    LocationListener locationListener;
+
     private String latitude;
     private String longitude;
-    private double mlatitude;
-    private double mlongitude;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
 
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient( this );
-        imagePath = applicationFolder();
+        checkGPSSettings();
 
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
@@ -170,12 +175,6 @@ public class ApplyFilters extends AppCompatActivity {
                         Toast.makeText(ApplyFilters.this, "Please say something about your post~", Toast.LENGTH_SHORT).show();
                     }else{
 
-                        getLocationInfo();
-//                        Toast.makeText(ApplyFilters.this, "The longitude information is: " + longitude, Toast.LENGTH_SHORT).show();
-//                        Toast.makeText(ApplyFilters.this, "The latitude information is: " + mlatitude, Toast.LENGTH_SHORT).show();
-//                        Log.d(TAG,"The longitude information is: " + mlongitude);
-//                        Log.d(TAG,"The latitude information is: " + mlatitude);
-
                         // Upload the image in the background to avoid stop front-end UI
                         Intent photoUploadService = new Intent( ApplyFilters.this, PhotoUploadService.class );
                         photoUploadService.putExtra( "file path", imagePath );
@@ -189,8 +188,6 @@ public class ApplyFilters extends AppCompatActivity {
                     Intent intent = new Intent( ApplyFilters.this, EditProfileActivity.class );
                     intent.putExtra( "profilePicPath", imagePath );
                     Log.d(TAG,"imagePath: " + imagePath);
-//                    photoUploadService.putExtra( "post message", postMessage );
-//                    startService( photoUploadService );
                     startActivity(intent);
                     finish();
                 }
@@ -198,71 +195,152 @@ public class ApplyFilters extends AppCompatActivity {
         });
     }
 
-    public void getLocationInfo(){
-        if (ActivityCompat.checkSelfPermission( this, Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission( this, Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED) {
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-//            longitude = "0";
-//            latitude = "0";
+    public void checkGPSSettings() {
+        lm = (LocationManager) getSystemService( Context.LOCATION_SERVICE);
 
-            if (ContextCompat.checkSelfPermission( this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION )
-                    != PackageManager.PERMISSION_GRANTED) {
-                Log.d( "TAG", "Whatever2" );
+        locationListener = new LocationListener()
+        {
 
-                // No explanation needed, we can request the permission.
-                ActivityCompat.requestPermissions( this,
-                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                        PERMISSIONS_REQUEST );
-            } else if (ContextCompat.checkSelfPermission( this,
-                    Manifest.permission.ACCESS_FINE_LOCATION )
-                    != PackageManager.PERMISSION_GRANTED) {
-
-                ActivityCompat.requestPermissions( this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                        PERMISSIONS_REQUEST );
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+                // TODO Auto-generated method stub
 
             }
-            else{
-                Task<Location> locationTask = mFusedLocationClient.getLastLocation()
-                        .addOnSuccessListener( this, new OnSuccessListener<Location>() {
-                            @Override
-                            public void onSuccess(Location location) {
-                                // Got last known location. In some rare situations this can be null.
-                                if (location != null) {
-//                                mlatitude = location.getAltitude();
-//                                mlongitude = location.getLongitude();
-//
-//                                    Log.d(TAG,"The location information is: "+ location);
-//                                    Toast.makeText(ApplyFilters.this, "The location information is: " + location, Toast.LENGTH_SHORT).show();
-                                    longitude = String.valueOf( location.getLongitude() );
-                                    latitude = String.valueOf( location.getLatitude() );
-                                }
-                            }
-                        } );
+
+            @Override
+            public void onProviderEnabled(String provider) {
+                // TODO Auto-generated method stub
+
             }
-        }
-        else {
-            Task<Location> locationTask = mFusedLocationClient.getLastLocation()
-                    .addOnSuccessListener( this, new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            // Got last known location. In some rare situations this can be null.
-                            if (location != null) {
-//                                mlatitude = location.getAltitude();
-//                                mlongitude = location.getLongitude();
-//                                Log.d(TAG,"The location information is: "+ location);
-//                                Toast.makeText(ApplyFilters.this, "The location information is: " + location, Toast.LENGTH_SHORT).show();
-                                longitude = String.valueOf( location.getLongitude() );
-                                latitude = String.valueOf( location.getLatitude() );
-                            }
-                        }
-                    } );
 
-        }
+            @Override
+            public void onProviderDisabled(String provider) {
+                // TODO Auto-generated method stub
 
-        return;
+            }
+
+            @Override
+            public void onLocationChanged(Location location) {
+                double mlongitude = location.getLongitude();
+                double mlatitude = location.getLatitude();
+
+                longitude = String.valueOf( mlongitude );
+                latitude = String.valueOf( mlatitude );
+            }
+        };
+
+
+
+
+        boolean GPSEnabled = lm.isProviderEnabled( LocationManager.GPS_PROVIDER);
+
+        String[] permissionsArray = {
+                android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                android.Manifest.permission.ACCESS_FINE_LOCATION
+        };
+
+        if (GPSEnabled) {
+            // Android 6.0+
+            if (Build.VERSION.SDK_INT >= 23) {
+                if (!checkPermissions(this, permissionsArray)) {
+                    // request code 1
+                    ActivityCompat.requestPermissions(this, permissionsArray,
+                            1);
+                } else {
+                    // Permission has already been granted
+                    startLocalisation();
+                }
+            } else {
+                // no runtime check
+                startLocalisation();
+            }
+        } else {
+            Toast.makeText(this, "GPS Not Enabled", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent();
+            intent.setAction( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            // request code 2
+            startActivityForResult(intent, 2);
+        }
     }
+
+    public static boolean checkPermissions(Context context, String... permissions) {
+        if (context != null && permissions != null) {
+            for (String permission : permissions) {
+                if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+
+    public void startLocalisation() {
+
+        // parameters of location service
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        criteria.setAltitudeRequired(false);
+        criteria.setBearingRequired(false);
+        criteria.setCostAllowed(true);
+        criteria.setPowerRequirement(Criteria.POWER_LOW);
+
+        // cellular or WIFI network can localise me
+        String providerNET = LocationManager.NETWORK_PROVIDER;
+
+        // gps signal often naive
+        String providerGPS = LocationManager.GPS_PROVIDER;
+
+
+        // must call this before using getLastKnownLocation
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PERMISSION_GRANTED) {
+            return;
+        }
+
+        boolean gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        boolean network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+
+        Location net_loc = null, gps_loc = null, finalLoc = null;
+
+        if (gps_enabled) {
+            lm.requestLocationUpdates(providerGPS, 0, 0, locationListener);
+            gps_loc = lm.getLastKnownLocation(providerGPS);
+        }
+        if (network_enabled){
+            lm.requestLocationUpdates(providerNET, 0, 0, locationListener);
+            net_loc = lm.getLastKnownLocation(providerNET);
+        }
+
+        if (gps_loc != null && net_loc != null) {
+            //smaller the number more accurate result will
+            if (gps_loc.getAccuracy() > net_loc.getAccuracy())
+                finalLoc = net_loc;
+            else
+                finalLoc = gps_loc;
+
+        } else {
+
+            if (gps_loc != null) {
+                finalLoc = gps_loc;
+            } else if (net_loc != null) {
+                finalLoc = net_loc;
+            }
+        }
+        if (finalLoc != null) {
+
+            double mlatitude = finalLoc.getLatitude();
+            double mlongitude = finalLoc.getLongitude();
+
+            longitude = String.valueOf( mlongitude );
+            latitude = String.valueOf( mlatitude );
+
+        } else {
+        }
+
+
+    }
+
 
 
     private boolean isRootTask(){
