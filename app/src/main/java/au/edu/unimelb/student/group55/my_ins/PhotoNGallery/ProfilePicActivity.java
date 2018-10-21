@@ -130,6 +130,8 @@ public class ProfilePicActivity extends AppCompatActivity {
                 selectedImage = BitmapFactory.decodeFile(newFilePath, options);
                 imagePath = newFilePath;
             }
+            selectedImage = BitmapFactory.decodeFile(newFilePath, options);
+            imageView.setImageBitmap( selectedImage );
             changeProfilePic( selectedImage );
         }
 
