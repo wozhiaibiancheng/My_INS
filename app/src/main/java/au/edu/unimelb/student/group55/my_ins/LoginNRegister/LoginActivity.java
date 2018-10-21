@@ -33,8 +33,6 @@ public class LoginActivity extends AppCompatActivity {
     private Context myContext;
     private EditText myEmail, myPassword;
 
-    SharedPreferences prefs;
-
 
 
     @Override
@@ -60,9 +58,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-     /*
-    ------------------------------------ Firebase ---------------------------------------------
-     */
+
 
     private void initialization(){
 
@@ -131,9 +127,8 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    /**
-     * Setup the firebase auth object
-     */
+
+//    setup firebase
     private void FirebaseAuth(){
         Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
 
@@ -150,7 +145,6 @@ public class LoginActivity extends AppCompatActivity {
                 else{
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
-                // ...
             }
         };
     }

@@ -66,12 +66,12 @@ public class ProfileActivity extends AppCompatActivity {
     //widgets
     private TextView posts, followers, following, displayName, username, description;
     private CircleImageView profile_pic;
-    private GridView gridView;
-    private Toolbar toolbar;
-    private ImageView profileMenu;
-    private BottomNavigationViewEx bottomNavigationView;
-
-    private StorageReference storageReference;
+//    private GridView gridView;
+//    private Toolbar toolbar;
+//    private ImageView profileMenu;
+//    private BottomNavigationViewEx bottomNavigationView;
+//
+//    private StorageReference storageReference;
     private FirebaseUser user;
     private String uid;
 
@@ -95,15 +95,15 @@ public class ProfileActivity extends AppCompatActivity {
         followers = (TextView) findViewById(R.id.followers);
         following = (TextView) findViewById(R.id.following);
         progressBar = (ProgressBar) findViewById(R.id.profileProgressBar);
-        gridView = (GridView) findViewById(R.id.image_grid);
-        toolbar = (Toolbar) findViewById(R.id.profileToolBar);
-        profileMenu = (ImageView) findViewById(R.id.profile_menu);
+//        gridView = (GridView) findViewById(R.id.image_grid);
+//        toolbar = (Toolbar) findViewById(R.id.profileToolBar);
+//        profileMenu = (ImageView) findViewById(R.id.profile_menu);
         firebaseMethods = new FirebaseMethods(context);
         posts = (TextView) findViewById( R.id.posts);
         followers = (TextView) findViewById( R.id.followers);
         following = (TextView) findViewById( R.id.following);
 
-        storageReference = FirebaseStorage.getInstance().getReference();
+//        storageReference = FirebaseStorage.getInstance().getReference();
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             uid = user.getUid();
@@ -167,68 +167,7 @@ public class ProfileActivity extends AppCompatActivity {
         following.setText(String.valueOf(userAccountSetting.getFollowing()));
         followers.setText(String.valueOf(userAccountSetting.getFollowers()));
         progressBar.setVisibility(View.GONE);
-
     }
-
-
-    /**
-     * Setup the firebase auth object
-     */
-    private void FirebaseAuth() {
-        Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
-
-        auth = FirebaseAuth.getInstance();
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference();
-
-        authListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-
-                if (user != null) {
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                } else {
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                    Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                }
-                // ...
-            }
-        };
-
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                setProfile(firebaseMethods.getUserSetting(dataSnapshot));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        auth.addAuthStateListener(authListener);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (authListener != null) {
-            auth.removeAuthStateListener(authListener);
-        }
-    }
-
-
-
-
 
 
 
@@ -246,11 +185,6 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
-
-    private void setupActivityWidgets() {
-
-        profile_pic = (CircleImageView) findViewById(R.id.profile_pic);
-    }
 
     private void setImageGrid(ArrayList<String> imgURLs) {
         GridView imgGrid = (GridView) findViewById(R.id.image_grid);
@@ -309,6 +243,67 @@ public class ProfileActivity extends AppCompatActivity {
                 Log.d(TAG,"onCancelled");
             }
         });}
+
+
+
+//    setup firebase auth
+    private void FirebaseAuth() {
+        Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
+
+        auth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        databaseReference = firebaseDatabase.getReference();
+
+        authListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+
+                if (user != null) {
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                } else {
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                    Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                }
+                // ...
+            }
+        };
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                setProfile(firebaseMethods.getUserSetting(dataSnapshot));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        auth.addAuthStateListener(authListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (authListener != null) {
+            auth.removeAuthStateListener(authListener);
+        }
+    }
+
+
+
+
+
+
 
     }
 

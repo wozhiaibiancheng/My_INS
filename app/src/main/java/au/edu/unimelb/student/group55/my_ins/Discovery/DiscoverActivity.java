@@ -40,15 +40,12 @@ import au.edu.unimelb.student.group55.my_ins.SupportFunctions.BottomNavTool;
 
 public class DiscoverActivity extends AppCompatActivity {
     private static final String TAG = "Discover Activity";
-    private static final int ACTIVITY_NUM = 1;
 
     private Context mContext = DiscoverActivity.this;
 
-    //widgets
     private EditText mSearchParam;
     private ListView mListView;
 
-    //vars
     private List<User> mUserList;
     private UserAdapter mAdapter;
     private Set<String> suggestID;
@@ -115,6 +112,7 @@ public class DiscoverActivity extends AppCompatActivity {
     }
 
 
+//suggestion or search
     private void searchForMatch(String keyword) {
         Log.d(TAG, "searchForMatch: searching for a match: " + keyword);
         mUserList.clear();

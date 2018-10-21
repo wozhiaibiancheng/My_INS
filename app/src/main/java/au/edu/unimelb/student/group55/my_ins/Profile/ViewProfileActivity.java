@@ -52,26 +52,17 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class ViewProfileActivity extends AppCompatActivity {
     private static final String TAG = "viewProfile Activity";
 
-    private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReference;
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
 
     private Context context = ViewProfileActivity.this;
     private static final int numColumns = 3;
 
-    //widgets
     private TextView posts, followers, following, displayName, username, description, follow, unfollow;
     private CircleImageView profile_pic;
-    private GridView gridView;
-    private Toolbar toolbar;
-    private ImageView profileMenu;
     private BottomNavigationViewEx bottomNavigationViewEx;
 
-    private StorageReference storageReference;
-
     private ImageView left_icon;
-    private GridView imgGrid;
     private ProgressBar progressBar;
 
     //target user
@@ -81,7 +72,6 @@ public class ViewProfileActivity extends AppCompatActivity {
 
     //    current user
     private FirebaseUser cUser;
-    //    private String cUID;
     private long cFollowingNum;
     private UserAccountSetting cUserAccountSettings;
 
@@ -104,28 +94,17 @@ public class ViewProfileActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.profileProgressBar);
         follow = (TextView) findViewById(R.id.text_follow);
         unfollow = (TextView) findViewById(R.id.text_unfollow);
-
-        gridView = (GridView) findViewById(R.id.image_grid);
-        toolbar = (Toolbar) findViewById(R.id.profileToolBar);
-
-
         left_icon = (ImageView) findViewById(R.id.left_icon);
-
         profile_pic = (CircleImageView) findViewById(R.id.profile_pic);
-
-        imgGrid = (GridView) findViewById(R.id.image_grid);
         bottomNavigationViewEx = (BottomNavigationViewEx) findViewById(R.id.bottom);
 
-        storageReference = FirebaseStorage.getInstance().getReference();
 
         FirebaseAuth();
         tUser = getUser();
         checkFollowing();
 
-
         gridSetup();
 
-//        setUpToolbar();
         setBottom();
 
 
@@ -246,7 +225,6 @@ public class ViewProfileActivity extends AppCompatActivity {
                         .child( tUser.getUser_id() )
                         .removeValue();
 
-//                System.out.println("unfollow after er/ing: " + tFollowerNum + "; " + cFollowingNum);
                 setUnFollow();
                 tFollowerNum = getTfollowerNum();
                 cFollowingNum = getCfollowingNum();
@@ -270,6 +248,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         follow.setVisibility(View.VISIBLE);
         unfollow.setVisibility(View.GONE);
     }
+
 
     private void checkFollowing() {
 
@@ -308,12 +287,9 @@ public class ViewProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
-
-//                    Log.d(TAG, "onDataChange: found user:" + ds.getValue(UserAccountSetting.class).toString());
                     tUserAccountSettings = ds.getValue(UserAccountSetting.class);
                     setProfile(tUserAccountSettings);
                     tFollowerNum = getTfollowerNum();
-
                 }
             }
 
@@ -498,11 +474,6 @@ public class ViewProfileActivity extends AppCompatActivity {
     }
 
 
-
-    private void setupActivityWidgets() {
-        profile_pic = findViewById(R.id.profile_pic);
-    }
-
     private void gridSetup() {
         Log.d(TAG, "setupGridView: Setting up image grid.");
 
@@ -580,21 +551,17 @@ public class ViewProfileActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * Setup the firebase auth object
-     */
+
+//    setup firebasea auth
     private void FirebaseAuth() {
         Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
 
         auth = FirebaseAuth.getInstance();
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference();
 
         authListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 cUser = firebaseAuth.getCurrentUser();
-//                cUID = cUser.getUid();
 
                 if (cUser != null) {
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + cUser.getUid());

@@ -34,16 +34,12 @@ public class UserAdapter extends ArrayAdapter<User> {
 
 
     private LayoutInflater mInflater;
-//    private List<User> mUsers = null;
     private int layoutResource;
-    private Context mContext;
 
     public UserAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<User> objects) {
         super(context, resource, objects);
-        mContext = context;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         layoutResource = resource;
-//        this.mUsers = objects;
     }
 
     private static class ViewHolder {
