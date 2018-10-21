@@ -30,10 +30,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
-import au.edu.unimelb.student.group55.my_ins.Firebase.ActivityFollowing;
 import au.edu.unimelb.student.group55.my_ins.Firebase.ActivityLikes;
 import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
-import au.edu.unimelb.student.group55.my_ins.Home.HomeFragmentAdapter;
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.SupportFunctions.BottomNavTool;

@@ -84,11 +84,8 @@ public class CommentFragment extends Fragment {
             }
         });
 
-
-//        try{
         photoInformation = getPhotoFromBundle();
         setupFirebaseAuth();
-//        }catch (NullPointerException e){ }
 
         return view;
     }
@@ -164,26 +161,17 @@ public class CommentFragment extends Fragment {
         return sdf.format(new Date());
     }
 
-    /**
-     * retrieve the photo from the incoming bundle from profileActivity interface
-     * @return
-     */
     private String getCallingActivityFromBundle(){
         Log.d(TAG, "getPhotoFromBundle: arguments: " + getArguments());
-
         Bundle bundle = this.getArguments();
         if(bundle != null) {
-            System.out.println("11111111111");
             return bundle.getString("photo");
         }else{
             return null;
         }
     }
 
-    /**
-     * retrieve the photo from the incoming bundle from profileActivity interface
-     * @return
-     */
+
     private PhotoInformation getPhotoFromBundle(){
         Log.d(TAG, "getPhotoFromBundle: arguments: " + getArguments());
 
@@ -195,13 +183,6 @@ public class CommentFragment extends Fragment {
         }
     }
 
-           /*
-    ------------------------------------ Firebase ---------------------------------------------
-     */
-
-    /**
-     * Setup the firebase auth object
-     */
     private void setupFirebaseAuth(){
         Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
 
@@ -226,14 +207,11 @@ public class CommentFragment extends Fragment {
             }
         };
 
-//        if(photoInformation.getComments().size() == 0){
         myComments.clear();
 
         photoInformation.setComments( myComments );
         setupWidgets();
-//        }
 
-//
         myRef.child( "posts")
                 .child( photoInformation.getUserID() )
                 .child( photoInformation.getPhotoID())

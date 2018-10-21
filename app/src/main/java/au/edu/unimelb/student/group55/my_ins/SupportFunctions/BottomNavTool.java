@@ -12,12 +12,13 @@ import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import au.edu.unimelb.student.group55.my_ins.ActivityFeed.FeedActivity;
 import au.edu.unimelb.student.group55.my_ins.Discovery.DiscoverActivity;
-import au.edu.unimelb.student.group55.my_ins.ActivityFeed.FeedActivityFollowing;
 import au.edu.unimelb.student.group55.my_ins.Home.HomeActivity;
 import au.edu.unimelb.student.group55.my_ins.PhotoNGallery.ApplyFilters;
 import au.edu.unimelb.student.group55.my_ins.Profile.ProfileActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 
+
+// This class defines the on click events of the bottom navigation tool
 public class BottomNavTool {
     private static final String TAG = "BottomNavTool activity";
 

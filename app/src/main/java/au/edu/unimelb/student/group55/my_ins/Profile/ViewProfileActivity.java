@@ -49,6 +49,9 @@ import au.edu.unimelb.student.group55.my_ins.SupportFunctions.ImageAdapter;
 import au.edu.unimelb.student.group55.my_ins.SupportFunctions.UniversalImageLoader;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+
+// The view profile activity will navigate users to the profile page of other users
+// user could follow the corresponding user in their profile page
 public class ViewProfileActivity extends AppCompatActivity {
     private static final String TAG = "viewProfile Activity";
 
@@ -234,8 +237,6 @@ public class ViewProfileActivity extends AppCompatActivity {
 
 
         init();
-
-
     }
 
 

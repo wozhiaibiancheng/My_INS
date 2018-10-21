@@ -38,14 +38,20 @@ import au.edu.unimelb.student.group55.my_ins.Profile.ViewProfileActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.SupportFunctions.BottomNavTool;
 
+
+// This activity allows user to search for a certain user by username
+// Also user could find suggested user here
 public class DiscoverActivity extends AppCompatActivity {
     private static final String TAG = "Discover Activity";
+    private static final int ACTIVITY_NUM = 1;
 
     private Context mContext = DiscoverActivity.this;
 
+    //widgets
     private EditText mSearchParam;
     private ListView mListView;
 
+    //vars
     private List<User> mUserList;
     private UserAdapter mAdapter;
     private Set<String> suggestID;
@@ -61,7 +67,6 @@ public class DiscoverActivity extends AppCompatActivity {
         Log.d("INFO", "onCreate started!");
         setContentView(R.layout.activity_discovery);
 
-
         mSearchParam = (EditText) findViewById(R.id.search);
         mListView = (ListView) findViewById(R.id.listView);
         suggestText = (TextView) findViewById(R.id.textView);
@@ -73,7 +78,7 @@ public class DiscoverActivity extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
     }
 
-
+    // The main function of listen to user input and search for users
     private void initTextListener() {
         Log.d(TAG, "initTextListener: initializing");
 
@@ -94,17 +99,15 @@ public class DiscoverActivity extends AppCompatActivity {
         mSearchParam.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                // Change all the user input to lower case
                 String text = mSearchParam.getText().toString().toLowerCase(Locale.getDefault());
                 searchForMatch(text);
             }
@@ -112,7 +115,6 @@ public class DiscoverActivity extends AppCompatActivity {
     }
 
 
-//suggestion or search
     private void searchForMatch(String keyword) {
         Log.d(TAG, "searchForMatch: searching for a match: " + keyword);
         mUserList.clear();
@@ -123,11 +125,9 @@ public class DiscoverActivity extends AppCompatActivity {
         if (keyword.length() == 0) {
 
             suggestText.setVisibility(View.VISIBLE);
-
-
             final Set<String> followingID = new HashSet();
 
-//            suggest friends
+            // suggest friends to current user
             final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
             final String currentUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -176,8 +176,6 @@ public class DiscoverActivity extends AppCompatActivity {
                                         public void onDataChange(DataSnapshot dataSnapshot) {
 
                                             for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
-                                                //                                        Log.d(TAG, "onDataChange: found user:" + singleSnapshot.getValue(User.class).toString());
-
                                                 mUserList.add(singleSnapshot.getValue(User.class));
                                             }
 
@@ -195,7 +193,7 @@ public class DiscoverActivity extends AppCompatActivity {
                                                 _query.addListenerForSingleValueEvent(new ValueEventListener() {
                                                     @Override
                                                     public void onDataChange(DataSnapshot dataSnapshot) {
-//                                at most suggest 6 users
+                                                    // Suggest at most suggest 6 users
                                                         int userCt = 0;
                                                         for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                                                             //   don't suggest himself
@@ -237,7 +235,6 @@ public class DiscoverActivity extends AppCompatActivity {
                             }
                         } else {
                             System.out.println("don't have any suggestion!");
-
 
                             Query _query = reference.child("users");
                             _query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -320,7 +317,7 @@ public class DiscoverActivity extends AppCompatActivity {
 
         } else {
 
-//            search people
+            //  search for matched user
             suggestText.setVisibility(View.GONE);
 
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference();

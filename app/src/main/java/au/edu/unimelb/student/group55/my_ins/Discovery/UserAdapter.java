@@ -27,19 +27,24 @@ import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.Firebase.UserAccountSetting;
 import au.edu.unimelb.student.group55.my_ins.Firebase.User;
 
-
+//This class display a list of users in the discover activity
+// Can be suggested user or searched user
 public class UserAdapter extends ArrayAdapter<User> {
 
     private static final String TAG = "UserAdapter";
 
 
     private LayoutInflater mInflater;
+//    private List<User> mUsers = null;
     private int layoutResource;
+    private Context mContext;
 
     public UserAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<User> objects) {
         super(context, resource, objects);
+        mContext = context;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         layoutResource = resource;
+//        this.mUsers = objects;
     }
 
     private static class ViewHolder {

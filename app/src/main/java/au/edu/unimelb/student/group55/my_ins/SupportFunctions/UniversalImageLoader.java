@@ -17,6 +17,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import au.edu.unimelb.student.group55.my_ins.R;
 
+// This class will load images into corresponding container
 public class UniversalImageLoader {
 
     private static int defaultImage = R.drawable.ic_android;

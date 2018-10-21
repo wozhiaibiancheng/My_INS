@@ -3,6 +3,8 @@ package au.edu.unimelb.student.group55.my_ins.Firebase;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+
+// This class contains all the information of user account setting
 public class UserAccountSetting implements Parcelable {
     private String description;
     private String display_name;

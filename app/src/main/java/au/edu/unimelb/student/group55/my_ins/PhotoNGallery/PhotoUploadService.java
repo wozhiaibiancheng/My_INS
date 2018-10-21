@@ -36,6 +36,8 @@ import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
 import au.edu.unimelb.student.group55.my_ins.Firebase.PhotoInformation;
 import au.edu.unimelb.student.group55.my_ins.Firebase.UserAccountSetting;
 
+
+// The photo upload service will upload user photo in the background to avoid stopping UI
 public class PhotoUploadService extends Service {
     @Nullable
     private FirebaseUser user;
@@ -139,7 +141,6 @@ public class PhotoUploadService extends Service {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss");
                     String currentDate2 = String.valueOf(simpleDateFormat.format(calendar.getTime()));
 
-//                    String currentDate2 = DateFormat.getDateTimeInstance().format(new Date());
                     String photoID = myRef.child("posts").child(uid).push().getKey();
 
                     PhotoInformation photoInformation = new PhotoInformation();
@@ -149,13 +150,10 @@ public class PhotoUploadService extends Service {
                     photoInformation.setLatitude( latitude );
                     photoInformation.setLongitude(longitude);
 
-//                    photoInformation.setLatitude( "1" );
-//                    photoInformation.setLongitude("2");
                     photoInformation.setPhotoID(photoID);
                     photoInformation.setPostMessage(postMessage);
 
                     mDatabase.child("posts").child(uid).child(photoID).setValue(photoInformation);
-
 
                     String activityPhotoID = myRef.child("activity").child("posts").child(uid).push().getKey();
 

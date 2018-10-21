@@ -16,7 +16,8 @@ import com.google.firebase.storage.StorageReference;
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.RegisterActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 
-
+// Contains all the functions need for firebase
+// Mainly about login and authentication
 public class FirebaseMethods {
 
     private static final String TAG = "FirebaseMethods";

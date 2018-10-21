@@ -10,6 +10,8 @@ import android.view.animation.AnimationSet;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 
+
+// The shape of heart and its on click events
 public class Heart {
 
     private static final String TAG = "Heart";

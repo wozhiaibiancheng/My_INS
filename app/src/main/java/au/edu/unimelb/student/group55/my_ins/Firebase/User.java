@@ -3,6 +3,8 @@ package au.edu.unimelb.student.group55.my_ins.Firebase;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+
+// A class for user register information
 public class User implements Parcelable {
 
     private String user_id;

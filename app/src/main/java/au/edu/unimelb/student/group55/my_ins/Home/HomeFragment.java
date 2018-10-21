@@ -38,7 +38,8 @@ import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.Firebase.Comment;
 
-
+// The home fragment displays all the user posts by the order of time
+// the most recent post is on the top
 public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
 
@@ -70,6 +71,7 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+    // The all the users that current user is following
     private void getFollowing(){
         Log.d(TAG, "getFollowing: searching for following");
 
@@ -124,6 +126,7 @@ public class HomeFragment extends Fragment {
         myPaginatedPhotos = new ArrayList<>();
     }
 
+    // The all posts that a user posted
     private void getPhotos(ArrayList<String> myFollowing){
         Log.d(TAG, "getPhotos: getting photos");
 
@@ -143,29 +146,35 @@ public class HomeFragment extends Fragment {
                     for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()){
                         System.out.println("Invoked here successfully");
 
-                        PhotoInformation photoInformation = new PhotoInformation();
-                        Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
+                        try{
+                            PhotoInformation photoInformation = new PhotoInformation();
+                            Map<String, Object> objectMap = (HashMap<String, Object>) singleSnapshot.getValue();
 
-                        photoInformation.setPostMessage(objectMap.get("postMessage").toString());
-                        photoInformation.setPhotoID(objectMap.get("photoID").toString());
-                        photoInformation.setUserID(objectMap.get("userID").toString());
-                        photoInformation.setDateCreated(objectMap.get("dateCreated").toString());
-                        photoInformation.setImageUrl(objectMap.get("imageUrl").toString());
-                        photoInformation.setLongitude( objectMap.get( "longitude" ).toString() );
-                        photoInformation.setLatitude( objectMap.get( "latitude" ).toString() );
+                            photoInformation.setPostMessage(objectMap.get("postMessage").toString());
+                            photoInformation.setPhotoID(objectMap.get("photoID").toString());
+                            photoInformation.setUserID(objectMap.get("userID").toString());
+                            photoInformation.setDateCreated(objectMap.get("dateCreated").toString());
+                            photoInformation.setImageUrl(objectMap.get("imageUrl").toString());
+                            photoInformation.setLongitude( objectMap.get( "longitude" ).toString() );
+                            photoInformation.setLatitude( objectMap.get( "latitude" ).toString() );
 
-                        ArrayList<Comment> comments = new ArrayList<Comment>();
-                        for (DataSnapshot dSnapshot : singleSnapshot
-                                .child("comments").getChildren()){
-                            Comment comment = new Comment();
-                            comment.setUser_id(dSnapshot.getValue(Comment.class).getUser_id());
-                            comment.setComment(dSnapshot.getValue(Comment.class).getComment());
-                            comment.setDate_created(dSnapshot.getValue(Comment.class).getDate_created());
-                            comments.add(comment);
+                            ArrayList<Comment> comments = new ArrayList<Comment>();
+                            for (DataSnapshot dSnapshot : singleSnapshot
+                                    .child("comments").getChildren()){
+                                Comment comment = new Comment();
+                                comment.setUser_id(dSnapshot.getValue(Comment.class).getUser_id());
+                                comment.setComment(dSnapshot.getValue(Comment.class).getComment());
+                                comment.setDate_created(dSnapshot.getValue(Comment.class).getDate_created());
+                                comments.add(comment);
+                            }
+
+                            photoInformation.setComments(comments);
+                            myPhotoInformations.add(photoInformation);
+                        }
+                        catch(Exception e){
+
                         }
 
-                        photoInformation.setComments(comments);
-                        myPhotoInformations.add(photoInformation);
                     }
                     if(count >= following.size() - 1){
                         //display our photos
@@ -182,6 +191,8 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    // When we have fetched all the posts from all the users we are following
+    // We display them in a list view
     private void displayPhotos(){
         myPaginatedPhotos = new ArrayList<>();
         if(myPhotoInformations != null){
@@ -211,7 +222,7 @@ public class HomeFragment extends Fragment {
         }
     }
 
-
+    // Check the login state of the user
     private void setupFirebaseAuth(){
 
         myAuth = FirebaseAuth.getInstance();
