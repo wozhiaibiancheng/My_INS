@@ -16,4 +16,9 @@
     <color name="zomato_red">#a40100</color>
     <color name="placeholder_background">#222322</color>
 
+    <color name="colorfont">#333333</color>
+    <color name="colorline">#888888</color>
+    <color name="colorline2">#e7c9c9</color>
+    <color name="background2">#a68f8b81</color>
+
 </resources>

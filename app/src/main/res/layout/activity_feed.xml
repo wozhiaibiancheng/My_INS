@@ -45,6 +45,18 @@
             <include layout="@layout/activity_feed_posts_item"/>
         </RelativeLayout>
 
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="400dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ic_bluetooth"
+            android:id="@+id/bluetooth"
+            />
+
+
+
+
 
     </RelativeLayout>
 

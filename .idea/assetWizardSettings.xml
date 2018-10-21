@@ -34,7 +34,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="url" value="jar:file:/D:/androidStudio/New%20folder/plugins/android/lib/android.jar!/images/material_design_icons/communication/ic_chat_bubble_outline_black_24dp.xml" />
+                                                <entry key="url" value="jar:file:/D:/androidStudio/New%20folder/plugins/android/lib/android.jar!/images/material_design_icons/device/ic_bluetooth_black_24dp.xml" />
                                               </map>
                                             </option>
                                           </PersistentState>
@@ -55,8 +55,8 @@
                                   </option>
                                   <option name="values">
                                     <map>
-                                      <entry key="imageAsset" value="D:\sem4\Android_Proj\ic_speech_bubble.png" />
-                                      <entry key="outputName" value="ic_bubble" />
+                                      <entry key="imageAsset" value="D:\sem4\Android_Proj\kisspng-blue-area-trademark-symbol-bluetooth-5ab0cfd65e9922.0620399315215369823875.jpg" />
+                                      <entry key="outputName" value="ic_bluetooth" />
                                       <entry key="themeColor" value="3d3d3d" />
                                     </map>
                                   </option>

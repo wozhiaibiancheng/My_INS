@@ -7,10 +7,14 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -18,15 +22,17 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
+import au.edu.unimelb.student.group55.my_ins.Home.HomeFragmentAdapter;
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.SupportFunctions.BottomNavTool;
 
-public class FeedActivity extends AppCompatActivity {
+public class FeedActivity extends AppCompatActivity  {
 
     private static final String TAG = "FeedActivity";
 
@@ -36,6 +42,7 @@ public class FeedActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
     private Context context;
+    private ImageView bluetooth;
 
 
     private TextView followingView, likesView, postsView;
@@ -45,15 +52,50 @@ public class FeedActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView( R.layout.activity_feed );
 
+        context = FeedActivity.this;
+
         followingView = (TextView) findViewById( R.id.feed_following_item );
         likesView = (TextView) findViewById( R.id.feed_likes_item );
         postsView = (TextView) findViewById( R.id.feed_posts_item );
+        bluetooth = (ImageView)findViewById(R.id.bluetooth);
 
         FirebaseAuth();
         setBottom();
         activityNavigation();
 
+        GestureDetector detector;
+        detector = new GestureDetector(context, new GestureDetector.OnGestureListener() {
+            @Override
+            public boolean onDown(MotionEvent motionEvent) {
+                return false;
+            }
 
+            @Override
+            public void onShowPress(MotionEvent motionEvent) {
+
+            }
+
+            @Override
+            public boolean onSingleTapUp(MotionEvent motionEvent) {
+                return false;
+            }
+
+            @Override
+            public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+                return false;
+            }
+
+            @Override
+            public void onLongPress(MotionEvent motionEvent) {
+
+            }
+
+            @Override
+            public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+                return false;
+            }
+        });
+//        bluetooth.setOnDragListener(bluetooth);
     }
 
 
@@ -98,7 +140,67 @@ public class FeedActivity extends AppCompatActivity {
 
 
 
-    // Always check the login state of the user
+    private class simpleGestureListener extends
+            GestureDetector.SimpleOnGestureListener {
+
+        /*****OnGestureListener的函数*****/
+        public boolean onDown(MotionEvent e) {
+            Log.i("MyGesture", "onDown");
+            Toast.makeText(context, "onDown", Toast.LENGTH_SHORT)
+                    .show();
+            return false;
+        }
+
+        public void onShowPress(MotionEvent e) {
+            Log.i("MyGesture", "onShowPress");
+//            Toast.makeText(context, "onShowPress", Toast.LENGTH_SHORT)
+//                    .show();
+        }
+
+        public boolean onSingleTapUp(MotionEvent e) {
+            Log.i("MyGesture", "onSingleTapUp");
+//            Toast.makeText(MainActivity.this, "onSingleTapUp",
+//                    Toast.LENGTH_SHORT).show();
+            return true;
+        }
+
+        public boolean onScroll(MotionEvent e1, MotionEvent e2,
+                                float distanceX, float distanceY) {
+            Log.i("MyGesture", "onScroll:" + (e2.getX() - e1.getX()) + "   "
+                    + distanceX);
+//            Toast.makeText(MainActivity.this, "onScroll", Toast.LENGTH_LONG)
+//                    .show();
+
+            return true;
+        }
+
+        public void onLongPress(MotionEvent e) {
+            Log.i("MyGesture", "onLongPress");
+//            Toast.makeText(MainActivity.this, "onLongPress", Toast.LENGTH_LONG)
+//                    .show();
+        }
+
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+                               float velocityY) {
+            Log.i("MyGesture", "onFling");
+            Toast.makeText(context, "onFling", Toast.LENGTH_LONG)
+                    .show();
+            return true;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+        // Always check the login state of the user
     private void FirebaseAuth() {
 
         auth = FirebaseAuth.getInstance();

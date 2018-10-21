@@ -80,7 +80,6 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
         UserAccountSetting settings = new UserAccountSetting();
         User user  = new User();
         StringBuilder users;
-        String myLikesString;
         boolean likeByCurrentUser;
         Heart heart;
         GestureDetector detector;
