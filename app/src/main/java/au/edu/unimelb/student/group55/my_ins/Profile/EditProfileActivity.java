@@ -61,7 +61,6 @@ public class EditProfileActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authListener;
 
-
     private Context context;
     private String uid;
 
@@ -78,7 +77,9 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private StorageReference storageReference;
     private FirebaseStorage storage;
+    private FirebaseUser user;
 
+//    private Task<Uri> downloadUri;
     private String downloadLink;
     private double mPhotoUploadProgress = 0;
 
@@ -86,11 +87,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private Bitmap resultImageBitmap;
     private ByteArrayOutputStream baos;
-
-
-
-
-
+    private byte[] imageData;
 
 
     @Override
@@ -110,6 +107,8 @@ public class EditProfileActivity extends AppCompatActivity {
         baos = new ByteArrayOutputStream();
         storage = FirebaseStorage.getInstance();
         progressBar = (ProgressBar) findViewById(R.id.profileProgressBar);
+
+//        setBottom();
 
         FirebaseAuth();
 
@@ -139,6 +138,10 @@ public class EditProfileActivity extends AppCompatActivity {
 
     }
 
+    private void setUpSettingList() {
+        Log.d(TAG, "set up edit profile setting list");
+
+    }
 
 
     private void setProfile(UserAccountSetting userAccountSetting) {
@@ -245,7 +248,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void uploadProfilePic(final String imgUrl,
                                   Bitmap bm){
-        Log.d(TAG, "uploadProfilePic: attempting to uplaod new profile pic.");
+        Log.d(TAG, "uploadProfilePic: attempting to upload new profile pic.");
 
         final String currentDate = DateFormat.getDateTimeInstance().format(new Date());
 
@@ -297,15 +300,17 @@ public class EditProfileActivity extends AppCompatActivity {
                     downloadLink = downloadUri.toString();
                     Log.d(TAG,"downloadLink: " + downloadLink);
 
-                Toast.makeText(context, "photo upload successed", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "photo upload success", Toast.LENGTH_SHORT).show();
+
+//                    insert into 'user_account_settings' node
                 setProfilePhoto(downloadLink);
 
                 //navigate to the main feed so the user can see their photo
                 Intent intent = new Intent(context, ProfileActivity.class);
                 startActivity(intent);
                 } else {
-                    Toast.makeText(context, "photo upload failed", Toast.LENGTH_LONG).show();
-
+                    // Handle failures
+                    // ...
                 }
             }
         });
@@ -331,7 +336,6 @@ public class EditProfileActivity extends AppCompatActivity {
         }
             }
 
-
 //            update profile pic url to db
     private void setProfilePhoto(String url){
         Log.d(TAG, "setProfilePhoto: setting new profile image: " + url);
@@ -353,11 +357,9 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
 
-
-
-
-
-//setup firebase
+    /**
+     * Setup the firebase auth object
+     */
     private void FirebaseAuth() {
         Log.d(TAG, "setupFirebaseAuth: setting up firebase auth.");
 

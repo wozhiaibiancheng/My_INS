@@ -2,6 +2,8 @@ package au.edu.unimelb.student.group55.my_ins.Home;
 
 import android.content.Context;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -24,6 +27,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,6 +35,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.ActivityLikes;
@@ -39,6 +44,7 @@ import au.edu.unimelb.student.group55.my_ins.Firebase.Comment;
 import au.edu.unimelb.student.group55.my_ins.Firebase.PhotoInformation;
 import au.edu.unimelb.student.group55.my_ins.Firebase.User;
 import au.edu.unimelb.student.group55.my_ins.Firebase.UserAccountSetting;
+import au.edu.unimelb.student.group55.my_ins.PhotoNGallery.ApplyFilters;
 import au.edu.unimelb.student.group55.my_ins.Profile.ProfileActivity;
 import au.edu.unimelb.student.group55.my_ins.Profile.ViewProfileActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
@@ -73,7 +79,7 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
     static class ViewHolder{
         CircleImageView myProfileImage;
         String likesString;
-        TextView username, time, postMessage, likes, comments;
+        TextView username, time, postMessage, likes, comments, location;
         SquareImageView image;
         ImageView heartRed, heartWhite, comment;
 
@@ -107,6 +113,7 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
             holder.postMessage = (TextView) convertView.findViewById(R.id.image_caption);
             holder.time = (TextView) convertView.findViewById(R.id.image_time_posted);
             holder.myProfileImage = (CircleImageView) convertView.findViewById(R.id.profile_photo);
+            holder.location = (TextView) convertView.findViewById( R.id.post_location) ;
 
             convertView.setTag(holder);
 
@@ -118,6 +125,25 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
         holder.detector = new GestureDetector( myContext, new GestureListener(holder));
         holder.users = new StringBuilder();
         holder.heart = new Heart(holder.heartWhite, holder.heartRed);
+
+
+
+        Geocoder geocoder;
+        List<Address> addresses;
+        geocoder = new Geocoder(myContext, Locale.getDefault());
+
+        try{
+//            holder.location.setText( "An address" );
+            Double longitude = Double.valueOf( getItem( position ).getLongitude() );
+            Double latitude = Double.valueOf( getItem( position ).getLatitude() );
+            addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            String address = addresses.get(0).getLocality();
+            holder.location.setText( address );
+        } catch (Exception e) {
+            e.printStackTrace();
+            holder.location.setText( "Not available" );
+        }
+
 
         //get the current users username (need for checking likes string)
         getCurrentUsername();
@@ -245,7 +271,9 @@ public class HomeFragmentAdapter extends ArrayAdapter<PhotoInformation>{
         });
 
         if(reachedEndOfList(position)){
-            loadMoreData();
+
+            Toast.makeText(getContext(), "No more post available ~", Toast.LENGTH_SHORT).show();
+//            loadMoreData();
         }
 
         return convertView;

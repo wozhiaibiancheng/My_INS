@@ -1,20 +1,16 @@
 package au.edu.unimelb.student.group55.my_ins.Home;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -25,22 +21,19 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONArray;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+import au.edu.unimelb.student.group55.my_ins.Firebase.Comment;
 import au.edu.unimelb.student.group55.my_ins.Firebase.PhotoInformation;
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
-import au.edu.unimelb.student.group55.my_ins.Firebase.Comment;
 
-
-public class HomeFragment extends Fragment {
-    private static final String TAG = "HomeFragment";
+public class HomeFragmentWithLocation extends Fragment {
+    private static final String TAG = "HomeFragmentWithLoc";
 
     //vars
     private ArrayList<PhotoInformation> myPhotoInformations;
@@ -50,6 +43,7 @@ public class HomeFragment extends Fragment {
     private HomeFragmentAdapter myAdapter;
     private ProgressBar progressBar;
     private int myResults;
+
     //firebase
     private FirebaseAuth myAuth;
     private FirebaseAuth.AuthStateListener myAuthListener;
@@ -189,14 +183,14 @@ public class HomeFragment extends Fragment {
                 Collections.sort( myPhotoInformations, new Comparator<PhotoInformation>() {
                     @Override
                     public int compare(PhotoInformation o1, PhotoInformation o2) {
-                        return o2.getDateCreated().compareTo(o1.getDateCreated());
+                        return o2.getLongitude().compareTo(o1.getLatitude());
                     }
                 });
 
                 int iterations = myPhotoInformations.size();
 
                 myResults = 10;
-                for(int i = 0; i < iterations; i++){
+                for(int i = iterations - 1; i >= 0; i--){
                     myPaginatedPhotos.add( myPhotoInformations.get(i));
                 }
 
@@ -210,6 +204,7 @@ public class HomeFragment extends Fragment {
             }
         }
     }
+
 
 
     private void setupFirebaseAuth(){
