@@ -38,11 +38,9 @@ import au.edu.unimelb.student.group55.my_ins.Profile.ViewProfileActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 import au.edu.unimelb.student.group55.my_ins.SupportFunctions.BottomNavTool;
 
-
-// This activity allows user to search for a certain user by username
-// Also user could find suggested user here
 public class DiscoverActivity extends AppCompatActivity {
     private static final String TAG = "Discover Activity";
+    private static final int ACTIVITY_NUM = 1;
 
     private Context mContext = DiscoverActivity.this;
 
@@ -66,6 +64,7 @@ public class DiscoverActivity extends AppCompatActivity {
         Log.d("INFO", "onCreate started!");
         setContentView(R.layout.activity_discovery);
 
+
         mSearchParam = (EditText) findViewById(R.id.search);
         mListView = (ListView) findViewById(R.id.listView);
         suggestText = (TextView) findViewById(R.id.textView);
@@ -77,7 +76,7 @@ public class DiscoverActivity extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
     }
 
-    // The main function of listen to user input and search for users
+
     private void initTextListener() {
         Log.d(TAG, "initTextListener: initializing");
 
@@ -88,7 +87,7 @@ public class DiscoverActivity extends AppCompatActivity {
             public void onFocusChange(View view, boolean b) {
                 if (hasWindowFocus()) {
                     suggestText.setVisibility(View.VISIBLE);
-                    String text = mSearchParam.getText().toString().toLowerCase(Locale.getDefault());
+                    String text = mSearchParam.getText().toString();
                     searchForMatch(text);
                 }
             }
@@ -98,16 +97,18 @@ public class DiscoverActivity extends AppCompatActivity {
         mSearchParam.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                // Change all the user input to lower case
-                String text = mSearchParam.getText().toString().toLowerCase(Locale.getDefault());
+
+                String text = mSearchParam.getText().toString();
                 searchForMatch(text);
             }
         });
@@ -124,9 +125,11 @@ public class DiscoverActivity extends AppCompatActivity {
         if (keyword.length() == 0) {
 
             suggestText.setVisibility(View.VISIBLE);
+
+
             final Set<String> followingID = new HashSet();
 
-            // suggest friends to current user
+//            suggest friends
             final DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
             final String currentUID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -175,24 +178,23 @@ public class DiscoverActivity extends AppCompatActivity {
                                         public void onDataChange(DataSnapshot dataSnapshot) {
 
                                             for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                                                //                                        Log.d(TAG, "onDataChange: found user:" + singleSnapshot.getValue(User.class).toString());
+
                                                 mUserList.add(singleSnapshot.getValue(User.class));
                                             }
 
                                             if (mUserList.size() > 0) {
-                                                System.out.println("111111");
-                                                System.out.println("188 update");
                                                 //update the users list view
                                                 updateUsersList();
                                                 progressBar.setVisibility(View.GONE);
                                             } else {
-                                                System.out.println("222222");
                                                 //if no friends suggests after filtered
 
                                                 Query _query = reference.child("users");
                                                 _query.addListenerForSingleValueEvent(new ValueEventListener() {
                                                     @Override
                                                     public void onDataChange(DataSnapshot dataSnapshot) {
-                                                    // Suggest at most suggest 6 users
+//                                at most suggest 6 users
                                                         int userCt = 0;
                                                         for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
                                                             //   don't suggest himself
@@ -207,7 +209,7 @@ public class DiscoverActivity extends AppCompatActivity {
                                                                 break;
                                                             }
                                                         }
-                                                        System.out.println("215 update");
+                                                     ;
                                                         //update the users list view
                                                         updateUsersList();
                                                         progressBar.setVisibility(View.GONE);
@@ -235,6 +237,7 @@ public class DiscoverActivity extends AppCompatActivity {
                         } else {
                             System.out.println("don't have any suggestion!");
 
+
                             Query _query = reference.child("users");
                             _query.addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
@@ -255,7 +258,7 @@ public class DiscoverActivity extends AppCompatActivity {
                                         }
                                     }
 
-                                    System.out.println("262 update");
+
                                     //update the users list view
                                     updateUsersList();
                                     progressBar.setVisibility(View.GONE);
@@ -291,7 +294,6 @@ public class DiscoverActivity extends AppCompatActivity {
                                         break;
                                     }
                                 }
-                                System.out.println("298 update");
                                 //update the users list view
                                 updateUsersList();
                                 progressBar.setVisibility(View.GONE);
@@ -316,7 +318,7 @@ public class DiscoverActivity extends AppCompatActivity {
 
         } else {
 
-            //  search for matched user
+//            search people
             suggestText.setVisibility(View.GONE);
 
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
@@ -330,7 +332,7 @@ public class DiscoverActivity extends AppCompatActivity {
 
                         mUserList.add(singleSnapshot.getValue(User.class));
                     }
-                    System.out.println("337 update");
+
                     //update the users list view
                     updateUsersList();
                     progressBar.setVisibility(View.GONE);
