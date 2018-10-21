@@ -48,8 +48,10 @@ dependencies {
 
     implementation 'com.github.iamutkarshtiwari:Ananas:v1.0.0'
 
-    // The location service API
-    implementation 'com.github.delight-im:Android-SimpleLocation:v1.0.1'
+    //Google Location API to fetch current location of the mobile service
+    implementation 'com.google.android.gms:play-services-location:15.0.1'
+    implementation 'com.google.android.gms:play-services-maps:15.0.1'
+
 
 
 

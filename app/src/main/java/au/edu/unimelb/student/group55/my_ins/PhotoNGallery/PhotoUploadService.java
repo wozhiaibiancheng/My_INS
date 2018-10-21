@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.Continuation;
@@ -29,24 +28,16 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.ActivityPosts;
-import au.edu.unimelb.student.group55.my_ins.Firebase.Comment;
 import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
-import au.edu.unimelb.student.group55.my_ins.Firebase.Like;
 import au.edu.unimelb.student.group55.my_ins.Firebase.PhotoInformation;
 import au.edu.unimelb.student.group55.my_ins.Firebase.UserAccountSetting;
-import im.delight.android.location.SimpleLocation;
 
 public class PhotoUploadService extends Service {
     @Nullable
-
-
     private FirebaseUser user;
     private FirebaseStorage storage;
     private DatabaseReference mDatabase;
@@ -57,8 +48,7 @@ public class PhotoUploadService extends Service {
     private DatabaseReference myRef;
     private FirebaseMethods mFirebaseMethods;
 
-
-    private int imageNumber = 0;
+    private int imageNumber;
     private long postNum;
     private String uid;
     private byte[] imageData;
@@ -67,8 +57,8 @@ public class PhotoUploadService extends Service {
     private Bitmap resultImageBitmap;
     private ByteArrayOutputStream baos;
     private String postMessage;
-    private SimpleLocation location;
-    private String altitude;
+
+    private String latitude;
     private String longitude;
 
 
@@ -76,9 +66,8 @@ public class PhotoUploadService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        mFirebaseMethods = new FirebaseMethods(PhotoUploadService.this);
+        mFirebaseMethods = new FirebaseMethods( PhotoUploadService.this );
         setupFirebaseAuth();
-
 
         user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
@@ -89,28 +78,17 @@ public class PhotoUploadService extends Service {
 
         baos = new ByteArrayOutputStream();
 
-        // The location service API is referenced from Github
-        // https://github.com/delight-im/Android-SimpleLocation
-        // construct a new instance of SimpleLocation
-        location = new SimpleLocation(this);
-
-        // if we can't access the location yet
-        if (!location.hasLocationEnabled()) {
-            // ask the user to enable location access
-            SimpleLocation.openSettings(this);
-        }
-
-        longitude = String.valueOf(location.getLatitude());
-        altitude = String.valueOf(location.getAltitude());
-
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
     }
+
 
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
 
         IMAGE_PATH = intent.getStringExtra("file path");
+        latitude = intent.getStringExtra( "latitude" );
+        longitude = intent.getStringExtra( "longitude" );
         resultImageBitmap = readImage(IMAGE_PATH);
 
         postMessage = intent.getStringExtra("post message");
@@ -168,8 +146,11 @@ public class PhotoUploadService extends Service {
                     photoInformation.setDateCreated(currentDate2);
                     photoInformation.setUserID(uid);
                     photoInformation.setImageUrl(downloadLink);
-                    photoInformation.setLatitude(altitude);
+                    photoInformation.setLatitude( latitude );
                     photoInformation.setLongitude(longitude);
+
+//                    photoInformation.setLatitude( "1" );
+//                    photoInformation.setLongitude("2");
                     photoInformation.setPhotoID(photoID);
                     photoInformation.setPostMessage(postMessage);
 
@@ -213,9 +194,6 @@ public class PhotoUploadService extends Service {
         return startId;
 
     }
-
-
-
 
 
     private long getPostNum() {
@@ -278,19 +256,6 @@ public class PhotoUploadService extends Service {
                 }
             }
         };
-
-//        myRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
 
         mAuth.addAuthStateListener(mAuthListener);
         myRef.addValueEventListener(new ValueEventListener() {

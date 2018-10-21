@@ -1,13 +1,17 @@
 package au.edu.unimelb.student.group55.my_ins.PhotoNGallery;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -16,18 +20,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
-import java.io.File;
-import java.io.InputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.logging.SimpleFormatter;
-
 import au.edu.unimelb.student.group55.my_ins.Profile.EditProfileActivity;
-import au.edu.unimelb.student.group55.my_ins.Profile.ProfileActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 import iamutkarshtiwari.github.io.ananas.editimage.EditImageActivity;
 
@@ -39,6 +39,7 @@ import iamutkarshtiwari.github.io.ananas.editimage.EditImageActivity;
 
 public class ApplyFilters extends AppCompatActivity {
 
+    private static final int PERMISSIONS_REQUEST = 12;
     private ImageView imageView;
     private Bitmap selectedImage;
     private String FILE_NAME = "/test.jpg";
@@ -51,14 +52,17 @@ public class ApplyFilters extends AppCompatActivity {
     public String cropPath;
     private static final String TAG = "Photo Activity";
 
+    private FusedLocationProviderClient mFusedLocationClient;
+    private String latitude;
+    private String longitude;
+    private double mlatitude;
+    private double mlongitude;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-//        String tempPath = applicationFolder();
-//        SimpleDateFormat s = new SimpleDateFormat("ddMMyyyyhhmmss");
-//        String format = s.format(new Date());
-//        Toast.makeText(this, currentDate, Toast.LENGTH_SHORT).show();
-//        imagePath = tempPath + "/" + format + ".jpg";
+
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient( this );
         imagePath = applicationFolder();
 
         CropImage.activity()
@@ -166,11 +170,18 @@ public class ApplyFilters extends AppCompatActivity {
                         Toast.makeText(ApplyFilters.this, "Please say something about your post~", Toast.LENGTH_SHORT).show();
                     }else{
 
+                        getLocationInfo();
+//                        Toast.makeText(ApplyFilters.this, "The longitude information is: " + longitude, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(ApplyFilters.this, "The latitude information is: " + mlatitude, Toast.LENGTH_SHORT).show();
+//                        Log.d(TAG,"The longitude information is: " + mlongitude);
+//                        Log.d(TAG,"The latitude information is: " + mlatitude);
 
                         // Upload the image in the background to avoid stop front-end UI
                         Intent photoUploadService = new Intent( ApplyFilters.this, PhotoUploadService.class );
                         photoUploadService.putExtra( "file path", imagePath );
                         photoUploadService.putExtra( "post message", postMessage );
+                        photoUploadService.putExtra( "longitude", longitude );
+                        photoUploadService.putExtra( "latitude", latitude );
                         startService( photoUploadService );
                         finish();
                     }
@@ -186,6 +197,73 @@ public class ApplyFilters extends AppCompatActivity {
             }
         });
     }
+
+    public void getLocationInfo(){
+        if (ActivityCompat.checkSelfPermission( this, Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission( this, Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED) {
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+//            longitude = "0";
+//            latitude = "0";
+
+            if (ContextCompat.checkSelfPermission( this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION )
+                    != PackageManager.PERMISSION_GRANTED) {
+                Log.d( "TAG", "Whatever2" );
+
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions( this,
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                        PERMISSIONS_REQUEST );
+            } else if (ContextCompat.checkSelfPermission( this,
+                    Manifest.permission.ACCESS_FINE_LOCATION )
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions( this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        PERMISSIONS_REQUEST );
+
+            }
+            else{
+                Task<Location> locationTask = mFusedLocationClient.getLastLocation()
+                        .addOnSuccessListener( this, new OnSuccessListener<Location>() {
+                            @Override
+                            public void onSuccess(Location location) {
+                                // Got last known location. In some rare situations this can be null.
+                                if (location != null) {
+//                                mlatitude = location.getAltitude();
+//                                mlongitude = location.getLongitude();
+//
+//                                    Log.d(TAG,"The location information is: "+ location);
+//                                    Toast.makeText(ApplyFilters.this, "The location information is: " + location, Toast.LENGTH_SHORT).show();
+                                    longitude = String.valueOf( location.getLongitude() );
+                                    latitude = String.valueOf( location.getLatitude() );
+                                }
+                            }
+                        } );
+            }
+        }
+        else {
+            Task<Location> locationTask = mFusedLocationClient.getLastLocation()
+                    .addOnSuccessListener( this, new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            // Got last known location. In some rare situations this can be null.
+                            if (location != null) {
+//                                mlatitude = location.getAltitude();
+//                                mlongitude = location.getLongitude();
+//                                Log.d(TAG,"The location information is: "+ location);
+//                                Toast.makeText(ApplyFilters.this, "The location information is: " + location, Toast.LENGTH_SHORT).show();
+                                longitude = String.valueOf( location.getLongitude() );
+                                latitude = String.valueOf( location.getLatitude() );
+                            }
+                        }
+                    } );
+
+        }
+
+        return;
+    }
+
 
     private boolean isRootTask(){
         int task = getIntent().getFlags();

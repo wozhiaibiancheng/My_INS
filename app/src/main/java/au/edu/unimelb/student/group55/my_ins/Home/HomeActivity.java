@@ -1,12 +1,16 @@
 package au.edu.unimelb.student.group55.my_ins.Home;
 
 //import android.content.SharedPreferences;
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -43,7 +47,7 @@ public class HomeActivity extends AppCompatActivity implements
             fragment.displayMorePhotos();
         }
     }
-
+    private static final int PERMISSIONS_REQUEST = 12;
     private static final String TAG = "Home Activity";
 
     private Context mContext = HomeActivity.this;
@@ -73,8 +77,34 @@ public class HomeActivity extends AppCompatActivity implements
 
         initImageLoader();
         setBottom();
+        requestPermission();
 
+    }
 
+    public void requestPermission() {
+        if (ActivityCompat.checkSelfPermission( this, Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission( this, Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+
+            if (ContextCompat.checkSelfPermission( this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION )
+                    != PackageManager.PERMISSION_GRANTED) {
+                Log.d( "TAG", "Whatever2" );
+
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions( this,
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                        PERMISSIONS_REQUEST );
+            } else if (ContextCompat.checkSelfPermission( this,
+                    Manifest.permission.ACCESS_FINE_LOCATION )
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                ActivityCompat.requestPermissions( this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        PERMISSIONS_REQUEST );
+            }
+        }
     }
 
     public void onCommentThreadSelected(PhotoInformation photoInformation){
