@@ -67,6 +67,7 @@ public class ApplyFilters extends AppCompatActivity {
         super.onCreate( savedInstanceState );
 
         checkGPSSettings();
+        imagePath = applicationFolder();
 
         CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
