@@ -20,7 +20,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import au.edu.unimelb.student.group55.my_ins.Firebase.FirebaseMethods;
-import au.edu.unimelb.student.group55.my_ins.MainActivity;
 import au.edu.unimelb.student.group55.my_ins.R;
 
 
@@ -179,8 +178,8 @@ public class RegisterActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.exists()){
                     firebaseMethods.registerNewEmail(email, password, username);
-                    SharedPreferences prefs = getSharedPreferences(MainActivity.MySharedPrefs, Context.MODE_PRIVATE);
-                    prefs.edit().putBoolean( "firststart", false );
+//                    SharedPreferences prefs = getSharedPreferences(MainActivity.MySharedPrefs, Context.MODE_PRIVATE);
+//                    prefs.edit().putBoolean( "firststart", false );
                     myAuth.signOut();
 
 

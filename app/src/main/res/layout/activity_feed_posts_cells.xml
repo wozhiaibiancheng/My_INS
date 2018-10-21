@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:id="@+id/relLayout1">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/profile_photo"
+                android:layout_marginTop="20dp"
+                app:civ_border_color="@color/black"
+                app:civ_border_width="0.5dp"
+                android:layout_marginLeft="25dp"
+                android:layout_centerVertical="true"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="Luc"
+                android:layout_toRightOf="@+id/profile_photo"
+                android:layout_marginLeft="10dp"
+                android:layout_centerVertical="true"
+                android:id="@+id/username"
+                android:textColor="@color/black"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15sp"
+                android:text="Sent a post"
+                android:layout_toRightOf="@+id/username"
+                android:layout_marginLeft="30dp"
+                android:layout_centerVertical="true"
+                android:id="@+id/post"
+                android:textColor="@color/grey"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:text="A time stamp"
+                android:layout_toRightOf="@+id/username"
+                android:layout_marginLeft="30dp"
+                android:layout_above="@+id/is_following"
+                android:id="@+id/time"
+                android:textColor="@color/black"
+                />
+
+            <au.edu.unimelb.student.group55.my_ins.SupportFunctions.SquareImageView
+                android:layout_width="40sp"
+                android:layout_height="40sp"
+                android:id="@+id/post_image"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
+                android:scaleType="centerCrop"/>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

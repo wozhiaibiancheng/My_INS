@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -22,14 +24,15 @@
             <include layout="@layout/editprofile_center"></include>
         </RelativeLayout>
 
-        <!--<ProgressBar-->
-            <!--android:layout_width="150dp"-->
-            <!--android:layout_height="150dp"-->
-            <!--android:id="@+id/profileProgressBar"-->
-            <!--android:layout_centerHorizontal="true"-->
-            <!--android:layout_marginTop="100dp"/>-->
+        <ProgressBar
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/profileProgressBar"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="200dp"
+            android:theme="@style/greyAccent"/>
 
-        <include layout="@layout/layout_bottom"/>
+
 
     </RelativeLayout>
 

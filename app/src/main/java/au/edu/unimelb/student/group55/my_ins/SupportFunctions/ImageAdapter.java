@@ -73,10 +73,10 @@ public class ImageAdapter extends ArrayAdapter<String>{
 
             @Override
             public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                System.out.println("img load completed");
+//                System.out.println("img load completed");
                 if(viewHolder.progressBar != null){
                     viewHolder.progressBar.setVisibility(View.GONE);
-                    System.out.println("progressBar GONE!");
+//                    System.out.println("progressBar GONE!");
                 }
             }
 

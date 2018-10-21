@@ -1,6 +1,9 @@
 package au.edu.unimelb.student.group55.my_ins.Firebase;
 
-public class UserAccountSetting {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class UserAccountSetting implements Parcelable {
     private String description;
     private String display_name;
     private long following;
@@ -26,6 +29,30 @@ public class UserAccountSetting {
 
     public UserAccountSetting(){
     }
+
+    protected UserAccountSetting(Parcel in) {
+        description = in.readString();
+        display_name = in.readString();
+        following = in.readLong();
+        followers = in.readLong();
+        posts = in.readLong();
+        profile_pic = in.readString();
+        username = in.readString();
+        phone_number = in.readLong();
+        user_id = in.readString();
+    }
+
+    public static final Creator<UserAccountSetting> CREATOR = new Creator<UserAccountSetting>() {
+        @Override
+        public UserAccountSetting createFromParcel(Parcel in) {
+            return new UserAccountSetting( in );
+        }
+
+        @Override
+        public UserAccountSetting[] newArray(int size) {
+            return new UserAccountSetting[size];
+        }
+    };
 
     public String getDescription() {
         return description;
@@ -97,5 +124,37 @@ public class UserAccountSetting {
 
     public void setUser_id(String user_id) {
         this.user_id = user_id;
+    }
+
+    @Override
+    public String toString() {
+        return "UserAccountSetting{" +
+                "description='" + description + '\'' +
+                ", display_name='" + display_name + '\'' +
+                ", followers=" + followers +
+                ", following=" + following +
+                ", posts=" + posts +
+                ", profile_picture='" + profile_pic + '\'' +
+                ", username='" + username + '\'' +
+                ", phone_number='" + phone_number + '\'' +
+                '}';
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString( description );
+        dest.writeString( display_name );
+        dest.writeLong( following );
+        dest.writeLong( followers );
+        dest.writeLong( posts );
+        dest.writeString( profile_pic );
+        dest.writeString( username );
+        dest.writeLong( phone_number );
+        dest.writeString( user_id );
     }
 }

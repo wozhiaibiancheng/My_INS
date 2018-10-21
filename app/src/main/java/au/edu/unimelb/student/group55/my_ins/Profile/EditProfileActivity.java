@@ -10,8 +10,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +34,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.ittianyu.bottomnavigationviewex.BottomNavigationViewEx;
 
 import java.io.ByteArrayOutputStream;
 import java.text.DateFormat;
@@ -42,6 +46,7 @@ import au.edu.unimelb.student.group55.my_ins.PhotoNGallery.ProfilePicActivity;
 import au.edu.unimelb.student.group55.my_ins.LoginNRegister.LoginActivity;
 //import au.edu.unimelb.student.group55.my_ins.PhotoNGallery.ApplyFilters;
 import au.edu.unimelb.student.group55.my_ins.R;
+import au.edu.unimelb.student.group55.my_ins.SupportFunctions.BottomNavTool;
 import au.edu.unimelb.student.group55.my_ins.SupportFunctions.ImageManager;
 import au.edu.unimelb.student.group55.my_ins.SupportFunctions.UniversalImageLoader;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -65,6 +70,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private TextView changeProfilePic;
     private TextView cancel;
     private  TextView done;
+
+    private ProgressBar progressBar;
 
 
     private UserAccountSetting userAccountSetting;
@@ -105,6 +112,9 @@ public class EditProfileActivity extends AppCompatActivity {
         firebaseMethods = new FirebaseMethods(context);
         baos = new ByteArrayOutputStream();
         storage = FirebaseStorage.getInstance();
+        progressBar = (ProgressBar) findViewById(R.id.profileProgressBar);
+
+//        setBottom();
 
         FirebaseAuth();
 
@@ -148,6 +158,7 @@ public class EditProfileActivity extends AppCompatActivity {
         phoneNum.setText(String.valueOf(userAccountSetting.getPhone_number()));
         System.out.println(String.valueOf(userAccountSetting.getPhone_number()));
         this.userAccountSetting = userAccountSetting;
+        progressBar.setVisibility(View.GONE);
 
         changeProfilePic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,7 +178,6 @@ public class EditProfileActivity extends AppCompatActivity {
         final String username = this.username.getText().toString();
         final String description = this.description.getText().toString();
         final long phoneNum = Long.parseLong(this.phoneNum.getText().toString());
-
 
         if(!userAccountSetting.getUsername().equals(username)){
 //            only if new username unique, we can update all information
@@ -269,7 +279,7 @@ public class EditProfileActivity extends AppCompatActivity {
 //        FilePaths filePaths = new FilePaths();
         String user_id = FirebaseAuth.getInstance().getCurrentUser().getUid();
         storageReference = storage.getReference().
-                child(uid + "/"+ currentDate + ".jpg");
+                child(uid + "/"+ "profile_pic.jpg");
 
         //convert image url to bitmap
         if(bm == null){
@@ -329,67 +339,8 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-
-//        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//            @Override
-//            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                    @Override
-//                    public void onSuccess(Uri uri) {
-//                        // Got the download URL for 'users/me/profile.png'
-//                        Uri downloadUri = taskSnapshot.getMetadata().getDownloadUrl();
-//                        generatedFilePath = downloadUri.toString(); /// The string(file link) that you need
-//                    }
-//                }).addOnFailureListener(new OnFailureListener() {
-//                    @Override
-//                    public void onFailure(@NonNull Exception exception) {
-//                        // Handle any errors
-//                    }
-//                });
-//                storageReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener() {
-//                    @override
-//                    public void onSuccess(Uri uri) {
-//                        Uri firebaseUrl = uri;
-////Task firebaseUrl = taskSnapshot.getStorage().getDownloadUrl();
-////Toast meassage
-//                        Toast.makeText(mContext, "Photo upload successful !", Toast.LENGTH_SHORT).show();
-//                        addPhotoToDatabase(caption, firebaseUrl.toString());
-//                Uri firebaseUrl = taskSnapshot.getDownloadUrl();
-//                Uri download = taskSnapshot.getMetadata().getReference().getDownloadUrl();
-
-//                downloadLink = downloadUri.toString();
-//                Log.d(TAG,"downloadLink: " + downloadLink);
-
-//                Toast.makeText(context, "photo upload success", Toast.LENGTH_SHORT).show();
-
-        //insert into 'user_account_settings' node
-//                setProfilePhoto(downloadLink);
-//
-//                //navigate to the main feed so the user can see their photo
-//                Intent intent = new Intent(context, ProfileActivity.class);
-//                startActivity(intent);
-//
-//
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception e) {
-//                Log.d(TAG, "onFailure: Photo upload failed.");
-//                Toast.makeText(context, "Photo upload failed ", Toast.LENGTH_SHORT).show();
-//            }
-//        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-//            @Override
-//            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-//                double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-//
-//                if(progress - 15 > mPhotoUploadProgress){
-//                    Toast.makeText(context, "photo upload progress: " + String.format("%.0f", progress) + "%", Toast.LENGTH_SHORT).show();
-//                    mPhotoUploadProgress = progress;
-//                }
-//
-//                Log.d(TAG, "onProgress: upload progress: " + progress + "% done");
     }
-        ;
+
 
 
 
@@ -490,6 +441,8 @@ public class EditProfileActivity extends AppCompatActivity {
             auth.removeAuthStateListener(authListener);
         }
     }
+
+
 
 
 }
