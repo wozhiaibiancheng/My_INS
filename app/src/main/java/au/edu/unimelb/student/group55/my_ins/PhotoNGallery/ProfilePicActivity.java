@@ -125,12 +125,13 @@ public class ProfilePicActivity extends AppCompatActivity {
             if(isImageEdit == false){
                 selectedImage = BitmapFactory.decodeFile(cropPath, options);
                 imagePath = cropPath;
+
             }
             else{
                 selectedImage = BitmapFactory.decodeFile(newFilePath, options);
                 imagePath = newFilePath;
             }
-            selectedImage = BitmapFactory.decodeFile(newFilePath, options);
+
             imageView.setImageBitmap( selectedImage );
             changeProfilePic( selectedImage );
         }
